@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 2 — El Problema de Investigación · Metodología Investigativa</title>
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --azul-oscuro: #0d1b4b;
+  --azul-medio: #1a3a8f;
+  --azul-vivo: #2563eb;
+  --amarillo: #f59e0b;
+  --amarillo-oscuro: #b45309;
+  --verde: #059669;
+  --verde-oscuro: #065f46;
+  --violeta: #7c3aed;
+  --rojo: #dc2626;
+  --naranja: #ea580c;
+  --gris-texto: #374151;
+  --gris-claro: #f3f4f6;
+  --blanco: #ffffff;
+  --sombra: 0 4px 20px rgba(0,0,0,0.09);
+}
+html { scroll-behavior: smooth; }
+body { font-family: 'Segoe UI', Roboto, Arial, sans-serif; background: #eef1f7; color: var(--gris-texto); line-height: 1.7; }
+
+/* HEADER */
+.site-header {
+  background: linear-gradient(135deg, #065f46 0%, #059669 55%, #10b981 100%);
+  color: white; position: sticky; top: 0; z-index: 100;
+  box-shadow: 0 3px 16px rgba(0,0,0,0.25);
+}
+.header-top { padding: 28px 48px 20px; border-bottom: 4px solid var(--amarillo); }
+.header-top .inst { font-size: 0.72rem; letter-spacing: 2.5px; text-transform: uppercase; color: #a7f3d0; margin-bottom: 6px; }
+.header-top h1 { font-size: 1.7rem; font-weight: 900; line-height: 1.2; margin-bottom: 6px; }
+.header-top .subtitulo { font-size: 0.9rem; color: #d1fae5; }
+.nav-secciones { display: flex; overflow-x: auto; gap: 0; background: rgba(0,0,0,0.25); scrollbar-width: none; }
+.nav-secciones::-webkit-scrollbar { display: none; }
+.nav-secciones a {
+  color: #a7f3d0; text-decoration: none; padding: 11px 20px; font-size: 0.78rem;
+  font-weight: 600; letter-spacing: 0.5px; white-space: nowrap;
+  border-right: 1px solid rgba(255,255,255,0.08); transition: background .2s, color .2s;
+}
+.nav-secciones a:hover { background: rgba(255,255,255,0.12); color: white; }
+.nav-secciones a.active { background: var(--amarillo); color: var(--azul-oscuro); }
+
+/* LAYOUT */
+.page-wrap { max-width: 1000px; margin: 36px auto; padding: 0 24px 80px; }
+
+/* SECCIONES */
+.seccion {
+  background: white; border-radius: 16px; padding: 44px 52px;
+  margin-bottom: 32px; box-shadow: var(--sombra); border-top: 5px solid transparent;
+}
+.sec-resumen   { border-top-color: #6b7280; }
+.sec-problema  { border-top-color: var(--azul-vivo); }
+.sec-arbol     { border-top-color: var(--naranja); }
+.sec-pregunta  { border-top-color: var(--verde); }
+.sec-justif    { border-top-color: var(--violeta); }
+.sec-hipotesis { border-top-color: var(--rojo); }
+.sec-pdn       { border-top-color: var(--amarillo); }
+.sec-taller    { border-top-color: var(--azul-oscuro); }
+
+.seccion-label { font-size: 0.68rem; font-weight: 800; letter-spacing: 2.5px; text-transform: uppercase; margin-bottom: 8px; }
+.lbl-gris    { color: #6b7280; }
+.lbl-azul    { color: var(--azul-vivo); }
+.lbl-naranja { color: var(--naranja); }
+.lbl-verde   { color: var(--verde); }
+.lbl-violeta { color: var(--violeta); }
+.lbl-rojo    { color: var(--rojo); }
+.lbl-amarillo{ color: var(--amarillo-oscuro); }
+.lbl-oscuro  { color: var(--azul-oscuro); }
+
+.seccion h2 { font-size: 1.55rem; font-weight: 800; color: var(--azul-oscuro); margin-bottom: 18px; line-height: 1.25; }
+.intro-parrafo { font-size: 1.02rem; color: #4b5563; margin-bottom: 24px; border-left: 4px solid #e5e7eb; padding-left: 16px; }
+h3.subtitulo-seccion {
+  font-size: 1.1rem; color: var(--azul-oscuro); margin: 28px 0 12px; font-weight: 800;
+  display: flex; align-items: center; gap: 10px;
+}
+h3.subtitulo-seccion::before { content: ''; display: inline-block; width: 4px; height: 20px; background: var(--verde); border-radius: 2px; }
+.divider { height: 1px; background: #e5e7eb; margin: 28px 0; }
+p.nota { font-size: 0.82rem; color: #6b7280; margin-top: 12px; font-style: italic; }
+
+/* RESUMEN CARD */
+.resumen-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px,1fr)); gap: 14px; margin: 24px 0; }
+.resumen-item {
+  background: var(--gris-claro); border-radius: 10px; padding: 16px 18px;
+  border-left: 4px solid var(--azul-vivo);
+}
+.resumen-item .ri-num { font-size: 1.5rem; font-weight: 900; color: var(--azul-vivo); line-height: 1; margin-bottom: 4px; }
+.resumen-item .ri-titulo { font-size: 0.82rem; font-weight: 700; color: var(--azul-oscuro); margin-bottom: 4px; }
+.resumen-item .ri-desc { font-size: 0.78rem; color: #6b7280; line-height: 1.5; }
+.conexion-banner {
+  background: linear-gradient(90deg, var(--azul-oscuro), var(--azul-medio));
+  color: white; border-radius: 12px; padding: 18px 28px; margin: 20px 0;
+  font-size: 0.9rem; line-height: 1.6;
+}
+.conexion-banner strong { color: var(--amarillo); }
+
+/* CONCEPTO GRID */
+.concepto-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 24px 0; }
+@media(max-width:640px){ .concepto-grid { grid-template-columns: 1fr; } }
+.concepto-card { border-radius: 12px; padding: 22px 24px; border-left: 5px solid transparent; }
+.cc-azul    { background: #eff6ff; border-left-color: var(--azul-vivo); }
+.cc-verde   { background: #f0fdf4; border-left-color: var(--verde); }
+.cc-violeta { background: #f5f3ff; border-left-color: var(--violeta); }
+.cc-amarillo{ background: #fffbeb; border-left-color: var(--amarillo); }
+.cc-rojo    { background: #fff1f2; border-left-color: #e11d48; }
+.cc-naranja { background: #fff7ed; border-left-color: var(--naranja); }
+.cc-gris    { background: var(--gris-claro); border-left-color: #6b7280; }
+.concepto-card .cc-titulo { font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+.concepto-card p { font-size: 0.9rem; color: #374151; line-height: 1.65; }
+.concepto-card ul { font-size: 0.88rem; color: #374151; padding-left: 18px; margin-top: 6px; line-height: 1.7; }
+
+/* TABLA */
+.tabla-wrap { overflow-x: auto; margin: 24px 0; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.07); }
+table { width: 100%; border-collapse: collapse; }
+thead tr { background: var(--azul-oscuro); color: white; }
+thead th { padding: 14px 18px; font-size: 0.85rem; text-align: left; font-weight: 700; letter-spacing: 0.5px; }
+tbody tr:nth-child(even) { background: #f8faff; }
+tbody tr:hover { background: #eff6ff; }
+td { padding: 13px 18px; font-size: 0.88rem; color: #374151; border-bottom: 1px solid #e5e7eb; vertical-align: top; }
+td:first-child { font-weight: 700; color: var(--azul-oscuro); }
+
+/* CITA */
+.cita-bloque {
+  background: #f8faff; border-left: 5px solid var(--azul-vivo);
+  padding: 20px 28px; border-radius: 0 10px 10px 0; margin: 24px 0;
+  font-style: italic; color: #1e3a8a; font-size: 1rem;
+}
+.cita-bloque cite { display: block; margin-top: 10px; font-size: 0.8rem; font-style: normal; color: #6b7280; }
+
+/* HIGHLIGHT BOX */
+.highlight-box { border-radius: 12px; padding: 22px 28px; margin: 24px 0; display: flex; gap: 18px; align-items: flex-start; }
+.hb-azul    { background: #eff6ff; border: 1px solid #bfdbfe; }
+.hb-amarillo{ background: #fffbeb; border: 1px solid #fcd34d; }
+.hb-verde   { background: #f0fdf4; border: 1px solid #86efac; }
+.hb-rojo    { background: #fff1f2; border: 1px solid #fda4af; }
+.hb-oscuro  { background: #f1f5f9; border: 1px solid #cbd5e1; }
+.hb-naranja { background: #fff7ed; border: 1px solid #fed7aa; }
+.hb-icon { font-size: 1.6rem; flex-shrink: 0; margin-top: 2px; }
+.hb-content strong { display: block; font-size: 0.92rem; color: var(--azul-oscuro); margin-bottom: 5px; }
+.hb-content p, .hb-content ul { font-size: 0.88rem; color: #374151; line-height: 1.65; }
+.hb-content ul { padding-left: 18px; margin-top: 6px; }
+.hb-content ul li { margin-bottom: 4px; }
+
+/* PROCESO LISTA */
+.proceso-lista { list-style: none; margin: 24px 0; }
+.proceso-lista li { display: flex; gap: 18px; align-items: flex-start; padding: 16px 0; border-bottom: 1px solid #f3f4f6; }
+.proceso-lista li:last-child { border-bottom: none; }
+.paso-num { width: 38px; height: 38px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1rem; color: white; background: var(--verde); }
+.paso-texto strong { display: block; font-size: 0.95rem; color: var(--azul-oscuro); margin-bottom: 4px; }
+.paso-texto span { font-size: 0.88rem; color: #4b5563; }
+
+/* ÁRBOL DEL PROBLEMA */
+.arbol-wrap { margin: 28px 0; }
+.arbol-nivel { display: flex; flex-direction: column; gap: 8px; }
+.arbol-bloque {
+  border-radius: 10px; padding: 14px 22px; color: white;
+  position: relative; text-align: center;
+}
+.ab-efectos { background: linear-gradient(90deg, #7c2d12, #dc2626); }
+.ab-problema { background: linear-gradient(90deg, #1e3a5f, #1a3a8f); font-size: 1.05rem; font-weight: 800; padding: 18px 22px; }
+.ab-causas   { background: linear-gradient(90deg, #065f46, #059669); }
+.arbol-bloque .ab-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px; opacity: 0.8; margin-bottom: 4px; }
+.arbol-bloque .ab-items { font-size: 0.88rem; line-height: 1.7; }
+.arbol-conector { text-align: center; font-size: 1.4rem; color: #9ca3af; margin: 2px 0; }
+.arbol-sub-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+.arbol-sub-grid .arbol-bloque { padding: 12px 16px; }
+
+/* DOBLE CARRIL — Investig. vs Plan de Negocio */
+.doble-carril { display: grid; grid-template-columns: 1fr 1fr; gap: 0; margin: 24px 0; border-radius: 12px; overflow: hidden; box-shadow: var(--sombra); }
+.carril-header {
+  padding: 14px 22px; font-size: 0.78rem; font-weight: 800;
+  text-transform: uppercase; letter-spacing: 1.5px; color: white; text-align: center;
+}
+.ch-inv  { background: var(--azul-medio); }
+.ch-pdn  { background: var(--amarillo-oscuro); }
+.carril-body { padding: 20px 22px; background: white; border: 1px solid #e5e7eb; }
+.carril-body:nth-child(4) { border-left: none; }
+.carril-body p, .carril-body ul { font-size: 0.87rem; color: #374151; line-height: 1.65; }
+.carril-body ul { padding-left: 18px; }
+.carril-body ul li { margin-bottom: 6px; }
+.carril-body .ejemplo {
+  background: var(--gris-claro); border-radius: 8px; padding: 10px 14px;
+  margin-top: 12px; font-size: 0.83rem; font-style: italic; color: #4b5563;
+}
+.carril-cuerpo-fila { display: contents; }
+@media(max-width:640px){ .doble-carril { grid-template-columns: 1fr; } .doble-carril .carril-body:nth-child(4){ border-left: 1px solid #e5e7eb; border-top: none; } }
+
+/* REFLEXION */
+.reflexion-box { background: linear-gradient(135deg, var(--azul-oscuro), var(--azul-medio)); color: white; border-radius: 14px; padding: 32px 40px; margin: 32px 0; }
+.reflexion-box h3 { font-size: 1.1rem; margin-bottom: 16px; color: var(--amarillo); }
+.reflexion-box ol { padding-left: 22px; }
+.reflexion-box ol li { margin-bottom: 12px; font-size: 0.92rem; line-height: 1.6; color: #e2e8f0; }
+.reflexion-box ol li strong { color: white; }
+
+/* TALLER */
+.taller-pasos { counter-reset: taller; list-style: none; margin: 20px 0; }
+.taller-pasos li {
+  counter-increment: taller; display: flex; gap: 16px; align-items: flex-start;
+  padding: 16px 0; border-bottom: 1px dashed #d1d5db;
+}
+.taller-pasos li:last-child { border-bottom: none; }
+.taller-pasos li::before {
+  content: counter(taller);
+  width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
+  background: var(--amarillo); color: var(--azul-oscuro);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 900; font-size: 0.95rem;
+}
+.taller-pasos li .tp-body strong { display: block; font-size: 0.92rem; color: var(--azul-oscuro); margin-bottom: 4px; }
+.taller-pasos li .tp-body p { font-size: 0.85rem; color: #4b5563; line-height: 1.6; }
+
+/* ACTIVIDAD BADGE */
+.actividad-strip {
+  background: linear-gradient(90deg, #0d1b4b, #1a3a8f);
+  color: white; border-radius: 12px; padding: 20px 28px; margin: 24px 0;
+  display: flex; gap: 20px; align-items: flex-start; flex-wrap: wrap;
+}
+.act-id { font-size: 2rem; font-weight: 900; color: var(--amarillo); flex-shrink: 0; }
+.act-info .act-nombre { font-size: 0.95rem; font-weight: 700; margin-bottom: 4px; }
+.act-info .act-desc { font-size: 0.85rem; color: #bfdbfe; line-height: 1.6; }
+.act-info .act-peso { display: inline-block; margin-top: 8px; background: var(--amarillo); color: var(--azul-oscuro); font-weight: 800; font-size: 0.78rem; padding: 3px 12px; border-radius: 20px; }
+
+/* TAGS */
+.tag { display: inline-block; padding: 3px 12px; border-radius: 20px; font-size: 0.73rem; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
+.tag-conocer  { background: #dbeafe; color: #1d4ed8; }
+.tag-aprender { background: #dcfce7; color: #166534; }
+.tag-aplicar  { background: #fef3c7; color: #92400e; }
+
+/* FOOTER */
+.site-footer { background: var(--azul-oscuro); color: #94a3b8; text-align: center; padding: 28px; font-size: 0.78rem; }
+.site-footer strong { color: white; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="header-top">
+    <div class="inst">UniGermana · Metodología Investigativa + Plan de Negocio · Ciclo 2026-13 · Prof. Sergio Andrés Rojas Trujillo</div>
+    <h1>Clase 2 — El Problema de Investigación</h1>
+    <div class="subtitulo">
+      <span class="tag tag-conocer">Conocer</span>&nbsp;<span class="tag tag-aprender">Aprender</span>
+      &nbsp;· Sesiones 4, 5 y 6 del ciclo · Actividades A1-F y A2 en construcción
+    </div>
+  </div>
+  <nav class="nav-secciones">
+    <a href="#sec-resumen" class="active">Resumen Clase 1</a>
+    <a href="#sec-problema">¿Qué es el problema?</a>
+    <a href="#sec-arbol">Árbol del Problema</a>
+    <a href="#sec-pregunta">Pregunta de Investigación</a>
+    <a href="#sec-justif">Justificación</a>
+    <a href="#sec-hipotesis">La Hipótesis</a>
+    <a href="#sec-pdn">Plan de Negocio</a>
+    <a href="#sec-taller">Taller Práctico</a>
+  </nav>
+</header>
+
+<div class="page-wrap">
+
+<!-- ============================================================
+     RESUMEN CLASE 1
+============================================================ -->
+<section id="sec-resumen" class="seccion sec-resumen">
+  <div class="seccion-label lbl-gris">Resumen · Clase 1</div>
+  <h2>¿De dónde venimos? Lo que construimos la sesión anterior</h2>
+  <p class="intro-parrafo">Antes de avanzar, anclamos los conceptos clave de la Clase 1. Todo lo que aprendimos allá es el piso estructural sobre el que edificamos hoy el problema de investigación.</p>
+
+  <div class="resumen-grid">
+    <div class="resumen-item">
+      <div class="ri-num">01</div>
+      <div class="ri-titulo">Conocimiento científico</div>
+      <div class="ri-desc">Sistemático, empírico, replicable, crítico y comunicable. No es lo mismo que saber cotidiano o intuición.</div>
+    </div>
+    <div class="resumen-item" style="border-left-color: var(--violeta);">
+      <div class="ri-num" style="color: var(--violeta);">02</div>
+      <div class="ri-titulo">Empirismo vs. Racionalismo</div>
+      <div class="ri-desc">El conocimiento viene de la experiencia (Bacon, Hume) y de la razón (Descartes). Kant integró las dos en la ciencia moderna.</div>
+    </div>
+    <div class="resumen-item" style="border-left-color: var(--verde);">
+      <div class="ri-num" style="color: var(--verde);">03</div>
+      <div class="ri-titulo">Método científico</div>
+      <div class="ri-desc">8 pasos: observar → preguntar → revisar literatura → hipotetizar → diseñar → recolectar → analizar → concluir.</div>
+    </div>
+    <div class="resumen-item" style="border-left-color: var(--amarillo-oscuro);">
+      <div class="ri-num" style="color: var(--amarillo-oscuro);">04</div>
+      <div class="ri-titulo">Fuentes confiables</div>
+      <div class="ri-desc">Jerarquía de 5 niveles. Scopus, EBSCO, ProQuest como estándar. Criterio CRAAP para evaluar cualquier fuente.</div>
+    </div>
+    <div class="resumen-item" style="border-left-color: var(--rojo);">
+      <div class="ri-num" style="color: var(--rojo);">05</div>
+      <div class="ri-titulo">APA 7ª edición</div>
+      <div class="ri-desc">Cita textual, parafraseada y lista de referencias. El plagio tiene consecuencias académicas graves.</div>
+    </div>
+    <div class="resumen-item" style="border-left-color: #dc2626;">
+      <div class="ri-num" style="color: #dc2626;">06</div>
+      <div class="ri-titulo">Pregunta transversal</div>
+      <div class="ri-desc">¿Cómo afecta la volatilidad de precios de insumos en la viabilidad financiera de las Mipymes colombianas?</div>
+    </div>
+  </div>
+
+  <div class="conexion-banner">
+    <strong>Conexión directa con hoy:</strong> En la Clase 1 identificamos el fenómeno y entendimos las herramientas del investigador. Hoy damos el primer paso real del proceso: convertir esa observación general en un <strong>problema de investigación delimitado, justificado y verificable</strong> — la pieza central de la Actividad A2.
+  </div>
+</section>
+
+<!-- ============================================================
+     ¿QUÉ ES EL PROBLEMA DE INVESTIGACIÓN?
+============================================================ -->
+<section id="sec-problema" class="seccion sec-problema">
+  <div class="seccion-label lbl-azul">Sección 1</div>
+  <h2>¿Qué es un Problema de Investigación y por qué es la Pieza más Importante?</h2>
+  <p class="intro-parrafo">Sin un problema bien formulado, no hay investigación posible. El problema no es una queja ni una observación vaga: es la brecha verificable entre lo que sabemos y lo que necesitamos saber.</p>
+
+  <div class="cita-bloque">
+    "Un problema de investigación es una situación que requiere solución, mejoramiento o alteración, o una dificultad que se necesita eliminar o resolver."
+    <cite>— Hernández Sampieri, R., Fernández Collado, C., & Baptista Lucio, M. P. (2014). Metodología de la investigación (6ª ed.). McGraw-Hill.</cite>
+  </div>
+
+  <h3 class="subtitulo-seccion">La diferencia entre un tema, un problema y una pregunta</h3>
+
+  <div class="tabla-wrap">
+    <table>
+      <thead>
+        <tr><th>Concepto</th><th>Qué es</th><th>Ejemplo en nuestro ciclo</th><th>¿Es suficiente para investigar?</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Tema</td>
+          <td>Un área general de interés. Muy amplia, sin dirección específica.</td>
+          <td>"Los insumos en las empresas colombianas"</td>
+          <td style="color: var(--rojo); font-weight:700;">No — demasiado vago</td>
+        </tr>
+        <tr>
+          <td>Problema</td>
+          <td>Una situación concreta que genera una brecha de conocimiento o una tensión real verificable.</td>
+          <td>"Las Mipymes del sector textil no cuentan con estrategias documentadas para gestionar el riesgo de alza de precios del algodón importado."</td>
+          <td style="color: var(--amarillo-oscuro); font-weight:700;">Casi — falta operacionalizarlo</td>
+        </tr>
+        <tr>
+          <td>Pregunta de investigación</td>
+          <td>Formulación precisa, delimitada y respondible mediante datos del problema identificado.</td>
+          <td>"¿Cuál es el impacto de la fluctuación del precio del algodón importado sobre el margen de utilidad neta de las Mipymes textiles de Bogotá durante el primer semestre de 2026?"</td>
+          <td style="color: var(--verde); font-weight:700;">Sí — es investigable</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="subtitulo-seccion">¿Cuándo existe un problema de investigación?</h3>
+  <p>Un problema existe cuando se cumple alguna de estas condiciones:</p>
+
+  <div class="concepto-grid" style="margin-top: 16px;">
+    <div class="concepto-card cc-azul">
+      <div class="cc-titulo" style="color: var(--azul-vivo);">Brecha de conocimiento</div>
+      <p>No existe información suficiente sobre el fenómeno. Nadie ha estudiado cómo impacta específicamente la suba de insumos médicos importados en las Mipymes de salud del Eje Cafetero.</p>
+    </div>
+    <div class="concepto-card cc-naranja">
+      <div class="cc-titulo" style="color: var(--naranja);">Contradicción entre teoría y práctica</div>
+      <p>La teoría económica dice que las empresas trasladan el costo al precio final, pero en campo observamos que las Mipymes no pueden hacerlo porque perderían clientes. Esa tensión es un problema.</p>
+    </div>
+    <div class="concepto-card cc-verde">
+      <div class="cc-titulo" style="color: var(--verde);">Problema real sin solución documentada</div>
+      <p>Los gerentes de Mipymes del sector agroalimentario saben que el cacao se encareció un 40% pero no tienen un protocolo formalizado de decisión frente a esa volatilidad. El conocimiento práctico existe, la sistematización no.</p>
+    </div>
+    <div class="concepto-card cc-violeta">
+      <div class="cc-titulo" style="color: var(--violeta);">Necesidad de actualización</div>
+      <p>Estudios anteriores abordaron el tema en otro contexto, otro ciclo económico o con otra metodología. La situación post-pandemia y el nuevo ciclo de inflación justifican replicar y actualizar el análisis.</p>
+    </div>
+  </div>
+
+  <div class="highlight-box hb-amarillo">
+    <div class="hb-icon">⚠️</div>
+    <div class="hb-content">
+      <strong>Error más frecuente: confundir síntoma con problema</strong>
+      <p>Decir "el problema es que las empresas están perdiendo dinero" es nombrar un síntoma, no un problema investigable. El problema de investigación debe identificar el mecanismo: <em>¿por qué</em> pierden dinero, <em>qué variable</em> lo explica, y <em>cómo</em> se puede medir esa relación.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     ÁRBOL DEL PROBLEMA
+============================================================ -->
+<section id="sec-arbol" class="seccion sec-arbol">
+  <div class="seccion-label lbl-naranja">Sección 2</div>
+  <h2>El Árbol del Problema: Visualizar para Comprender</h2>
+  <p class="intro-parrafo">El árbol del problema es una herramienta de análisis causal que nos permite mapear con claridad el fenómeno que investigamos: sus raíces (causas), su tronco (el problema central) y sus ramas (los efectos).</p>
+
+  <h3 class="subtitulo-seccion">¿Cómo se construye?</h3>
+  <ul class="proceso-lista">
+    <li>
+      <div class="paso-num" style="background: #dc2626;">1</div>
+      <div class="paso-texto">
+        <strong>Identifica los efectos (copa del árbol)</strong>
+        <span>¿Qué consecuencias visibles genera el problema? Son los síntomas observables: caída de márgenes, reducción de personal, cierre de líneas de producto, endeudamiento.</span>
+      </div>
+    </li>
+    <li>
+      <div class="paso-num" style="background: var(--azul-medio);">2</div>
+      <div class="paso-texto">
+        <strong>Formula el problema central (tronco)</strong>
+        <span>La situación concreta que genera esos efectos. Debe ser específica, delimitada y expresada como un estado negativo, no como la ausencia de su solución.</span>
+      </div>
+    </li>
+    <li>
+      <div class="paso-num" style="background: var(--verde);">3</div>
+      <div class="paso-texto">
+        <strong>Identifica las causas (raíces)</strong>
+        <span>¿Qué origina el problema? Pueden ser directas (primer nivel) o indirectas (segundo nivel). Busca las causas más profundas, no solo las superficiales.</span>
+      </div>
+    </li>
+    <li>
+      <div class="paso-num" style="background: var(--amarillo-oscuro);">4</div>
+      <div class="paso-texto">
+        <strong>Verifica la coherencia causal</strong>
+        <span>Prueba el árbol de arriba hacia abajo: ¿si existen esas causas, se genera ese problema? ¿Si existe ese problema, se generan esos efectos? Si la lógica no fluye, ajusta.</span>
+      </div>
+    </li>
+  </ul>
+
+  <h3 class="subtitulo-seccion">Árbol del problema — Ejemplo aplicado al ciclo</h3>
+
+  <div class="arbol-wrap">
+    <!-- EFECTOS -->
+    <div class="arbol-bloque ab-efectos">
+      <div class="ab-label">Efectos (Copa)</div>
+      <div class="arbol-sub-grid" style="grid-template-columns: 1fr 1fr 1fr; margin-top: 8px;">
+        <div style="background: rgba(255,255,255,0.15); border-radius: 8px; padding: 10px 12px; font-size: 0.82rem; text-align: center;">Reducción del margen de utilidad neta</div>
+        <div style="background: rgba(255,255,255,0.15); border-radius: 8px; padding: 10px 12px; font-size: 0.82rem; text-align: center;">Dificultades en el flujo de caja operativo</div>
+        <div style="background: rgba(255,255,255,0.15); border-radius: 8px; padding: 10px 12px; font-size: 0.82rem; text-align: center;">Pérdida de competitividad frente a grandes empresas</div>
+      </div>
+    </div>
+
+    <div class="arbol-conector">↑ &nbsp; ↑ &nbsp; ↑</div>
+
+    <!-- PROBLEMA CENTRAL -->
+    <div class="arbol-bloque ab-problema">
+      <div class="ab-label">Problema Central (Tronco)</div>
+      <div style="margin-top: 6px;">Las Mipymes colombianas carecen de estrategias formalizadas para gestionar el impacto financiero de la volatilidad en los precios de sus insumos críticos</div>
+    </div>
+
+    <div class="arbol-conector">↑ &nbsp; ↑ &nbsp; ↑</div>
+
+    <!-- CAUSAS -->
+    <div class="arbol-bloque ab-causas">
+      <div class="ab-label">Causas (Raíces)</div>
+      <div class="arbol-sub-grid" style="grid-template-columns: 1fr 1fr 1fr; margin-top: 8px;">
+        <div style="background: rgba(255,255,255,0.15); border-radius: 8px; padding: 10px 12px; font-size: 0.82rem; text-align: center;">Alta dependencia de insumos importados indexados a la TRM</div>
+        <div style="background: rgba(255,255,255,0.15); border-radius: 8px; padding: 10px 12px; font-size: 0.82rem; text-align: center;">Ausencia de planeación financiera de largo plazo en la mayoría de Mipymes</div>
+        <div style="background: rgba(255,255,255,0.15); border-radius: 8px; padding: 10px 12px; font-size: 0.82rem; text-align: center;">Limitado acceso a herramientas de cobertura cambiaria o gestión de riesgo</div>
+      </div>
+    </div>
+  </div>
+
+  <p class="nota">Este árbol corresponde al nivel del macro-proyecto transversal. En la Actividad A2, cada estudiante construirá el árbol específico de su sector asignado.</p>
+
+  <div class="highlight-box hb-verde" style="margin-top: 20px;">
+    <div class="hb-icon">🌳</div>
+    <div class="hb-content">
+      <strong>Del árbol al texto: la narrativa del problema</strong>
+      <p>El árbol del problema no es el entregable final — es la herramienta de análisis. Lo que entregas en la Actividad A2 es la <strong>narrativa del planteamiento del problema</strong>: un texto corrido de máximo 2 páginas que integra contexto, causas, magnitud del fenómeno, efectos observados y la justificación del estudio. El árbol es el mapa; el texto es el relato del mapa.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     PREGUNTA DE INVESTIGACIÓN
+============================================================ -->
+<section id="sec-pregunta" class="seccion sec-pregunta">
+  <div class="seccion-label lbl-verde">Sección 3</div>
+  <h2>La Pregunta de Investigación: El Corazón del Proyecto</h2>
+  <p class="intro-parrafo">Una buena pregunta de investigación hace el 60% del trabajo. Define el alcance, guía la búsqueda de fuentes, orienta el diseño metodológico y determina qué datos necesitas recolectar. Aprende a redactarla bien y todo lo demás fluye.</p>
+
+  <h3 class="subtitulo-seccion">Criterios de una buena pregunta de investigación</h3>
+
+  <div class="concepto-grid">
+    <div class="concepto-card cc-verde">
+      <div class="cc-titulo" style="color: var(--verde);">Delimitada</div>
+      <p>Especifica claramente el <strong>qué</strong> (fenómeno), el <strong>quién</strong> (población), el <strong>dónde</strong> (contexto geográfico/sectorial) y el <strong>cuándo</strong> (período de análisis). Sin límites, no hay investigación posible.</p>
+    </div>
+    <div class="concepto-card cc-azul">
+      <div class="cc-titulo" style="color: var(--azul-vivo);">Verificable empíricamente</div>
+      <p>Debe poder responderse con datos recolectables en la realidad, no solo con reflexión teórica. Si la respuesta no puede obtenerse mediante evidencia observable, reorienta la pregunta.</p>
+    </div>
+    <div class="concepto-card cc-naranja">
+      <div class="cc-titulo" style="color: var(--naranja);">Novedosa o pertinente</div>
+      <p>No debe tener una respuesta obvia ni ser idéntica a algo ya publicado. Debe aportar algo: datos nuevos, un contexto diferente, una variable no estudiada antes, o actualización de conocimiento previo.</p>
+    </div>
+    <div class="concepto-card cc-violeta">
+      <div class="cc-titulo" style="color: var(--violeta);">Viable</div>
+      <p>¿Puedes responderla con los recursos, el tiempo y el acceso disponibles? Una pregunta perfecta que requiere 500 entrevistas en 5 países no es viable para un ciclo de 7 clases. La viabilidad es un criterio ético y práctico.</p>
+    </div>
+  </div>
+
+  <h3 class="subtitulo-seccion">Cómo transformar la pregunta transversal en tu pregunta sectorial</h3>
+
+  <div class="tabla-wrap">
+    <table>
+      <thead>
+        <tr><th>Nivel</th><th>Pregunta</th><th>Alcance</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Macro-proyecto (transversal)</td>
+          <td>¿Cómo afecta la fluctuación de precios de insumos en la viabilidad financiera y la toma de decisiones de las Mipymes colombianas?</td>
+          <td>Todos los sectores, nivel nacional, marco del artículo co-autorado</td>
+        </tr>
+        <tr>
+          <td>Tu pregunta sectorial (A2)</td>
+          <td>¿Cuál es el impacto de la variación del precio del [insumo crítico] sobre [variable financiera específica] en las Mipymes del sector [tu sector] en [ciudad/región] durante [período]?</td>
+          <td>Tu sector asignado, alcance local, base de tu entregable individual</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="subtitulo-seccion">Ejemplos por sector</h3>
+
+  <div class="tabla-wrap">
+    <table>
+      <thead>
+        <tr><th>Sector</th><th>Insumo crítico</th><th>Ejemplo de pregunta sectorial válida</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Salud</td>
+          <td>EPP e insumos médicos importados</td>
+          <td>¿En qué medida el incremento en el precio de los insumos médicos importados ha afectado la rentabilidad operativa de las Mipymes del sector salud en Bogotá durante el primer semestre de 2026?</td>
+        </tr>
+        <tr>
+          <td>Agroalimentario</td>
+          <td>Cacao, café, fertilizantes</td>
+          <td>¿Cuál es la relación entre la volatilidad del precio del cacao en el mercado internacional y la toma de decisiones de producción en las Mipymes procesadoras de chocolate del Eje Cafetero?</td>
+        </tr>
+        <tr>
+          <td>Textil y confección</td>
+          <td>Algodón importado</td>
+          <td>¿Cómo ha impactado la fluctuación del precio del algodón importado en la estructura de costos y las estrategias de precio de las Mipymes textiles de Medellín en el ciclo 2025-2026?</td>
+        </tr>
+        <tr>
+          <td>Tecnología</td>
+          <td>Componentes electrónicos</td>
+          <td>¿De qué manera la escasez y el encarecimiento de componentes electrónicos han afectado la viabilidad de proyectos de desarrollo de software en Mipymes tecnológicas colombianas?</td>
+        </tr>
+        <tr>
+          <td>Construcción</td>
+          <td>Acero y cemento</td>
+          <td>¿Cuál ha sido el efecto de la variación en el precio del acero sobre los flujos de caja proyectados de las Mipymes constructoras en Colombia durante 2025-2026?</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="highlight-box hb-rojo">
+    <div class="hb-icon">🚫</div>
+    <div class="hb-content">
+      <strong>Preguntas que no funcionan — y por qué</strong>
+      <ul>
+        <li><strong>"¿Es importante estudiar los insumos?"</strong> — Respuesta obvia: sí. No genera conocimiento nuevo.</li>
+        <li><strong>"¿Cómo afectan los insumos a todo el mundo?"</strong> — Sin delimitar, es imposible operacionalizar y recolectar datos.</li>
+        <li><strong>"¿Por qué las empresas colombianas fracasan?"</strong> — Demasiado amplia y ya tiene miles de estudios. Necesita un ángulo nuevo y delimitado.</li>
+        <li><strong>"¿Podría el gobierno ayudar a las empresas?"</strong> — Es una pregunta de política pública, no de investigación empírica sobre el fenómeno.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     JUSTIFICACIÓN
+============================================================ -->
+<section id="sec-justif" class="seccion sec-justif">
+  <div class="seccion-label lbl-violeta">Sección 4</div>
+  <h2>La Justificación: ¿Por qué Vale la Pena Investigar Esto?</h2>
+  <p class="intro-parrafo">La justificación responde una sola pregunta: ¿por qué este estudio merece existir? Toda investigación debe demostrar su valor antes de recibir recursos, tiempo y atención. En el mundo académico y empresarial, si no puedes justificar tu investigación, no existe.</p>
+
+  <h3 class="subtitulo-seccion">Los tres pilares de la justificación</h3>
+
+  <div class="concepto-grid">
+    <div class="concepto-card cc-azul">
+      <div class="cc-titulo" style="color: var(--azul-vivo);">Justificación Teórica</div>
+      <p>¿Qué aporta al conocimiento académico? ¿Llena un vacío en la literatura? ¿Replicalga un estudio en un contexto nuevo? ¿Contrasta teorías existentes con datos del contexto colombiano actual?</p>
+      <ul>
+        <li>Vacíos en la literatura identificados en la revisión de fuentes</li>
+        <li>Necesidad de actualización del conocimiento (contexto 2024-2026)</li>
+        <li>Aporte a teorías de gestión de riesgo, finanzas empresariales o cadena de suministro</li>
+      </ul>
+    </div>
+    <div class="concepto-card cc-verde">
+      <div class="cc-titulo" style="color: var(--verde);">Justificación Práctica</div>
+      <p>¿A quién le sirven los resultados? ¿Qué decisiones reales pueden mejorarse con este conocimiento? La investigación que no conecta con un problema real de actores reales tiene poco impacto.</p>
+      <ul>
+        <li>Gerentes de Mipymes que necesitan estrategias de gestión de costos</li>
+        <li>Cámaras de comercio y gremios sectoriales para política empresarial</li>
+        <li>Entidades financieras que financian proyectos de Mipymes</li>
+      </ul>
+    </div>
+    <div class="concepto-card cc-violeta">
+      <div class="cc-titulo" style="color: var(--violeta);">Justificación Metodológica</div>
+      <p>¿Introduce algún aporte en la forma de recolectar o analizar los datos? ¿Usa una metodología poco explorada en este contexto? ¿La escala o el enfoque multisectorial son novedosos?</p>
+      <ul>
+        <li>Análisis comparativo multisectorial simultáneo (3 cursos, múltiples sectores)</li>
+        <li>Instrumento digitalizado con captura automatizada en tiempo real (AXON)</li>
+        <li>Co-autoría masiva como modelo innovador de producción científica</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3 class="subtitulo-seccion">Cómo redactar la justificación: estructura recomendada</h3>
+
+  <ul class="proceso-lista">
+    <li>
+      <div class="paso-num" style="background: var(--violeta);">1</div>
+      <div class="paso-texto">
+        <strong>Abre con el contexto y la magnitud del problema</strong>
+        <span>Datos duros que demuestren que el fenómeno es real y relevante. Cifras del DANE, Banco de la República, informes sectoriales. Ejemplo: "Según el DANE (2025), el 68% de las Mipymes manufactureras reportaron incrementos superiores al 20% en sus costos de insumos durante 2024..."</span>
+      </div>
+    </li>
+    <li>
+      <div class="paso-num" style="background: var(--violeta);">2</div>
+      <div class="paso-texto">
+        <strong>Señala el vacío en la literatura</strong>
+        <span>¿Qué no se ha estudiado suficientemente? Conecta con los artículos que encontraste en la Biblioteca Virtual. "Si bien existen estudios sobre inflación y costos empresariales (Autor, año), la perspectiva multisectorial focalizada en Mipymes colombianas en el período 2025-2026 permanece poco documentada."</span>
+      </div>
+    </li>
+    <li>
+      <div class="paso-num" style="background: var(--violeta);">3</div>
+      <div class="paso-texto">
+        <strong>Declara el valor práctico de los resultados</strong>
+        <span>¿Quiénes se benefician y cómo? Sé específico: "Los resultados de este estudio permitirán a los gerentes de Mipymes del sector [X] identificar cuáles insumos representan el mayor riesgo financiero y tomar decisiones preventivas informadas por evidencia."</span>
+      </div>
+    </li>
+    <li>
+      <div class="paso-num" style="background: var(--violeta);">4</div>
+      <div class="paso-texto">
+        <strong>Menciona el aporte metodológico si aplica</strong>
+        <span>Solo si tu diseño tiene algo novedoso. No es obligatorio en todos los estudios, pero en nuestro caso la co-autoría masiva y la captura automatizada de datos sí constituyen un aporte metodológico documentable.</span>
+      </div>
+    </li>
+  </ul>
+
+  <div class="cita-bloque">
+    "Una investigación tiene valor cuando sus resultados pueden ser utilizados en la práctica o cuando contribuyen a construir o verificar teoría."
+    <cite>— Ñaupas Paitán, H. et al. (2018). Metodología de la investigación. Ediciones de la U.</cite>
+  </div>
+</section>
+
+<!-- ============================================================
+     LA HIPÓTESIS
+============================================================ -->
+<section id="sec-hipotesis" class="seccion sec-hipotesis">
+  <div class="seccion-label lbl-rojo">Sección 5</div>
+  <h2>La Hipótesis de Investigación: Una Respuesta que se Somete a Prueba</h2>
+  <p class="intro-parrafo">La hipótesis no es una conclusión anticipada ni una predicción mágica. Es una respuesta tentativa y verificable a la pregunta de investigación, que el proceso metodológico confirmará o refutará con datos reales.</p>
+
+  <h3 class="subtitulo-seccion">¿Qué hace que una hipótesis sea científicamente válida?</h3>
+
+  <div class="tabla-wrap">
+    <table>
+      <thead>
+        <tr><th>Requisito</th><th>Qué implica</th><th>Verificación rápida</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Falseable (Popper)</td>
+          <td>Debe existir alguna evidencia posible que pueda refutarla</td>
+          <td>¿Qué resultado de la encuesta la refutaría? Si no hay respuesta, no es falseable.</td>
+        </tr>
+        <tr>
+          <td>Delimitada</td>
+          <td>Especifica variables, población y contexto</td>
+          <td>¿Puedo identificar la variable independiente, la dependiente y la población?</td>
+        </tr>
+        <tr>
+          <td>Coherente con el marco teórico</td>
+          <td>Debe desprenderse de la teoría revisada, no aparecer "de la nada"</td>
+          <td>¿Hay al menos un artículo científico que apoye la lógica causal de la hipótesis?</td>
+        </tr>
+        <tr>
+          <td>Verificable con los datos disponibles</td>
+          <td>Las variables deben poder medirse con el instrumento que diseñarás</td>
+          <td>¿Alguna pregunta de la encuesta AXON captura las variables de esta hipótesis?</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="subtitulo-seccion">Tipos de hipótesis</h3>
+
+  <div class="concepto-grid">
+    <div class="concepto-card cc-azul">
+      <div class="cc-titulo" style="color: var(--azul-vivo);">Hipótesis Afirmativa (H1)</div>
+      <p>Plantea la existencia de una relación, diferencia o efecto entre variables.<br><br><em>Ejemplo:</em> "La fluctuación del precio del algodón importado se relaciona positiva y significativamente con la reducción del margen de utilidad neta en las Mipymes textiles de Bogotá."</p>
+    </div>
+    <div class="concepto-card cc-gris">
+      <div class="cc-titulo" style="color: #374151;">Hipótesis Nula (H0)</div>
+      <p>Plantea la ausencia de relación o diferencia. Es el "statu quo" que intentamos refutar.<br><br><em>Ejemplo:</em> "No existe relación estadísticamente significativa entre la fluctuación del precio del algodón importado y el margen de utilidad neta en las Mipymes textiles de Bogotá."</p>
+    </div>
+    <div class="concepto-card cc-verde">
+      <div class="cc-titulo" style="color: var(--verde);">Hipótesis Descriptiva</div>
+      <p>Predice una característica, valor o comportamiento de una variable sin establecer relación causal.<br><br><em>Ejemplo:</em> "Más del 60% de las Mipymes del sector agroalimentario encuestadas han reestructurado su presupuesto operativo como respuesta a la suba del precio del cacao."</p>
+    </div>
+    <div class="concepto-card cc-naranja">
+      <div class="cc-titulo" style="color: var(--naranja);">Hipótesis Causal</div>
+      <p>Establece una relación de causa-efecto entre variables. Es la más exigente porque implica demostrar no solo correlación sino causalidad.<br><br><em>Ejemplo:</em> "El incremento sostenido del precio de los EPP importados es una causa directa del deterioro del margen operativo en clínicas Mipyme del sector salud."</p>
+    </div>
+  </div>
+
+  <h3 class="subtitulo-seccion">Anatomía de una hipótesis bien redactada</h3>
+
+  <div class="highlight-box hb-azul">
+    <div class="hb-icon">🔬</div>
+    <div class="hb-content">
+      <strong>Estructura: Variable independiente → Relación → Variable dependiente → Población → Contexto</strong>
+      <p><br>
+      <strong>Variable independiente (VI):</strong> Lo que varía de manera autónoma. En nuestro caso: el precio de los insumos críticos.<br>
+      <strong>Variable dependiente (VD):</strong> Lo que se ve afectado. En nuestro caso: el margen de utilidad, el flujo de caja, las decisiones gerenciales.<br>
+      <strong>Relación:</strong> Positiva, negativa, directa, inversa, de mediación.<br>
+      <strong>Población:</strong> Las Mipymes de tu sector asignado.<br>
+      <strong>Contexto:</strong> Colombia, ciclo 2025-2026.<br><br>
+      <em>Plantilla práctica:</em> "La [variación de VI] se relaciona [tipo de relación] con [VD] en las [Mipymes del sector X] de [geografía] durante [período]."</p>
+    </div>
+  </div>
+
+  <div class="reflexion-box">
+    <h3>Reflexión: el ciclo pregunta → hipótesis → datos → conclusión</h3>
+    <ol>
+      <li>Tienes la pregunta: <strong>"¿Cómo impacta el alza del precio del acero en el flujo de caja de las Mipymes constructoras?"</strong> Redacta dos hipótesis posibles: una que diga que sí hay impacto significativo y otra que diga que no lo hay. ¿Cuál crees que encontrarás en los datos?</li>
+      <li>Un estudiante redactó esta hipótesis: <strong>"Las empresas deberían gestionar mejor sus costos."</strong> ¿Por qué no es una hipótesis de investigación válida? ¿Cómo la reformularías?</li>
+      <li>¿Qué pregunta de las 5 del núcleo AXON conecta directamente con las variables de tu hipótesis sectorial?</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============================================================
+     PLAN DE NEGOCIO
+============================================================ -->
+<section id="sec-pdn" class="seccion sec-pdn">
+  <div class="seccion-label lbl-amarillo">Sección 6 · Doble Aplicación</div>
+  <h2>El Mismo Proceso, Dos Contextos: Investigación Existente vs. Plan de Negocio</h2>
+  <p class="intro-parrafo">La metodología de investigación no es solo para auditar empresas que ya existen. Para quienes desarrollan un Plan de Negocio, el planteamiento del problema, la justificación y la hipótesis tienen una aplicación directa y poderosa: justificar la viabilidad de tu emprendimiento con evidencia.</p>
+
+  <div class="highlight-box hb-amarillo" style="margin-bottom: 28px;">
+    <div class="hb-icon">🧭</div>
+    <div class="hb-content">
+      <strong>La lógica es idéntica — el objeto de análisis cambia</strong>
+      <p>En ambos casos buscamos responder: ¿existe un problema real que justifique nuestra intervención? En Metodología Investigativa, esa intervención es el estudio. En Plan de Negocio, esa intervención es el emprendimiento. Las herramientas (árbol del problema, pregunta, justificación, hipótesis) son exactamente las mismas.</p>
+    </div>
+  </div>
+
+  <!-- DOBLE CARRIL: cada elemento comparado -->
+  <h3 class="subtitulo-seccion">Elemento por elemento: cómo se traduce cada componente</h3>
+
+  <div class="doble-carril">
+    <div class="carril-header ch-inv">Metodología Investigativa<br>Empresa existente / Sector asignado</div>
+    <div class="carril-header ch-pdn">Plan de Negocio<br>Emprendimiento propio</div>
+
+    <!-- Árbol del problema -->
+    <div class="carril-body">
+      <p><strong>Árbol del problema:</strong> Mapeas causas y efectos de un fenómeno que afecta a empresas que ya existen en el sector. El problema pertenece al entorno que analizas.</p>
+      <div class="ejemplo">El problema es la vulnerabilidad financiera de las Mipymes textiles ante la suba del algodón. Tú eres el investigador externo que lo estudia.</div>
+    </div>
+    <div class="carril-body">
+      <p><strong>Árbol del problema:</strong> Mapeas el problema del mercado que tu emprendimiento resolverá. Aquí el problema es la necesidad insatisfecha del cliente potencial.</p>
+      <div class="ejemplo">El problema es que los pequeños confeccionistas no tienen acceso a tela reciclada de calidad a precio competitivo. Tu emprendimiento es la solución.</div>
+    </div>
+
+    <!-- Pregunta de investigación -->
+    <div class="carril-body">
+      <p><strong>Pregunta de investigación:</strong> Busca comprender cómo funciona el fenómeno o medir su magnitud en la realidad actual de las empresas del sector.</p>
+      <div class="ejemplo">¿En qué medida la fluctuación del precio del algodón afecta el margen de utilidad de las Mipymes textiles de Bogotá en 2026?</div>
+    </div>
+    <div class="carril-body">
+      <p><strong>Pregunta de investigación (validación de mercado):</strong> Busca confirmar que el problema existe, que el mercado está dispuesto a pagar por una solución, y que tu propuesta es viable.</p>
+      <div class="ejemplo">¿Estaría el mercado de confeccionistas independientes dispuesto a adquirir tela reciclada certificada si su precio es hasta un 20% superior al convencional?</div>
+    </div>
+
+    <!-- Justificación -->
+    <div class="carril-body">
+      <p><strong>Justificación:</strong> Argumentas por qué es importante estudiar el fenómeno. El valor es académico y práctico para el sector.</p>
+      <div class="ejemplo">Este estudio permite a los gremios y gerentes del sector textil identificar los insumos con mayor riesgo financiero y diseñar estrategias preventivas basadas en evidencia.</div>
+    </div>
+    <div class="carril-body">
+      <p><strong>Justificación del emprendimiento:</strong> Argumentas por qué el negocio es necesario, viable y tiene mercado. El valor es para inversionistas, bancos y socios estratégicos.</p>
+      <div class="ejemplo">El mercado de telas sostenibles en Colombia crece al 15% anual (fuente académica) y el 72% de los confeccionistas encuestados expresó disposición a pagar un premium por insumos con certificación ambiental.</div>
+    </div>
+
+    <!-- Hipótesis -->
+    <div class="carril-body">
+      <p><strong>Hipótesis de investigación:</strong> Anticipa una relación causal entre variables del fenómeno que los datos podrán confirmar o refutar.</p>
+      <div class="ejemplo">La fluctuación del precio del algodón importado se relaciona negativamente con el margen de utilidad neta de las Mipymes textiles de Bogotá en 2026.</div>
+    </div>
+    <div class="carril-body">
+      <p><strong>Hipótesis del plan de negocio (supuesto central):</strong> Anticipas el comportamiento del mercado que sustenta la viabilidad del emprendimiento. Es el supuesto que el trabajo de campo validará o invalidará.</p>
+      <div class="ejemplo">Los confeccionistas independientes de la ciudad tienen capacidad y disposición de pago para adquirir tela reciclada certificada si la propuesta incluye entrega a domicilio y volúmenes mínimos accesibles.</div>
+    </div>
+  </div>
+
+  <h3 class="subtitulo-seccion">La encuesta AXON como herramienta de validación de mercado</h3>
+  <p>Para quienes desarrollan un Plan de Negocio, la <strong>Actividad A6 (encuesta AXON)</strong> no es un ejercicio académico aislado — es la validación de mercado de su emprendimiento. Los 5 informantes clave no son gerentes de empresas existentes, sino clientes potenciales, competidores o proveedores del sector al que entrará el nuevo negocio.</p>
+
+  <div class="concepto-grid" style="margin-top: 16px;">
+    <div class="concepto-card cc-amarillo">
+      <div class="cc-titulo" style="color: var(--amarillo-oscuro);">¿Quiénes son tus 5 informantes clave?</div>
+      <ul>
+        <li>Clientes potenciales del segmento objetivo</li>
+        <li>Competidores directos o indirectos</li>
+        <li>Proveedores del insumo crítico que identificaste</li>
+        <li>Distribuidores o canales del sector</li>
+        <li>Expertos del sector (gremios, cámaras de comercio)</li>
+      </ul>
+    </div>
+    <div class="concepto-card cc-verde">
+      <div class="cc-titulo" style="color: var(--verde);">¿Qué responde tu encuesta?</div>
+      <ul>
+        <li>¿Existe el problema que tu negocio resuelve?</li>
+        <li>¿Con qué intensidad lo vive el mercado objetivo?</li>
+        <li>¿Cuánto impacta el insumo crítico en sus costos?</li>
+        <li>¿Qué decisiones han tomado frente a la volatilidad?</li>
+        <li>¿Están dispuestos a cambiar de proveedor o de solución?</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     TALLER PRÁCTICO
+============================================================ -->
+<section id="sec-taller" class="seccion sec-taller">
+  <div class="seccion-label lbl-oscuro">Sección 7 · Trabajo en Clase</div>
+  <h2>Taller: Construye el Núcleo de tu Proyecto</h2>
+  <p class="intro-parrafo">Todo lo que aprendiste hoy tiene una sola finalidad: que puedas construir, aquí y ahora, los elementos centrales de tu Actividad A2. Este taller es el puente entre la teoría y tu entregable.</p>
+
+  <div class="actividad-strip">
+    <div class="act-id">A2</div>
+    <div class="act-info">
+      <div class="act-nombre">Planteamiento del Problema de Investigación</div>
+      <div class="act-desc">Documento individual por sector. Incluye: contexto del problema país, pregunta específica derivada de la transversal, justificación teórico-práctica e hipótesis de investigación. Formato: PDF, máximo 3 páginas, interlineado 1.5, letra Arial 11, Normas APA 7ª edición.</div>
+      <div class="act-peso">40% del Corte 1</div>
+    </div>
+  </div>
+
+  <h3 class="subtitulo-seccion">Pasos del taller — trabaja en este orden</h3>
+
+  <ol class="taller-pasos">
+    <li>
+      <div class="tp-body">
+        <strong>Declara tu sector y tu insumo crítico</strong>
+        <p>Escribe en una línea: "Mi sector asignado es [X] y el insumo crítico que investigaré es [Y]." Justifica en 2-3 oraciones por qué ese insumo es el más relevante para la viabilidad financiera del sector. Usa datos contextuales si los tienes.</p>
+      </div>
+    </li>
+    <li>
+      <div class="tp-body">
+        <strong>Esboza tu árbol del problema</strong>
+        <p>En papel o en tu dispositivo: escribe el problema central en el centro. Arriba 2-3 efectos observables. Abajo 2-3 causas directas. No tiene que ser perfecto — es un borrador de análisis que luego se convierte en narrativa.</p>
+      </div>
+    </li>
+    <li>
+      <div class="tp-body">
+        <strong>Formula tu pregunta de investigación</strong>
+        <p>Usa la estructura: ¿[Cómo/Cuál/En qué medida] [Variable Independiente] [tipo de relación] [Variable Dependiente] en [población: Mipymes de tu sector] en [contexto geográfico] durante [período 2025-2026]? Escribe al menos 2 versiones y quédate con la más precisa.</p>
+      </div>
+    </li>
+    <li>
+      <div class="tp-body">
+        <strong>Redacta tu párrafo de justificación</strong>
+        <p>Un párrafo de 5-7 oraciones que responda: ¿por qué este estudio es relevante? Incluye un dato estadístico real del sector (DANE, Confecámaras, banco de la república, informe sectorial). Menciona un vacío en la literatura que hayas identificado en la Biblioteca Virtual.</p>
+      </div>
+    </li>
+    <li>
+      <div class="tp-body">
+        <strong>Escribe tu hipótesis inicial</strong>
+        <p>Usa la plantilla: "La [variación/fluctuación/incremento] de [Variable Independiente] se relaciona [positiva/negativa/directamente] con [Variable Dependiente] en las Mipymes del sector [X] de [lugar] durante [período]." Es una hipótesis de trabajo — puede ajustarse cuando tengas el marco teórico.</p>
+      </div>
+    </li>
+    <li>
+      <div class="tp-body">
+        <strong>Revisión cruzada en pareja</strong>
+        <p>Intercambia tu borrador con un compañero. Usa estas preguntas para dar retroalimentación: ¿La pregunta está delimitada? ¿La hipótesis es falseable? ¿La justificación tiene datos reales? ¿El árbol tiene coherencia causal de raíz a copa?</p>
+      </div>
+    </li>
+  </ol>
+
+  <div class="highlight-box hb-verde" style="margin-top: 8px;">
+    <div class="hb-icon">📌</div>
+    <div class="hb-content">
+      <strong>Lo que debes traer completado para la Clase 3</strong>
+      <ul>
+        <li>Borrador del árbol del problema de tu sector (puede ser a mano o digital)</li>
+        <li>Pregunta de investigación sectorial en versión definitiva</li>
+        <li>Al menos 2 artículos científicos indexados encontrados en la Biblioteca Virtual UniGermana relacionados con tu tema</li>
+        <li>Hipótesis de trabajo redactada según la estructura aprendida hoy</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="reflexion-box">
+    <h3>Cierre de Clase 2 — Puntos de control antes de salir</h3>
+    <ol>
+      <li><strong>¿Puedes formular en una sola oración</strong> el problema central de tu investigación sectorial? Si te cuesta más de 25 palabras, el problema aún no está suficientemente delimitado.</li>
+      <li><strong>¿Tu pregunta de investigación tiene</strong> qué (fenómeno), quién (población), dónde (contexto) y cuándo (período)? Verifica los cuatro elementos antes de cerrar la sesión.</li>
+      <li><strong>¿Tu hipótesis puede ser refutada?</strong> Imagina que la encuesta arroja el resultado contrario a lo que esperabas — ¿eso refutaría tu hipótesis? Si la respuesta es sí, la hipótesis está bien construida.</li>
+      <li><strong>Si desarrollas un Plan de Negocio:</strong> ¿tu problema de mercado está sustentado por al menos un dato externo verificable? La intuición de emprendedor es un punto de partida, no una justificación científica.</li>
+    </ol>
+  </div>
+
+</section>
+
+</div><!-- /page-wrap -->
+
+<footer class="site-footer">
+  <strong>UniGermana · Metodología Investigativa + Plan de Negocio · Ciclo 2026-13</strong><br>
+  Prof. Sergio Andrés Rojas Trujillo · Dirección de Investigaciones · Facultad de Ciencias Económicas y Administrativas<br>
+  Plataformas: Q10 · AXON (Supabase/Render) · Biblioteca Virtual UniGermana
+</footer>
+
+<script>
+const secciones = document.querySelectorAll('.seccion');
+const navLinks = document.querySelectorAll('.nav-secciones a');
+window.addEventListener('scroll', () => {
+  let actual = '';
+  secciones.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 120) actual = s.id;
+  });
+  navLinks.forEach(a => {
+    a.classList.remove('active');
+    if (a.getAttribute('href') === '#' + actual) a.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>

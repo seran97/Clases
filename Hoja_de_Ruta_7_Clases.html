@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hoja de Ruta — Metodología Investigativa · Ciclo 2026-13</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f2f5; color: #1a1a2e; }
+  header {
+    background: linear-gradient(135deg, #0d1b4b 0%, #1a3a8f 60%, #2563eb 100%);
+    color: white; padding: 40px 48px; border-bottom: 5px solid #f59e0b;
+  }
+  header .inst { font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; color: #93c5fd; margin-bottom: 8px; }
+  header h1 { font-size: 2rem; font-weight: 800; line-height: 1.2; margin-bottom: 10px; }
+  header .sub { font-size: 1rem; color: #bfdbfe; }
+  .pregunta-banner {
+    background: #f59e0b; color: #1a1a2e;
+    padding: 18px 48px; font-size: 0.95rem; font-weight: 700;
+    border-left: 8px solid #b45309;
+  }
+  .pregunta-banner span { font-style: italic; font-weight: 400; }
+  .container { max-width: 1100px; margin: 40px auto; padding: 0 24px 60px; }
+  .intro-box {
+    background: white; border-radius: 12px; padding: 28px 36px;
+    border-left: 6px solid #2563eb; margin-bottom: 40px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  }
+  .intro-box h2 { color: #1a3a8f; margin-bottom: 10px; font-size: 1.1rem; }
+  .intro-box p { color: #374151; line-height: 1.7; font-size: 0.95rem; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  @media(max-width:720px){ .grid { grid-template-columns: 1fr; } }
+  .card {
+    background: white; border-radius: 14px; overflow: hidden;
+    box-shadow: 0 3px 16px rgba(0,0,0,0.08); transition: transform .2s;
+  }
+  .card:hover { transform: translateY(-4px); }
+  .card-header {
+    padding: 18px 24px; display: flex; align-items: center; gap: 16px;
+  }
+  .card-num {
+    width: 48px; height: 48px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem; font-weight: 900; color: white; flex-shrink: 0;
+  }
+  .card-header-text .clase-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px; opacity: .7; }
+  .card-header-text h3 { font-size: 1rem; font-weight: 700; line-height: 1.3; }
+  .card-body { padding: 0 24px 24px; }
+  .pilar-tag {
+    display: inline-block; font-size: 0.7rem; font-weight: 700;
+    padding: 3px 10px; border-radius: 20px; margin-bottom: 12px;
+    letter-spacing: 1px; text-transform: uppercase;
+  }
+  .card-body ul { list-style: none; padding: 0; }
+  .card-body ul li {
+    padding: 6px 0; border-bottom: 1px solid #f3f4f6;
+    font-size: 0.88rem; color: #374151; padding-left: 18px; position: relative;
+  }
+  .card-body ul li:before { content: "→"; position: absolute; left: 0; color: #9ca3af; }
+  .card-body ul li:last-child { border-bottom: none; }
+  .actividad-badge {
+    margin-top: 14px; background: #eff6ff; border: 1px solid #bfdbfe;
+    border-radius: 8px; padding: 10px 14px;
+  }
+  .actividad-badge .badge-title { font-size: 0.72rem; font-weight: 700; color: #1d4ed8; text-transform: uppercase; letter-spacing: 1px; }
+  .actividad-badge p { font-size: 0.82rem; color: #374151; margin-top: 3px; line-height: 1.5; }
+  /* Colores por clase */
+  .c1 .card-header { background: linear-gradient(90deg,#0d1b4b,#1a3a8f); color: white; }
+  .c1 .card-num { background: #f59e0b; color: #1a1a2e; }
+  .c1 .card-header-text { color: white; }
+  .c2 .card-header { background: linear-gradient(90deg,#1e3a5f,#2563eb); color: white; }
+  .c2 .card-num { background: #60a5fa; }
+  .c2 .card-header-text { color: white; }
+  .c3 .card-header { background: linear-gradient(90deg,#065f46,#059669); color: white; }
+  .c3 .card-num { background: #34d399; color: #1a1a2e; }
+  .c3 .card-header-text { color: white; }
+  .c4 .card-header { background: linear-gradient(90deg,#4c1d95,#7c3aed); color: white; }
+  .c4 .card-num { background: #c4b5fd; color: #1a1a2e; }
+  .c4 .card-header-text { color: white; }
+  .c5 .card-header { background: linear-gradient(90deg,#7c2d12,#ea580c); color: white; }
+  .c5 .card-num { background: #fdba74; color: #1a1a2e; }
+  .c5 .card-header-text { color: white; }
+  .c6 .card-header { background: linear-gradient(90deg,#134e4a,#0d9488); color: white; }
+  .c6 .card-num { background: #5eead4; color: #1a1a2e; }
+  .c6 .card-header-text { color: white; }
+  .c7 .card-header { background: linear-gradient(90deg,#1a1a2e,#374151); color: white; }
+  .c7 .card-num { background: #f59e0b; color: #1a1a2e; }
+  .c7 .card-header-text { color: white; }
+  .tag-conocer { background: #dbeafe; color: #1d4ed8; }
+  .tag-aprender { background: #dcfce7; color: #166534; }
+  .tag-aplicar { background: #fef3c7; color: #92400e; }
+  .tag-integrar { background: #f3e8ff; color: #6b21a8; }
+  .corte-banner {
+    grid-column: 1 / -1; background: #1a3a8f; color: white;
+    border-radius: 10px; padding: 14px 24px; font-size: 0.85rem;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .corte-banner strong { font-size: 1rem; }
+  footer { text-align: center; padding: 30px; color: #6b7280; font-size: 0.8rem; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="inst">UniGermana · Facultad de Ciencias Económicas y Administrativas · Ciclo 2026-13</div>
+  <h1>Hoja de Ruta — Metodología Investigativa</h1>
+  <div class="sub">Prof. Sergio Andrés Rojas Trujillo &nbsp;|&nbsp; 7 clases · Enfoque CAA · Metodología Profesional</div>
+</header>
+
+<div class="pregunta-banner">
+  Pregunta Transversal Eje: <span>¿Cómo afecta la fluctuación de precios de insumos (importados o locales) en la viabilidad financiera y la toma de decisiones de las Mipymes colombianas?</span>
+</div>
+
+<div class="container">
+
+  <div class="intro-box">
+    <h2>Lógica del Ciclo</h2>
+    <p>Las 7 clases construyen de forma progresiva un proyecto de investigación real. Cada sesión aporta el andamiaje conceptual necesario para completar las actividades evaluativas (A1 a A7). El hilo conductor es siempre la misma pregunta transversal: el impacto de la volatilidad de insumos en las Mipymes colombianas de cada sector asignado. Las primeras clases cimientan el saber (Conocer); las intermedias desarrollan el hacer (Aprender); las finales producen resultados reales (Aplicar).</p>
+  </div>
+
+  <div class="grid">
+
+    <div class="corte-banner">
+      <div>&#9632;</div>
+      <div><strong>CORTE 1 — 40%</strong> &nbsp;·&nbsp; Clases 1 a 4 &nbsp;·&nbsp; Actividades: A1 (Diagnóstico) · A1-F (Foro) · A2 (Planteamiento del problema) · A3 (Evaluación escrita)</div>
+    </div>
+
+    <!-- CLASE 1 -->
+    <div class="card c1">
+      <div class="card-header">
+        <div class="card-num">1</div>
+        <div class="card-header-text">
+          <div class="clase-label">Clase 1</div>
+          <h3>Fundamentos del Conocimiento Científico</h3>
+        </div>
+      </div>
+      <div class="card-body">
+        <span class="pilar-tag tag-conocer">Conocer</span>
+        <ul>
+          <li>¿Qué es investigar? Ciencia vs. opinión</li>
+          <li>Empirismo y racionalismo como raíces del método</li>
+          <li>El método científico paso a paso</li>
+          <li>Tipos de fuentes: confiables vs. no confiables</li>
+          <li>Bases de datos académicas (Scopus, EBSCOhost, ProQuest)</li>
+          <li>Presentación de la pregunta transversal del ciclo</li>
+          <li>Vista general del proyecto de 7 clases</li>
+        </ul>
+        <div class="actividad-badge">
+          <div class="badge-title">Activa en este tramo → A1 Diagnóstico</div>
+          <p>Cuestionario diagnóstico institucional sobre conceptos básicos de investigación, mercados e inflación.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- CLASE 2 -->
+    <div class="card c2">
+      <div class="card-header">
+        <div class="card-num">2</div>
+        <div class="card-header-text">
+          <div class="clase-label">Clase 2</div>
+          <h3>El Problema de Investigación</h3>
+        </div>
+      </div>
+      <div class="card-body">
+        <span class="pilar-tag tag-conocer">Conocer → Aprender</span>
+        <ul>
+          <li>Árbol del problema: causas, efectos, núcleo</li>
+          <li>Cómo formular una pregunta de investigación válida</li>
+          <li>Justificación: teórica, práctica y metodológica</li>
+          <li>La hipótesis: tipos y cómo redactarla</li>
+          <li>Delimitación del problema al sector asignado</li>
+          <li>Taller: cada estudiante formula SU pregunta sectorial</li>
+        </ul>
+        <div class="actividad-badge">
+          <div class="badge-title">Construyendo → A1-F Foro Reflexivo · A2 Planteamiento</div>
+          <p>Foro sobre insumo más crítico del sector. Inicio de redacción del planteamiento del problema (entregable A2).</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- CLASE 3 -->
+    <div class="card c3">
+      <div class="card-header">
+        <div class="card-num">3</div>
+        <div class="card-header-text">
+          <div class="clase-label">Clase 3</div>
+          <h3>Marco Teórico y Fuentes Académicas</h3>
+        </div>
+      </div>
+      <div class="card-body">
+        <span class="pilar-tag tag-aprender">Aprender</span>
+        <ul>
+          <li>¿Para qué sirve el marco teórico?</li>
+          <li>Búsqueda avanzada en Biblioteca Virtual UniGermana</li>
+          <li>Cómo leer y reseñar un artículo científico</li>
+          <li>Normas APA 7ª edición: citas y referencias</li>
+          <li>Errores comunes: plagio, citas incorrectas, fuentes no indexadas</li>
+          <li>Variables del problema: independiente, dependiente, interviniente</li>
+        </ul>
+        <div class="actividad-badge">
+          <div class="badge-title">Construyendo → A2 cierre · inicio A4 Matriz</div>
+          <p>Cierre del planteamiento del problema. Primera aproximación a la matriz bibliográfica de la Actividad A4.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- CLASE 4 -->
+    <div class="card c4">
+      <div class="card-header">
+        <div class="card-num">4</div>
+        <div class="card-header-text">
+          <div class="clase-label">Clase 4</div>
+          <h3>Repaso Integrado y Evaluación Corte 1</h3>
+        </div>
+      </div>
+      <div class="card-body">
+        <span class="pilar-tag tag-aplicar">Aplicar</span>
+        <ul>
+          <li>Repaso activo: pregunta → justificación → hipótesis → fuentes</li>
+          <li>Clínica de escritura: revisión de borradores A2</li>
+          <li>Taller de citación APA en contexto real (casos Mipymes)</li>
+          <li>Preparación para el examen escrito de Corte 1</li>
+          <li>Evaluación escrita A3: control metodológico y conceptual</li>
+        </ul>
+        <div class="actividad-badge">
+          <div class="badge-title">Cierre Corte 1 → A3 Evaluación Escrita (30% del corte)</div>
+          <p>Examen de control metodológico y conceptual en plataforma. Retroalimentación inmediata reactivo por reactivo.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="corte-banner">
+      <div>&#9632;</div>
+      <div><strong>CORTE 2 — 60%</strong> &nbsp;·&nbsp; Clases 5 a 7 &nbsp;·&nbsp; Actividades: A4 (Matriz) · A5 (Metodología) · A6 (Encuesta AXON) · A7 (Examen Final)</div>
+    </div>
+
+    <!-- CLASE 5 -->
+    <div class="card c5">
+      <div class="card-header">
+        <div class="card-num">5</div>
+        <div class="card-header-text">
+          <div class="clase-label">Clase 5</div>
+          <h3>Diseño Metodológico</h3>
+        </div>
+      </div>
+      <div class="card-body">
+        <span class="pilar-tag tag-conocer">Conocer → Aprender</span>
+        <ul>
+          <li>Tipos de investigación: descriptiva, correlacional, explicativa</li>
+          <li>Enfoques: cuantitativo, cualitativo, mixto</li>
+          <li>Población, muestra y criterios de selección</li>
+          <li>Operacionalización de variables: dimensiones e indicadores</li>
+          <li>Diseño del instrumento: encuesta estructurada</li>
+          <li>Las 5 preguntas núcleo transversales AXON + 2 sectoriales</li>
+        </ul>
+        <div class="actividad-badge">
+          <div class="badge-title">Construyendo → A4 Matriz · A5 Metodología</div>
+          <p>Trabajo en la matriz bibliográfica (A4) y redacción de los cuatro subapartados del diseño metodológico (A5).</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- CLASE 6 -->
+    <div class="card c6">
+      <div class="card-header">
+        <div class="card-num">6</div>
+        <div class="card-header-text">
+          <div class="clase-label">Clase 6</div>
+          <h3>Trabajo de Campo: Encuesta AXON</h3>
+        </div>
+      </div>
+      <div class="card-body">
+        <span class="pilar-tag tag-aplicar">Aplicar</span>
+        <ul>
+          <li>¿Qué es un dato primario? Valor vs. dato secundario</li>
+          <li>Ética en la recolección de información (consentimiento informado)</li>
+          <li>Uso de la plataforma AXON: StudentSurveyActivity</li>
+          <li>Aplicación de la encuesta a ≥5 informantes clave de Mipymes</li>
+          <li>Lectura de resultados: tablas de frecuencia y gráficos básicos</li>
+          <li>Conexión de datos con la hipótesis planteada</li>
+        </ul>
+        <div class="actividad-badge">
+          <div class="badge-title">Entrega → A6 Encuesta AXON (20% del Corte 2)</div>
+          <p>Aplicación real del instrumento. Captura automatizada en AXON. Mínimo 5 informantes: proveedores, clientes, contadores o gerentes de Mipymes.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- CLASE 7 -->
+    <div class="card c7">
+      <div class="card-header">
+        <div class="card-num">7</div>
+        <div class="card-header-text">
+          <div class="clase-label">Clase 7</div>
+          <h3>Resultados, Conclusiones y Co-Autoría</h3>
+        </div>
+      </div>
+      <div class="card-body">
+        <span class="pilar-tag tag-integrar">Integrar</span>
+        <ul>
+          <li>Análisis descriptivo de los datos recolectados</li>
+          <li>¿Se confirma la hipótesis? Discusión de resultados</li>
+          <li>Cómo redactar conclusiones y recomendaciones</li>
+          <li>Arquitectura del artículo científico co-autorado del ciclo</li>
+          <li>Socialización: cada sector presenta su hallazgo clave</li>
+          <li>Preparación para el Examen Final A7</li>
+        </ul>
+        <div class="actividad-badge">
+          <div class="badge-title">Cierre Corte 2 → A7 Examen Final (30% del Corte 2)</div>
+          <p>Evaluación integral del proyecto y análisis de variables. Los datos del ciclo convergen en el artículo multisectorial co-autorado.</p>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /grid -->
+</div><!-- /container -->
+
+<footer>
+  UniGermana · Metodología Investigativa · Ciclo 2026-13 · Prof. Sergio Andrés Rojas Trujillo
+</footer>
+
+</body>
+</html>

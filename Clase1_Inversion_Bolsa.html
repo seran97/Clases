@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Clase 1 — El Juego del Dinero · Inversión en Bolsa</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap');
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --negro: #0a0a0f;
+  --negro2: #111118;
+  --card: #16161f;
+  --card2: #1e1e2a;
+  --oro: #f0b429;
+  --oro2: #ffd166;
+  --verde-bolsa: #00d4aa;
+  --rojo-bolsa: #ff4757;
+  --azul: #4facfe;
+  --blanco: #f0f0f5;
+  --gris: #8888a0;
+  --borde: rgba(255,255,255,0.07);
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', -apple-system, sans-serif;
+  background: var(--negro);
+  color: var(--blanco);
+  line-height: 1.65;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── HEADER HERO ── */
+.hero {
+  background: linear-gradient(160deg, #0a0a0f 0%, #0d1a2e 50%, #0a0a0f 100%);
+  padding: 48px 24px 40px;
+  text-align: center;
+  border-bottom: 1px solid var(--borde);
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 50% 0%, rgba(240,180,41,0.12) 0%, transparent 65%);
+  pointer-events: none;
+}
+.hero-badge {
+  display: inline-block;
+  background: rgba(240,180,41,0.15);
+  border: 1px solid rgba(240,180,41,0.35);
+  color: var(--oro);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 5px 14px;
+  border-radius: 20px;
+  margin-bottom: 18px;
+}
+.hero h1 {
+  font-size: clamp(1.9rem, 7vw, 3rem);
+  font-weight: 900;
+  line-height: 1.1;
+  margin-bottom: 14px;
+  background: linear-gradient(135deg, #fff 0%, var(--oro2) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero .sub {
+  color: var(--gris);
+  font-size: 0.95rem;
+  max-width: 420px;
+  margin: 0 auto 24px;
+}
+.hero .profe-tag {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--card2); border: 1px solid var(--borde);
+  padding: 8px 16px; border-radius: 30px; font-size: 0.8rem; color: var(--gris);
+}
+.hero .profe-tag span { color: var(--blanco); font-weight: 700; }
+
+/* NAV */
+.nav-sticky {
+  position: sticky; top: 0; z-index: 99;
+  background: rgba(10,10,15,0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--borde);
+  overflow-x: auto; scrollbar-width: none;
+}
+.nav-sticky::-webkit-scrollbar { display: none; }
+.nav-inner {
+  display: flex; white-space: nowrap;
+  padding: 0 16px;
+}
+.nav-inner a {
+  display: inline-block;
+  color: var(--gris); text-decoration: none;
+  padding: 14px 16px; font-size: 0.78rem; font-weight: 600;
+  border-bottom: 2px solid transparent;
+  transition: color .2s, border-color .2s;
+}
+.nav-inner a:hover { color: var(--blanco); }
+.nav-inner a.active { color: var(--oro); border-bottom-color: var(--oro); }
+
+/* WRAPPER */
+.wrap { max-width: 680px; margin: 0 auto; padding: 0 20px 80px; }
+
+/* SECCIONES */
+.sec { padding: 44px 0 8px; }
+.sec-label {
+  font-size: 0.65rem; font-weight: 800; letter-spacing: 2.5px;
+  text-transform: uppercase; margin-bottom: 8px;
+}
+.lbl-oro    { color: var(--oro); }
+.lbl-verde  { color: var(--verde-bolsa); }
+.lbl-rojo   { color: var(--rojo-bolsa); }
+.lbl-azul   { color: var(--azul); }
+.lbl-gris   { color: var(--gris); }
+
+.sec h2 {
+  font-size: clamp(1.35rem, 5vw, 1.75rem);
+  font-weight: 900; line-height: 1.2;
+  margin-bottom: 16px; color: #fff;
+}
+.sec .lead {
+  color: var(--gris); font-size: 0.97rem; margin-bottom: 28px;
+  border-left: 3px solid rgba(255,255,255,0.1);
+  padding-left: 14px;
+}
+
+/* CARDS */
+.card {
+  background: var(--card);
+  border: 1px solid var(--borde);
+  border-radius: 16px; padding: 22px 20px;
+  margin-bottom: 14px;
+}
+.card-oro  { border-left: 4px solid var(--oro); }
+.card-verde{ border-left: 4px solid var(--verde-bolsa); }
+.card-rojo { border-left: 4px solid var(--rojo-bolsa); }
+.card-azul { border-left: 4px solid var(--azul); }
+.card-violeta { border-left: 4px solid #a78bfa; }
+.card-gris { border-left: 4px solid rgba(255,255,255,0.15); }
+
+.card .card-titulo {
+  font-size: 0.75rem; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 1.5px; margin-bottom: 8px;
+}
+.card p { font-size: 0.9rem; color: #ccc; line-height: 1.65; }
+.card ul { font-size: 0.88rem; color: #ccc; padding-left: 18px; line-height: 1.8; margin-top: 6px; }
+
+/* STAT GRID */
+.stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 20px 0; }
+.stat-box {
+  background: var(--card); border: 1px solid var(--borde);
+  border-radius: 14px; padding: 18px 16px; text-align: center;
+}
+.stat-box .stat-num { font-size: 2rem; font-weight: 900; line-height: 1; }
+.stat-box .stat-label { font-size: 0.72rem; color: var(--gris); margin-top: 5px; line-height: 1.4; }
+.num-oro { color: var(--oro); }
+.num-verde { color: var(--verde-bolsa); }
+.num-rojo { color: var(--rojo-bolsa); }
+.num-azul { color: var(--azul); }
+
+/* TICKER ANIMADO */
+.ticker-wrap {
+  background: var(--card2); border: 1px solid var(--borde);
+  border-radius: 12px; overflow: hidden; margin: 20px 0;
+  padding: 12px 0;
+}
+.ticker-inner {
+  display: flex; gap: 32px;
+  animation: ticker 18s linear infinite;
+  white-space: nowrap; padding: 0 20px;
+}
+@keyframes ticker {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.tick-item { display: flex; align-items: center; gap: 8px; font-size: 0.82rem; }
+.tick-name { color: #fff; font-weight: 700; }
+.tick-up   { color: var(--verde-bolsa); font-weight: 700; }
+.tick-down { color: var(--rojo-bolsa); font-weight: 700; }
+
+/* PERFIL INVERSIONISTA */
+.perfil-card {
+  background: var(--card); border: 1px solid var(--borde);
+  border-radius: 16px; padding: 20px;
+  margin-bottom: 12px; display: flex; gap: 16px; align-items: flex-start;
+}
+.perfil-icon {
+  font-size: 2.2rem; flex-shrink: 0;
+  width: 52px; height: 52px;
+  background: var(--card2); border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+}
+.perfil-body .perfil-nombre {
+  font-size: 0.95rem; font-weight: 800; margin-bottom: 4px;
+}
+.perfil-body .perfil-desc { font-size: 0.85rem; color: #bbb; line-height: 1.55; }
+.perfil-body .perfil-tag {
+  display: inline-block; margin-top: 8px;
+  font-size: 0.68rem; font-weight: 700; letter-spacing: 1px;
+  text-transform: uppercase; padding: 3px 10px; border-radius: 20px;
+}
+.pt-verde   { background: rgba(0,212,170,0.15); color: var(--verde-bolsa); }
+.pt-amarillo{ background: rgba(240,180,41,0.15); color: var(--oro); }
+.pt-rojo    { background: rgba(255,71,87,0.15);  color: var(--rojo-bolsa); }
+
+/* MERCADOS BULL/BEAR */
+.mercado-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 20px 0; }
+.mercado-card {
+  border-radius: 16px; padding: 22px 18px; text-align: center;
+}
+.mc-bull { background: linear-gradient(160deg, rgba(0,212,170,0.12), rgba(0,212,170,0.04)); border: 1px solid rgba(0,212,170,0.25); }
+.mc-bear { background: linear-gradient(160deg, rgba(255,71,87,0.12), rgba(255,71,87,0.04)); border: 1px solid rgba(255,71,87,0.25); }
+.mc-emoji { font-size: 2.8rem; margin-bottom: 10px; }
+.mc-nombre { font-size: 1.1rem; font-weight: 900; margin-bottom: 6px; }
+.mc-nombre-bull { color: var(--verde-bolsa); }
+.mc-nombre-bear { color: var(--rojo-bolsa); }
+.mc-def { font-size: 0.8rem; color: #aaa; line-height: 1.5; }
+@media(max-width:360px){ .mercado-grid { grid-template-columns: 1fr; } }
+
+/* PSICOLOGIA GRAFICO */
+.psi-barra { margin: 16px 0; }
+.psi-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+.psi-label { font-size: 0.78rem; font-weight: 700; min-width: 110px; color: #ccc; }
+.psi-track { flex: 1; background: var(--card2); border-radius: 6px; height: 10px; overflow: hidden; }
+.psi-fill { height: 100%; border-radius: 6px; transition: width 1.5s ease; }
+.psi-pct { font-size: 0.75rem; font-weight: 700; min-width: 36px; text-align: right; }
+
+/* LATENCIA */
+.latencia-steps { position: relative; padding-left: 28px; margin: 20px 0; }
+.latencia-steps::before {
+  content: ''; position: absolute; left: 8px; top: 0; bottom: 0;
+  width: 2px; background: linear-gradient(180deg, var(--oro), var(--rojo-bolsa));
+}
+.ls-item { position: relative; margin-bottom: 22px; }
+.ls-dot {
+  position: absolute; left: -24px; top: 4px;
+  width: 12px; height: 12px; border-radius: 50%;
+  border: 2px solid var(--oro); background: var(--negro);
+}
+.ls-item strong { display: block; font-size: 0.9rem; color: #fff; margin-bottom: 3px; }
+.ls-item p { font-size: 0.83rem; color: #aaa; line-height: 1.5; }
+
+/* HIGHLIGHT */
+.highlight {
+  border-radius: 14px; padding: 20px 22px; margin: 22px 0;
+  display: flex; gap: 14px; align-items: flex-start;
+}
+.hl-oro    { background: rgba(240,180,41,0.08); border: 1px solid rgba(240,180,41,0.2); }
+.hl-verde  { background: rgba(0,212,170,0.08); border: 1px solid rgba(0,212,170,0.2); }
+.hl-rojo   { background: rgba(255,71,87,0.08); border: 1px solid rgba(255,71,87,0.2); }
+.hl-azul   { background: rgba(79,172,254,0.08); border: 1px solid rgba(79,172,254,0.2); }
+.hl-icon { font-size: 1.5rem; flex-shrink: 0; }
+.hl-body strong { display: block; font-size: 0.88rem; font-weight: 800; margin-bottom: 5px; color: #fff; }
+.hl-body p { font-size: 0.85rem; color: #bbb; line-height: 1.6; }
+
+/* CITA */
+.cita {
+  border-left: 3px solid var(--oro);
+  padding: 14px 18px;
+  margin: 22px 0;
+  font-style: italic; color: #ccc; font-size: 0.95rem;
+  background: rgba(240,180,41,0.04);
+  border-radius: 0 10px 10px 0;
+}
+.cita cite { display: block; margin-top: 8px; font-size: 0.75rem; color: var(--gris); font-style: normal; }
+
+/* REFLEXIÓN FINAL */
+.reflexion-section {
+  background: linear-gradient(160deg, #0d1a2e, #0a0a0f);
+  border: 1px solid rgba(240,180,41,0.2);
+  border-radius: 20px; padding: 32px 24px; margin: 40px 0 20px;
+}
+.reflexion-section h2 {
+  font-size: 1.4rem; font-weight: 900; margin-bottom: 6px;
+  background: linear-gradient(135deg, #fff, var(--oro2));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.reflexion-section .rs-sub { color: var(--gris); font-size: 0.85rem; margin-bottom: 28px; }
+
+.pregunta-card {
+  background: var(--card); border: 1px solid var(--borde);
+  border-radius: 14px; padding: 20px;
+  margin-bottom: 14px;
+  transition: border-color .2s;
+}
+.pregunta-card:hover { border-color: rgba(240,180,41,0.3); }
+.pq-num {
+  display: inline-block;
+  background: var(--oro); color: #000;
+  font-size: 0.7rem; font-weight: 900;
+  padding: 2px 10px; border-radius: 20px;
+  margin-bottom: 10px;
+}
+.pregunta-card .pq-texto {
+  font-size: 0.95rem; font-weight: 700; color: #fff; margin-bottom: 10px; line-height: 1.45;
+}
+.pregunta-card .pq-hint { font-size: 0.8rem; color: var(--gris); line-height: 1.5; }
+.pq-input {
+  width: 100%; margin-top: 12px;
+  background: var(--negro2); border: 1px solid var(--borde);
+  border-radius: 10px; padding: 12px 14px;
+  color: var(--blanco); font-size: 0.88rem; font-family: inherit;
+  resize: vertical; min-height: 72px; outline: none;
+  transition: border-color .2s;
+}
+.pq-input:focus { border-color: rgba(240,180,41,0.4); }
+.pq-input::placeholder { color: var(--gris); }
+
+/* BOTÓN WHATSAPP */
+.btn-wa {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  width: 100%; padding: 16px 24px;
+  background: #25d366; border: none; border-radius: 14px;
+  color: #fff; font-size: 1rem; font-weight: 800;
+  cursor: pointer; text-decoration: none; margin-top: 24px;
+  transition: opacity .2s, transform .15s;
+  font-family: inherit;
+}
+.btn-wa:hover { opacity: 0.9; transform: scale(1.01); }
+.btn-wa:active { transform: scale(0.98); }
+.btn-wa svg { width: 22px; height: 22px; fill: white; flex-shrink: 0; }
+.wa-nota { text-align: center; font-size: 0.75rem; color: var(--gris); margin-top: 10px; }
+
+/* DIVIDER */
+.divider { height: 1px; background: var(--borde); margin: 36px 0; }
+
+/* TABLA */
+.tabla-wrap { overflow-x: auto; margin: 20px 0; border-radius: 12px; border: 1px solid var(--borde); }
+table { width: 100%; border-collapse: collapse; min-width: 420px; }
+thead tr { background: var(--card2); }
+thead th { padding: 12px 16px; font-size: 0.78rem; font-weight: 700; text-align: left; color: var(--gris); text-transform: uppercase; letter-spacing: 1px; }
+tbody td { padding: 12px 16px; font-size: 0.85rem; color: #ccc; border-top: 1px solid var(--borde); vertical-align: top; }
+tbody tr:hover td { background: rgba(255,255,255,0.02); }
+
+/* FOOTER */
+.footer {
+  text-align: center; padding: 32px 24px;
+  border-top: 1px solid var(--borde);
+  font-size: 0.75rem; color: var(--gris);
+}
+.footer strong { color: var(--blanco); }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">Clase 1 · Inversión en Bolsa</div>
+  <h1>El Juego del Dinero que nadie te enseñó en el colegio</h1>
+  <p class="sub">Bienvenidos a la clase donde el dinero deja de ser un tabú y se convierte en una herramienta.</p>
+  <div class="profe-tag">
+    Docente: <span>Sergio Rojas</span>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav class="nav-sticky">
+  <div class="nav-inner">
+    <a href="#sec-intro" class="active">¿Por qué?</a>
+    <a href="#sec-invertir">Invertir</a>
+    <a href="#sec-perfiles">Perfiles</a>
+    <a href="#sec-psico">Psicología</a>
+    <a href="#sec-mercados">Mercados</a>
+    <a href="#sec-latencia">Latencia</a>
+    <a href="#sec-reflexion">Reflexión</a>
+  </div>
+</nav>
+
+<div class="wrap">
+
+<!-- ═══════════════════════════════
+     SECCIÓN INTRO
+═══════════════════════════════ -->
+<section id="sec-intro" class="sec">
+  <div class="sec-label lbl-oro">Punto de partida</div>
+  <h2>¿Por qué la mayoría de la gente trabaja toda la vida y no acumula riqueza?</h2>
+  <p class="lead">No es falta de trabajo. No es mala suerte. Es que nadie les enseñó las reglas del juego.</p>
+
+  <div class="ticker-wrap">
+    <div class="ticker-inner">
+      <div class="tick-item"><span class="tick-name">APPLE</span><span class="tick-up">▲ +1.84%</span></div>
+      <div class="tick-item"><span class="tick-name">ECOPETROL</span><span class="tick-down">▼ -0.63%</span></div>
+      <div class="tick-item"><span class="tick-name">NVIDIA</span><span class="tick-up">▲ +3.21%</span></div>
+      <div class="tick-item"><span class="tick-name">BVC COL</span><span class="tick-up">▲ +0.47%</span></div>
+      <div class="tick-item"><span class="tick-name">AMAZON</span><span class="tick-up">▲ +2.09%</span></div>
+      <div class="tick-item"><span class="tick-name">BANCOLOMBIA</span><span class="tick-down">▼ -1.12%</span></div>
+      <div class="tick-item"><span class="tick-name">TESLA</span><span class="tick-up">▲ +5.33%</span></div>
+      <div class="tick-item"><span class="tick-name">MICROSOFT</span><span class="tick-up">▲ +0.92%</span></div>
+      <!-- duplicado para loop -->
+      <div class="tick-item"><span class="tick-name">APPLE</span><span class="tick-up">▲ +1.84%</span></div>
+      <div class="tick-item"><span class="tick-name">ECOPETROL</span><span class="tick-down">▼ -0.63%</span></div>
+      <div class="tick-item"><span class="tick-name">NVIDIA</span><span class="tick-up">▲ +3.21%</span></div>
+      <div class="tick-item"><span class="tick-name">BVC COL</span><span class="tick-up">▲ +0.47%</span></div>
+      <div class="tick-item"><span class="tick-name">AMAZON</span><span class="tick-up">▲ +2.09%</span></div>
+      <div class="tick-item"><span class="tick-name">BANCOLOMBIA</span><span class="tick-down">▼ -1.12%</span></div>
+      <div class="tick-item"><span class="tick-name">TESLA</span><span class="tick-up">▲ +5.33%</span></div>
+      <div class="tick-item"><span class="tick-name">MICROSOFT</span><span class="tick-up">▲ +0.92%</span></div>
+    </div>
+  </div>
+
+  <div class="stat-grid">
+    <div class="stat-box">
+      <div class="stat-num num-rojo">78%</div>
+      <div class="stat-label">de colombianos no tiene ningún tipo de inversión formal</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num num-oro">$0</div>
+      <div class="stat-label">es el interés que genera el dinero guardado debajo del colchón</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num num-verde">S&P</div>
+      <div class="stat-label">ha dado en promedio +10.5% anual en los últimos 50 años</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num num-azul">1926</div>
+      <div class="stat-label">año en que nació la bolsa de valores moderna tal como la conocemos</div>
+    </div>
+  </div>
+
+  <div class="highlight hl-oro">
+    <div class="hl-icon">💡</div>
+    <div class="hl-body">
+      <strong>La regla que los ricos saben desde niños</strong>
+      <p>El dinero que no trabaja para ti, trabaja para alguien más. Cuando compras en cuotas, cuando dejas la plata en una cuenta de ahorros sin rendimientos reales, cuando no inviertes — estás financiando la riqueza de otros.</p>
+    </div>
+  </div>
+
+  <div class="cita">
+    "No ahorres lo que te queda después de gastar. Gasta lo que te queda después de ahorrar e invertir."
+    <cite>— Warren Buffett</cite>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════
+     ¿QUÉ ES INVERTIR?
+═══════════════════════════════ -->
+<section id="sec-invertir" class="sec">
+  <div class="sec-label lbl-verde">Fundamento 1</div>
+  <h2>Entonces... ¿qué significa realmente invertir?</h2>
+  <p class="lead">Invertir no es apostar. No es hacerse rico de la noche a la mañana. Es poner tu dinero a trabajar hoy para que mañana haga más por ti.</p>
+
+  <div class="card card-verde">
+    <div class="card-titulo" style="color: var(--verde-bolsa);">La definición simple</div>
+    <p>Invertir es destinar un capital hoy, asumiendo un nivel de riesgo, con la expectativa de obtener un rendimiento futuro que supere la inflación y aumente tu patrimonio.</p>
+  </div>
+
+  <p style="font-size: 0.92rem; color: #bbb; margin: 20px 0 16px;">El dinero tiene tres posibles destinos. Solo uno te hace crecer:</p>
+
+  <div class="card card-rojo">
+    <div class="card-titulo" style="color: var(--rojo-bolsa);">❌ Consumir</div>
+    <p>Compras algo y ese dinero desaparece. No genera valor futuro. Es necesario para vivir, pero no puede ser el destino de todo tu dinero.</p>
+  </div>
+  <div class="card card-oro">
+    <div class="card-titulo" style="color: var(--oro);">⚠️ Ahorrar</div>
+    <p>Guardas el dinero para usarlo después. El problema: la inflación lo come lentamente. En Colombia, si la inflación es del 7% anual y tu cuenta de ahorros da el 3%, estás perdiendo poder adquisitivo.</p>
+  </div>
+  <div class="card card-verde">
+    <div class="card-titulo" style="color: var(--verde-bolsa);">✅ Invertir</div>
+    <p>Pones el dinero en un activo que puede crecer. Puede ser acciones, bonos, finca raíz, fondos, ETFs, tu propio negocio. El objetivo: que el rendimiento supere la inflación y genere riqueza real.</p>
+  </div>
+
+  <div class="highlight hl-azul">
+    <div class="hl-icon">📱</div>
+    <div class="hl-body">
+      <strong>Ejemplo del mundo real — el caso Netflix</strong>
+      <p>Si en 2010 hubieras invertido $1.000 dólares en acciones de Netflix cuando valían ~$7 la acción, hoy tendrías más de $60.000. Los que lo hicieron no eran genios — solo entendieron lo que era invertir a tiempo.</p>
+    </div>
+  </div>
+
+  <h3 style="font-size: 1rem; font-weight: 800; margin: 28px 0 14px; color: #fff;">¿En qué se puede invertir? El universo de activos</h3>
+
+  <div class="tabla-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Activo</th>
+          <th>Riesgo</th>
+          <th>Rendimiento esperado</th>
+          <th>Liquidez</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Acciones</strong></td>
+          <td style="color: var(--rojo-bolsa);">Alto</td>
+          <td style="color: var(--verde-bolsa);">Alto (8-15% anual histórico)</td>
+          <td style="color: var(--verde-bolsa);">Alta</td>
+        </tr>
+        <tr>
+          <td><strong>Bonos del Estado</strong></td>
+          <td style="color: var(--verde-bolsa);">Bajo-Medio</td>
+          <td style="color: var(--oro);">Medio (4-8%)</td>
+          <td style="color: var(--oro);">Media</td>
+        </tr>
+        <tr>
+          <td><strong>ETFs / Fondos</strong></td>
+          <td style="color: var(--oro);">Medio</td>
+          <td style="color: var(--verde-bolsa);">Medio-Alto</td>
+          <td style="color: var(--verde-bolsa);">Alta</td>
+        </tr>
+        <tr>
+          <td><strong>Finca Raíz</strong></td>
+          <td style="color: var(--oro);">Medio</td>
+          <td style="color: var(--oro);">Medio + valorización</td>
+          <td style="color: var(--rojo-bolsa);">Baja</td>
+        </tr>
+        <tr>
+          <td><strong>Criptomonedas</strong></td>
+          <td style="color: var(--rojo-bolsa);">Muy Alto</td>
+          <td style="color: var(--rojo-bolsa);">Muy variable (puede ser negativo)</td>
+          <td style="color: var(--verde-bolsa);">Alta</td>
+        </tr>
+        <tr>
+          <td><strong>CDT / Depósito</strong></td>
+          <td style="color: var(--verde-bolsa);">Muy Bajo</td>
+          <td style="color: var(--rojo-bolsa);">Bajo (generalmente bajo la inflación)</td>
+          <td style="color: var(--rojo-bolsa);">Baja (plazo fijo)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════
+     PERFILES DE INVERSIONISTA
+═══════════════════════════════ -->
+<section id="sec-perfiles" class="sec">
+  <div class="sec-label lbl-azul">Fundamento 2</div>
+  <h2>¿Qué tipo de inversionista eres tú?</h2>
+  <p class="lead">Antes de invertir un solo peso, necesitas conocerte a ti mismo. El perfil de riesgo no se elige — se descubre. Y es diferente para cada persona.</p>
+
+  <div class="highlight hl-verde">
+    <div class="hl-icon">🧠</div>
+    <div class="hl-body">
+      <strong>La pregunta clave antes de invertir</strong>
+      <p>¿Cuánto dinero puedes perder sin que afecte tu vida ni tu salud mental? Esa respuesta honesta define tu perfil. No hay respuesta correcta o incorrecta — hay respuestas honestas y deshonestas.</p>
+    </div>
+  </div>
+
+  <div class="perfil-card">
+    <div class="perfil-icon">🛡️</div>
+    <div class="perfil-body">
+      <div class="perfil-nombre">El Conservador</div>
+      <div class="perfil-desc">Prefiere dormir tranquilo antes que ganar mucho. Su prioridad es no perder. Invierte en instrumentos de bajo riesgo: bonos del Estado, CDTs, fondos de renta fija. Acepta rendimientos bajos a cambio de certeza.<br><br><em>Lo que no sabe todavía:</em> la inflación también es una forma de perder dinero, solo que más lentamente.</div>
+      <span class="perfil-tag pt-verde">Riesgo bajo</span>
+    </div>
+  </div>
+
+  <div class="perfil-card">
+    <div class="perfil-icon">⚖️</div>
+    <div class="perfil-body">
+      <div class="perfil-nombre">El Moderado</div>
+      <div class="perfil-desc">El inversionista más común y — bien llevado — el más sabio. Diversifica entre activos de bajo y alto riesgo. Acepta cierta volatilidad en el corto plazo porque entiende que en el largo plazo los mercados tienden a crecer.<br><br><em>Su superpoder:</em> la diversificación. No pone todos los huevos en la misma canasta.</div>
+      <span class="perfil-tag pt-amarillo">Riesgo medio</span>
+    </div>
+  </div>
+
+  <div class="perfil-card">
+    <div class="perfil-icon">🚀</div>
+    <div class="perfil-body">
+      <div class="perfil-nombre">El Agresivo</div>
+      <div class="perfil-desc">Busca máximos rendimientos y acepta máximos riesgos. Invierte en acciones individuales, startups, derivados, criptomonedas. Puede ganar muchísimo — o perderlo todo. Necesita nervios de acero, horizonte de largo plazo, y — esto es clave — capital que pueda permitirse perder.<br><br><em>Error fatal:</em> ser agresivo con dinero que necesitas para el arriendo del mes.</div>
+      <span class="perfil-tag pt-rojo">Riesgo alto</span>
+    </div>
+  </div>
+
+  <div class="card card-azul" style="margin-top: 20px;">
+    <div class="card-titulo" style="color: var(--azul);">El Especulador — una categoría aparte</div>
+    <p>No invierte — apuesta. Opera en el muy corto plazo buscando ganancias rápidas en movimientos de precio. Puede ser el day trader en acciones o el que compra cripto en la madrugada. Estadísticamente, más del 70% de los especuladores retail pierden dinero. No porque los mercados sean injustos, sino porque están compitiendo contra algoritmos con velocidades de microsegundo.</p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════
+     PSICOLOGÍA DE LA INVERSIÓN
+═══════════════════════════════ -->
+<section id="sec-psico" class="sec">
+  <div class="sec-label lbl-rojo">Fundamento 3 · El más importante de todos</div>
+  <h2>Por qué el mayor enemigo del inversionista vive adentro de su cabeza</h2>
+  <p class="lead">Puedes saber todo sobre finanzas y aun así perder dinero por tomar decisiones emocionales. La psicología de la inversión explica por qué gente inteligente hace cosas financieramente absurdas.</p>
+
+  <div class="cita">
+    "Los mercados son dispositivos para transferir dinero de los impacientes a los pacientes."
+    <cite>— Warren Buffett</cite>
+  </div>
+
+  <h3 style="font-size: 0.95rem; font-weight: 800; margin: 24px 0 16px; color: #fff;">Las dos emociones que mueven los mercados</h3>
+
+  <div class="mercado-grid">
+    <div class="mercado-card" style="background: linear-gradient(160deg, rgba(255,71,87,0.15), rgba(255,71,87,0.05)); border: 1px solid rgba(255,71,87,0.25);">
+      <div class="mc-emoji">😱</div>
+      <div class="mc-nombre" style="color: var(--rojo-bolsa); font-size: 1rem;">MIEDO</div>
+      <div class="mc-def">Hace que la gente venda cuando los precios caen, asegurando pérdidas que eran solo temporales.</div>
+    </div>
+    <div class="mercado-card" style="background: linear-gradient(160deg, rgba(240,180,41,0.15), rgba(240,180,41,0.05)); border: 1px solid rgba(240,180,41,0.25);">
+      <div class="mc-emoji">🤑</div>
+      <div class="mc-nombre" style="color: var(--oro); font-size: 1rem;">CODICIA</div>
+      <div class="mc-def">Hace que la gente compre cuando los precios ya están en máximos, pagando de más por euforia.</div>
+    </div>
+  </div>
+
+  <p style="font-size: 0.9rem; color: #bbb; margin: 20px 0 16px;">Los sesgos cognitivos más frecuentes en inversores:</p>
+
+  <div class="psi-barra">
+    <div class="psi-row">
+      <div class="psi-label">Efecto rebaño</div>
+      <div class="psi-track"><div class="psi-fill" style="width:91%; background: var(--rojo-bolsa);"></div></div>
+      <div class="psi-pct" style="color: var(--rojo-bolsa);">91%</div>
+    </div>
+    <div class="psi-row">
+      <div class="psi-label">Aversión a la pérdida</div>
+      <div class="psi-track"><div class="psi-fill" style="width:84%; background: var(--rojo-bolsa);"></div></div>
+      <div class="psi-pct" style="color: var(--rojo-bolsa);">84%</div>
+    </div>
+    <div class="psi-row">
+      <div class="psi-label">Anclaje al precio</div>
+      <div class="psi-track"><div class="psi-fill" style="width:76%; background: var(--oro);"></div></div>
+      <div class="psi-pct" style="color: var(--oro);">76%</div>
+    </div>
+    <div class="psi-row">
+      <div class="psi-label">Exceso de confianza</div>
+      <div class="psi-track"><div class="psi-fill" style="width:68%; background: var(--oro);"></div></div>
+      <div class="psi-pct" style="color: var(--oro);">68%</div>
+    </div>
+    <div class="psi-row">
+      <div class="psi-label">Sesgo de confirmación</div>
+      <div class="psi-track"><div class="psi-fill" style="width:73%; background: var(--azul);"></div></div>
+      <div class="psi-pct" style="color: var(--azul);">73%</div>
+    </div>
+  </div>
+  <p class="nota" style="color: var(--gris); font-size: 0.75rem; margin-top: 4px; font-style: italic;">Frecuencia de aparición en decisiones de inversores retail según literatura de finanzas conductuales.</p>
+
+  <div class="card card-rojo" style="margin-top: 20px;">
+    <div class="card-titulo" style="color: var(--rojo-bolsa);">El sesgo más peligroso: aversión a la pérdida</div>
+    <p>Daniel Kahneman (Premio Nobel de Economía) demostró que el dolor de perder $100 es psicológicamente el doble de intenso que la alegría de ganar $100. Esto hace que los inversores vendan activos ganadores demasiado rápido (para "asegurar" la ganancia) y aguanten activos perdedores demasiado tiempo (esperando que se recuperen). El resultado: se tiran las flores y se guardan las malas yerbas.</p>
+  </div>
+
+  <div class="highlight hl-verde">
+    <div class="hl-icon">🧘</div>
+    <div class="hl-body">
+      <strong>El antídoto: el inversionista aburrido gana más</strong>
+      <p>Los estudios de Fidelity encontraron que las cuentas de inversión con mejor rendimiento pertenecían a clientes que se habían olvidado que tenían cuenta — o que habían fallecido. La quietud supera al movimiento constante.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════
+     MERCADOS: BULL & BEAR
+═══════════════════════════════ -->
+<section id="sec-mercados" class="sec">
+  <div class="sec-label lbl-verde">Fundamento 4</div>
+  <h2>Bull Market y Bear Market: los dos estados del mercado</h2>
+  <p class="lead">Los mercados no suben siempre ni bajan para siempre. Se mueven en ciclos. Entender en qué momento del ciclo estás es la diferencia entre el pánico y la oportunidad.</p>
+
+  <div class="mercado-grid">
+    <div class="mercado-card mc-bull">
+      <div class="mc-emoji">🐂</div>
+      <div class="mc-nombre mc-nombre-bull">BULL MARKET</div>
+      <div class="mc-def">Mercado alcista. Los precios suben sostenidamente más del 20% desde sus mínimos recientes. Hay optimismo, confianza, crecimiento económico y apetito por el riesgo. El toro ataca empujando hacia arriba.</div>
+    </div>
+    <div class="mercado-card mc-bear">
+      <div class="mc-emoji">🐻</div>
+      <div class="mc-nombre mc-nombre-bear">BEAR MARKET</div>
+      <div class="mc-def">Mercado bajista. Los precios caen más del 20% desde sus máximos recientes. Hay pesimismo, miedo, contracción económica y huida del riesgo. El oso ataca golpeando hacia abajo.</div>
+    </div>
+  </div>
+
+  <div class="highlight hl-oro" style="margin-top: 20px;">
+    <div class="hl-icon">🔄</div>
+    <div class="hl-body">
+      <strong>La paradoja que pocos comprenden</strong>
+      <p>Los novatos celebran el Bull Market (cuando los activos están caros) y le huyen al Bear Market (cuando los activos están baratos). Los inversionistas experimentados hacen exactamente lo contrario. Warren Buffett lo resume así: "Sé codicioso cuando otros tienen miedo, y miedoso cuando otros son codiciosos."</p>
+    </div>
+  </div>
+
+  <div class="card card-azul" style="margin-top: 14px;">
+    <div class="card-titulo" style="color: var(--azul);">¿Cuánto dura cada ciclo?</div>
+    <ul>
+      <li>Bull Market promedio histórico: <strong style="color: var(--verde-bolsa);">~4.5 años</strong> con rendimientos promedio del 150%</li>
+      <li>Bear Market promedio histórico: <strong style="color: var(--rojo-bolsa);">~1.5 años</strong> con caídas promedio del 35%</li>
+      <li>Desde 1900, el mercado ha subido aproximadamente el <strong style="color: var(--oro);">75% del tiempo</strong></li>
+      <li>Cada Bear Market en la historia ha sido seguido por un nuevo máximo histórico — sin excepción</li>
+    </ul>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════
+     LATENCIA
+═══════════════════════════════ -->
+<section id="sec-latencia" class="sec">
+  <div class="sec-label lbl-azul">Fundamento 5</div>
+  <h2>Latencia: el tiempo entre la información y el precio</h2>
+  <p class="lead">Este concepto es el que separa al inversionista informado del que siempre llega tarde a la fiesta.</p>
+
+  <div class="card card-azul">
+    <div class="card-titulo" style="color: var(--azul);">¿Qué es la latencia en inversiones?</div>
+    <p>Es el tiempo que transcurre entre que ocurre un evento relevante (una noticia, un dato económico, una decisión política) y el momento en que ese evento se refleja completamente en el precio de un activo. En ese gap de tiempo está la oportunidad — o el riesgo.</p>
+  </div>
+
+  <h3 style="font-size: 0.95rem; font-weight: 800; margin: 24px 0 16px; color: #fff;">El viaje de la información hasta el precio</h3>
+
+  <div class="latencia-steps">
+    <div class="ls-item">
+      <div class="ls-dot"></div>
+      <strong>El evento ocurre</strong>
+      <p>Una empresa anuncia resultados mejores de lo esperado. Un banco central sube las tasas de interés. Un conflicto geopolítico interrumpe cadenas de suministro.</p>
+    </div>
+    <div class="ls-item">
+      <div class="ls-dot" style="border-color: var(--azul);"></div>
+      <strong>Los algoritmos reaccionan (milisegundos)</strong>
+      <p>Los grandes fondos institucionales y los sistemas de trading automatizado procesan la información y ejecutan órdenes en microsegundos. Para cuando tú ves la noticia en tu celular, ellos ya actuaron.</p>
+    </div>
+    <div class="ls-item">
+      <div class="ls-dot" style="border-color: var(--verde-bolsa);"></div>
+      <strong>Los analistas publican (minutos a horas)</strong>
+      <p>Los analistas de los grandes bancos actualizan sus modelos y lanzan recomendaciones. Los traders más avanzados ya están reacomodando sus posiciones.</p>
+    </div>
+    <div class="ls-item">
+      <div class="ls-dot" style="border-color: var(--oro);"></div>
+      <strong>Los medios masivos publican (horas a días)</strong>
+      <p>El titular aparece en Bloomberg, El Tiempo, portales financieros. El precio ya refleja la mayor parte de la información. El que compra aquí generalmente llegó tarde.</p>
+    </div>
+    <div class="ls-item">
+      <div class="ls-dot" style="border-color: var(--rojo-bolsa);"></div>
+      <strong>El público general se entera (días a semanas)</strong>
+      <p>La noticia llega a redes sociales, conversaciones de pasillo, grupos de WhatsApp. Para este punto, el precio ya incorporó la información completa — a veces ya la corrigió.</p>
+    </div>
+  </div>
+
+  <div class="highlight hl-rojo">
+    <div class="hl-icon">⚡</div>
+    <div class="hl-body">
+      <strong>La trampa de las "noticias calientes"</strong>
+      <p>Cuando lees en un grupo de WhatsApp "compra esto ahora que va a subir", generalmente significa que los que sabían ya compraron, el precio ya subió, y tú serías el último en entrar — el que carga el costo de la salida de todos los que llegaron antes.</p>
+    </div>
+  </div>
+
+  <div class="card card-verde">
+    <div class="card-titulo" style="color: var(--verde-bolsa);">La respuesta del inversionista inteligente frente a la latencia</div>
+    <p>Dado que no puedes ganarle la velocidad a los algoritmos, la estrategia correcta para la mayoría de las personas no es el corto plazo — es el largo plazo. El inversor de largo plazo no necesita llegar primero a la noticia. Necesita entender el valor fundamental del activo y esperar que el mercado lo reconozca.</p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════
+     REFLEXIÓN FINAL
+═══════════════════════════════ -->
+<section id="sec-reflexion" class="sec">
+  <div class="reflexion-section">
+    <h2>4 Preguntas que te van a quitar el sueño esta noche</h2>
+    <p class="rs-sub">No hay respuestas correctas. Hay respuestas honestas. Escríbelas, piénsalas — y mándalas al WhatsApp del profe.</p>
+
+    <div class="pregunta-card">
+      <div class="pq-num">01</div>
+      <div class="pq-texto">Si ahora mismo tuvieras $500.000 pesos "libres" — no para el arriendo ni la comida, sino disponibles — ¿qué harías con ellos y por qué?</div>
+      <div class="pq-hint">Piensa en tu primera reacción honesta. ¿Los gastarías? ¿Los guardarías? ¿Los invertirías? ¿En qué? Esa respuesta dice más de tu perfil de inversionista que cualquier test.</div>
+      <textarea class="pq-input" id="r1" placeholder="Escribe tu respuesta aquí..."></textarea>
+    </div>
+
+    <div class="pregunta-card">
+      <div class="pq-num">02</div>
+      <div class="pq-texto">¿En qué momento de tu vida has visto que alguien cercano perdió dinero por una "buena oportunidad" que le contaron? ¿Qué falló ahí?</div>
+      <div class="pq-hint">Puede ser familiar, amigo o tú mismo. No se trata de juzgar — se trata de identificar cuál de los sesgos psicológicos que vimos hoy entró en juego en esa historia.</div>
+      <textarea class="pq-input" id="r2" placeholder="Escribe tu respuesta aquí..."></textarea>
+    </div>
+
+    <div class="pregunta-card">
+      <div class="pq-num">03</div>
+      <div class="pq-texto">Si el mercado cayera un 40% mañana y todo lo que tienes invertido valiera menos de la mitad, ¿qué harías? Sé brutalmente honesto.</div>
+      <div class="pq-hint">Esta pregunta no tiene respuesta buena o mala — tiene respuesta real. Tu reacción imaginaria frente a una caída del 40% es exactamente tu perfil de riesgo real. No el que escribirías en un formulario bancario.</div>
+      <textarea class="pq-input" id="r3" placeholder="Escribe tu respuesta aquí..."></textarea>
+    </div>
+
+    <div class="pregunta-card">
+      <div class="pq-num">04</div>
+      <div class="pq-texto">¿Cuántos años tienes hoy? Calcula: si empiezas a invertir $200.000 pesos al mes desde hoy con un rendimiento promedio del 10% anual, ¿cuánto tendrías a los 65 años?</div>
+      <div class="pq-hint">Usa una calculadora o Googlealo: "calculadora de interés compuesto". El resultado puede ser incómodo. Esa incomodidad es exactamente el punto de esta pregunta — el costo de no empezar hoy.</div>
+      <textarea class="pq-input" id="r4" placeholder="Escribe tu resultado y cómo te hizo sentir..."></textarea>
+    </div>
+
+    <button class="btn-wa" onclick="enviarWA()">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+      Enviar mis reflexiones al profe
+    </button>
+    <p class="wa-nota">El documento no guarda tus respuestas — envíalas antes de cerrar esta página.</p>
+  </div>
+</section>
+
+</div><!-- /wrap -->
+
+<footer class="footer">
+  <strong>Prof. Sergio Rojas</strong> · Inversión en Bolsa · Clase 1<br>
+  El conocimiento financiero no es privilegio de pocos — es una decisión.
+</footer>
+
+<script>
+// Nav activa en scroll
+const secciones = document.querySelectorAll('.sec');
+const navLinks  = document.querySelectorAll('.nav-inner a');
+window.addEventListener('scroll', () => {
+  let actual = '';
+  secciones.forEach(s => { if (window.scrollY >= s.offsetTop - 130) actual = s.id; });
+  navLinks.forEach(a => {
+    a.classList.remove('active');
+    if (a.getAttribute('href') === '#' + actual) a.classList.add('active');
+  });
+});
+
+// Enviar por WhatsApp
+function enviarWA() {
+  const r1 = document.getElementById('r1').value.trim();
+  const r2 = document.getElementById('r2').value.trim();
+  const r3 = document.getElementById('r3').value.trim();
+  const r4 = document.getElementById('r4').value.trim();
+
+  if (!r1 && !r2 && !r3 && !r4) {
+    alert('Parcero, escribe al menos una reflexión antes de enviar 😅');
+    return;
+  }
+
+  const nombre = prompt('¿Cuál es tu nombre completo?') || 'Estudiante';
+
+  let texto = `*Reflexiones Clase 1 — Inversión en Bolsa*\n*Estudiante:* ${nombre}\n\n`;
+  if (r1) texto += `*1. ¿Qué harías con $500k libres?*\n${r1}\n\n`;
+  if (r2) texto += `*2. Historia de pérdida por "buena oportunidad"*\n${r2}\n\n`;
+  if (r3) texto += `*3. Si el mercado cae 40% mañana...*\n${r3}\n\n`;
+  if (r4) texto += `*4. Cálculo interés compuesto y cómo me hizo sentir*\n${r4}`;
+
+  // Número del profe — Sergio puede cambiarlo aquí
+  const numeroProfe = '573XXXXXXXXX'; // ← Sergio: reemplaza con tu número (código país + número sin +)
+  const url = `https://wa.me/${numeroProfe}?text=${encodeURIComponent(texto)}`;
+  window.open(url, '_blank');
+}
+</script>
+</body>
+</html>

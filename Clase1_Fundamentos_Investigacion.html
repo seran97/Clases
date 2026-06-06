@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 1 — Fundamentos del Conocimiento Científico · Metodología Investigativa</title>
+<style>
+/* ============================================================
+   BASE & RESET
+============================================================ */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --azul-oscuro: #0d1b4b;
+  --azul-medio: #1a3a8f;
+  --azul-vivo: #2563eb;
+  --amarillo: #f59e0b;
+  --amarillo-oscuro: #b45309;
+  --verde: #059669;
+  --violeta: #7c3aed;
+  --gris-texto: #374151;
+  --gris-claro: #f3f4f6;
+  --blanco: #ffffff;
+  --sombra: 0 4px 20px rgba(0,0,0,0.09);
+}
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+  background: #eef1f7;
+  color: var(--gris-texto);
+  line-height: 1.7;
+}
+
+/* ============================================================
+   HEADER
+============================================================ */
+.site-header {
+  background: linear-gradient(135deg, var(--azul-oscuro) 0%, var(--azul-medio) 55%, #1e40af 100%);
+  color: white;
+  padding: 0;
+  position: sticky; top: 0; z-index: 100;
+  box-shadow: 0 3px 16px rgba(0,0,0,0.25);
+}
+.header-top {
+  padding: 28px 48px 20px;
+  border-bottom: 4px solid var(--amarillo);
+}
+.header-top .inst {
+  font-size: 0.72rem; letter-spacing: 2.5px; text-transform: uppercase;
+  color: #93c5fd; margin-bottom: 6px;
+}
+.header-top h1 {
+  font-size: 1.7rem; font-weight: 900; line-height: 1.2; margin-bottom: 6px;
+}
+.header-top .subtitulo {
+  font-size: 0.9rem; color: #bfdbfe;
+}
+.nav-secciones {
+  display: flex; overflow-x: auto; gap: 0;
+  background: rgba(0,0,0,0.25);
+  scrollbar-width: none;
+}
+.nav-secciones::-webkit-scrollbar { display: none; }
+.nav-secciones a {
+  color: #bfdbfe; text-decoration: none;
+  padding: 11px 20px; font-size: 0.78rem; font-weight: 600;
+  letter-spacing: 0.5px; white-space: nowrap;
+  border-right: 1px solid rgba(255,255,255,0.08);
+  transition: background .2s, color .2s;
+}
+.nav-secciones a:hover { background: rgba(255,255,255,0.12); color: white; }
+.nav-secciones a.active { background: var(--amarillo); color: var(--azul-oscuro); }
+
+/* ============================================================
+   LAYOUT
+============================================================ */
+.page-wrap { max-width: 1000px; margin: 36px auto; padding: 0 24px 80px; }
+
+/* ============================================================
+   SECCIÓN GENÉRICA
+============================================================ */
+.seccion {
+  background: white; border-radius: 16px;
+  padding: 44px 52px; margin-bottom: 32px;
+  box-shadow: var(--sombra);
+  border-top: 5px solid transparent;
+}
+.seccion-intro { border-top-color: var(--azul-vivo); }
+.seccion-empirismo { border-top-color: var(--violeta); }
+.seccion-metodo { border-top-color: var(--verde); }
+.seccion-fuentes { border-top-color: var(--amarillo); }
+.seccion-pregunta { border-top-color: #dc2626; }
+.seccion-proyecto { border-top-color: var(--azul-oscuro); }
+
+.seccion-label {
+  font-size: 0.68rem; font-weight: 800; letter-spacing: 2.5px;
+  text-transform: uppercase; margin-bottom: 8px;
+}
+.lbl-azul { color: var(--azul-vivo); }
+.lbl-violeta { color: var(--violeta); }
+.lbl-verde { color: var(--verde); }
+.lbl-amarillo { color: var(--amarillo-oscuro); }
+.lbl-rojo { color: #dc2626; }
+.lbl-oscuro { color: var(--azul-oscuro); }
+
+.seccion h2 {
+  font-size: 1.55rem; font-weight: 800;
+  color: var(--azul-oscuro); margin-bottom: 18px; line-height: 1.25;
+}
+.seccion .intro-parrafo {
+  font-size: 1.02rem; color: #4b5563; margin-bottom: 24px;
+  border-left: 4px solid #e5e7eb; padding-left: 16px;
+}
+
+/* ============================================================
+   TARJETAS CONCEPTO
+============================================================ */
+.concepto-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 24px 0; }
+@media(max-width:640px){ .concepto-grid { grid-template-columns: 1fr; } }
+.concepto-card {
+  border-radius: 12px; padding: 22px 24px;
+  border-left: 5px solid transparent;
+}
+.cc-azul { background: #eff6ff; border-left-color: var(--azul-vivo); }
+.cc-verde { background: #f0fdf4; border-left-color: var(--verde); }
+.cc-violeta { background: #f5f3ff; border-left-color: var(--violeta); }
+.cc-amarillo { background: #fffbeb; border-left-color: var(--amarillo); }
+.cc-rojo { background: #fff1f2; border-left-color: #e11d48; }
+.cc-gris { background: var(--gris-claro); border-left-color: #6b7280; }
+.concepto-card .cc-titulo {
+  font-size: 0.85rem; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 1px; margin-bottom: 8px;
+}
+.concepto-card p { font-size: 0.9rem; color: #374151; line-height: 1.65; }
+
+/* ============================================================
+   TABLA COMPARATIVA
+============================================================ */
+.tabla-wrap { overflow-x: auto; margin: 24px 0; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.07); }
+table { width: 100%; border-collapse: collapse; }
+thead tr { background: var(--azul-oscuro); color: white; }
+thead th { padding: 14px 18px; font-size: 0.85rem; text-align: left; font-weight: 700; letter-spacing: 0.5px; }
+tbody tr:nth-child(even) { background: #f8faff; }
+tbody tr:hover { background: #eff6ff; }
+td { padding: 13px 18px; font-size: 0.88rem; color: #374151; border-bottom: 1px solid #e5e7eb; vertical-align: top; }
+td:first-child { font-weight: 700; color: var(--azul-oscuro); }
+
+/* ============================================================
+   CITA / BLOCKQUOTE
+============================================================ */
+.cita-bloque {
+  background: #f8faff; border-left: 5px solid var(--azul-vivo);
+  padding: 20px 28px; border-radius: 0 10px 10px 0;
+  margin: 24px 0; font-style: italic; color: #1e3a8a;
+  font-size: 1rem;
+}
+.cita-bloque cite {
+  display: block; margin-top: 10px; font-size: 0.8rem;
+  font-style: normal; color: #6b7280;
+}
+
+/* ============================================================
+   PASOS / PROCESO
+============================================================ */
+.proceso-lista { list-style: none; margin: 24px 0; }
+.proceso-lista li {
+  display: flex; gap: 18px; align-items: flex-start;
+  padding: 16px 0; border-bottom: 1px solid #f3f4f6;
+}
+.proceso-lista li:last-child { border-bottom: none; }
+.paso-num {
+  width: 38px; height: 38px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 900; font-size: 1rem; color: white;
+  background: var(--azul-vivo);
+}
+.paso-texto strong { display: block; font-size: 0.95rem; color: var(--azul-oscuro); margin-bottom: 4px; }
+.paso-texto span { font-size: 0.88rem; color: #4b5563; }
+
+/* ============================================================
+   HIGHLIGHT BOX
+============================================================ */
+.highlight-box {
+  border-radius: 12px; padding: 22px 28px; margin: 24px 0;
+  display: flex; gap: 18px; align-items: flex-start;
+}
+.hb-azul { background: #eff6ff; border: 1px solid #bfdbfe; }
+.hb-amarillo { background: #fffbeb; border: 1px solid #fcd34d; }
+.hb-verde { background: #f0fdf4; border: 1px solid #86efac; }
+.hb-rojo { background: #fff1f2; border: 1px solid #fda4af; }
+.hb-oscuro { background: #f1f5f9; border: 1px solid #cbd5e1; }
+.hb-icon { font-size: 1.6rem; flex-shrink: 0; margin-top: 2px; }
+.hb-content strong { display: block; font-size: 0.92rem; color: var(--azul-oscuro); margin-bottom: 5px; }
+.hb-content p, .hb-content ul { font-size: 0.88rem; color: #374151; line-height: 1.65; }
+.hb-content ul { padding-left: 18px; margin-top: 6px; }
+.hb-content ul li { margin-bottom: 4px; }
+
+/* ============================================================
+   PIRAMIDE / JERARQUIA
+============================================================ */
+.jerarquia { margin: 28px 0; }
+.jerarquia-nivel {
+  border-radius: 8px; padding: 14px 22px; margin-bottom: 8px;
+  display: flex; align-items: center; gap: 14px;
+}
+.jn-1 { background: #0d1b4b; color: white; margin: 0 0; }
+.jn-2 { background: #1a3a8f; color: white; margin: 0 24px; }
+.jn-3 { background: #2563eb; color: white; margin: 0 48px; }
+.jn-4 { background: #bfdbfe; color: #1e3a8a; margin: 0 72px; }
+.jn-5 { background: #f3f4f6; color: #374151; margin: 0 96px; border: 1px dashed #d1d5db; }
+.jerarquia-nivel .jn-tipo { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.75; }
+.jerarquia-nivel .jn-nombre { font-size: 0.95rem; font-weight: 700; }
+.jerarquia-nivel .jn-desc { font-size: 0.8rem; opacity: 0.8; margin-top: 2px; }
+
+/* ============================================================
+   QUIZ / REFLEXION
+============================================================ */
+.reflexion-box {
+  background: linear-gradient(135deg, var(--azul-oscuro), var(--azul-medio));
+  color: white; border-radius: 14px; padding: 32px 40px; margin: 32px 0;
+}
+.reflexion-box h3 { font-size: 1.1rem; margin-bottom: 16px; color: var(--amarillo); }
+.reflexion-box ol { padding-left: 22px; }
+.reflexion-box ol li { margin-bottom: 12px; font-size: 0.92rem; line-height: 1.6; color: #e2e8f0; }
+.reflexion-box ol li strong { color: white; }
+
+/* ============================================================
+   PREGUNTA TRANSVERSAL HERO
+============================================================ */
+.pregunta-hero {
+  background: linear-gradient(135deg, #7f1d1d, #b91c1c, #dc2626);
+  border-radius: 16px; padding: 36px 44px; margin: 28px 0; color: white;
+  box-shadow: 0 6px 24px rgba(185,28,28,0.3);
+}
+.pregunta-hero .ph-label {
+  font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase;
+  color: #fca5a5; margin-bottom: 12px;
+}
+.pregunta-hero blockquote {
+  font-size: 1.25rem; font-weight: 700; font-style: italic;
+  line-height: 1.45; border-left: 4px solid #fca5a5;
+  padding-left: 20px; color: white;
+}
+.pregunta-hero .ph-explicacion {
+  margin-top: 18px; font-size: 0.9rem; color: #fee2e2; line-height: 1.65;
+}
+
+/* ============================================================
+   TARJETAS SECTOR
+============================================================ */
+.sector-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); gap: 16px; margin: 24px 0; }
+.sector-card {
+  background: var(--gris-claro); border-radius: 10px; padding: 18px;
+  border-top: 4px solid var(--azul-vivo); text-align: center;
+}
+.sector-card .sc-icon { font-size: 2rem; margin-bottom: 8px; }
+.sector-card .sc-nombre { font-size: 0.88rem; font-weight: 700; color: var(--azul-oscuro); }
+.sector-card .sc-insumo { font-size: 0.78rem; color: #6b7280; margin-top: 4px; }
+
+/* ============================================================
+   TARJETAS EVALUACION
+============================================================ */
+.eval-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin: 24px 0; }
+@media(max-width:620px){ .eval-grid { grid-template-columns: 1fr; } }
+.eval-card {
+  border-radius: 12px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+}
+.eval-header {
+  padding: 14px 20px; display: flex; align-items: center; gap: 12px; color: white;
+}
+.eval-header .eval-id {
+  font-size: 1.1rem; font-weight: 900;
+  width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.2);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.eval-header .eval-titulo { font-size: 0.85rem; font-weight: 700; line-height: 1.3; }
+.eval-body { background: white; padding: 14px 20px; font-size: 0.83rem; color: #4b5563; line-height: 1.6; }
+.eval-peso {
+  display: inline-block; margin-top: 8px; font-weight: 700; font-size: 0.78rem;
+  background: #eff6ff; color: var(--azul-vivo); padding: 3px 10px; border-radius: 20px;
+}
+.bg-c1a { background: linear-gradient(90deg, #0d1b4b, #1a3a8f); }
+.bg-c1b { background: linear-gradient(90deg, #1a3a8f, #2563eb); }
+.bg-c1c { background: linear-gradient(90deg, #065f46, #059669); }
+.bg-c1d { background: linear-gradient(90deg, #7c2d12, #ea580c); }
+
+/* ============================================================
+   FOOTER
+============================================================ */
+.site-footer {
+  background: var(--azul-oscuro); color: #94a3b8; text-align: center;
+  padding: 28px; font-size: 0.78rem;
+}
+.site-footer strong { color: white; }
+
+/* ============================================================
+   UTILITIES
+============================================================ */
+h3.subtitulo-seccion {
+  font-size: 1.1rem; color: var(--azul-oscuro);
+  margin: 28px 0 12px; font-weight: 800;
+  display: flex; align-items: center; gap: 10px;
+}
+h3.subtitulo-seccion::before {
+  content: ''; display: inline-block; width: 4px; height: 20px;
+  background: var(--azul-vivo); border-radius: 2px;
+}
+.divider { height: 1px; background: #e5e7eb; margin: 28px 0; }
+.tag { display: inline-block; padding: 3px 12px; border-radius: 20px; font-size: 0.73rem; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
+.tag-conocer { background: #dbeafe; color: #1d4ed8; }
+.tag-aprender { background: #dcfce7; color: #166534; }
+.tag-aplicar { background: #fef3c7; color: #92400e; }
+p.nota { font-size: 0.82rem; color: #6b7280; margin-top: 12px; font-style: italic; }
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     HEADER
+============================================================ -->
+<header class="site-header">
+  <div class="header-top">
+    <div class="inst">UniGermana · Metodología Investigativa · Ciclo 2026-13 · Prof. Sergio Andrés Rojas Trujillo</div>
+    <h1>Clase 1 — Fundamentos del Conocimiento Científico</h1>
+    <div class="subtitulo">
+      <span class="tag tag-conocer">Pilar: Conocer</span> &nbsp; Sesión inaugural · 7 clases en el ciclo
+    </div>
+  </div>
+  <nav class="nav-secciones">
+    <a href="#seccion-investigar" class="active">¿Qué es investigar?</a>
+    <a href="#seccion-corrientes">Empirismo y Racionalismo</a>
+    <a href="#seccion-metodo">Método Científico</a>
+    <a href="#seccion-fuentes">Fuentes Confiables</a>
+    <a href="#seccion-pregunta">Pregunta Transversal</a>
+    <a href="#seccion-proyecto">El Proyecto del Ciclo</a>
+  </nav>
+</header>
+
+<!-- ============================================================
+     WRAP
+============================================================ -->
+<div class="page-wrap">
+
+<!-- ============================================================
+     SECCIÓN 1: ¿QUÉ ES INVESTIGAR?
+============================================================ -->
+<section id="seccion-investigar" class="seccion seccion-intro">
+  <div class="seccion-label lbl-azul">Sección 1</div>
+  <h2>¿Qué es investigar?</h2>
+  <p class="intro-parrafo">Antes de hablar de metodología, hay que entender qué distingue una afirmación científica de una simple opinión. Esa diferencia no es de tono ni de intensidad: es de proceso.</p>
+
+  <div class="cita-bloque">
+    "La investigación científica es un proceso sistemático, controlado, empírico y crítico de proposiciones hipotéticas sobre las supuestas relaciones que existen entre fenómenos naturales."
+    <cite>— Kerlinger, F. N. (1975). Investigación del comportamiento. McGraw-Hill.</cite>
+  </div>
+
+  <h3 class="subtitulo-seccion">¿Por qué no cualquier búsqueda es investigación?</h3>
+  <p>Todos buscamos información todos los días. Pero buscar en Google, preguntar a un amigo o recordar algo que vimos en las noticias no es investigar. Investigar implica un protocolo, una pregunta precisa, evidencia verificable y un resultado que otros pueden criticar y reproducir.</p>
+
+  <div class="concepto-grid">
+    <div class="concepto-card cc-azul">
+      <div class="cc-titulo" style="color: var(--azul-vivo);">Conocimiento Científico</div>
+      <p>Se obtiene mediante un proceso sistemático. Es verificable, público, replicable y autocorrectivo. Admite que puede estar equivocado y tiene mecanismos para detectarlo.</p>
+    </div>
+    <div class="concepto-card cc-rojo">
+      <div class="cc-titulo" style="color:#dc2626;">Conocimiento Vulgar (Cotidiano)</div>
+      <p>Se obtiene por experiencia personal, tradición o intuición. Es útil en la vida diaria pero no tiene validez universal. No puede ser sometido a prueba rigurosa.</p>
+    </div>
+    <div class="concepto-card cc-violeta">
+      <div class="cc-titulo" style="color: var(--violeta);">Conocimiento Filosófico</div>
+      <p>Reflexiona sobre los fundamentos del ser, la existencia y los valores. Es racional y sistemático, pero no necesariamente basado en evidencia empírica verificable.</p>
+    </div>
+    <div class="concepto-card cc-verde">
+      <div class="cc-titulo" style="color: var(--verde);">Conocimiento Tecnológico</div>
+      <p>Aplica el conocimiento científico para resolver problemas prácticos. Transforma el saber en hacer. Es el puente entre la ciencia y la realidad productiva.</p>
+    </div>
+  </div>
+
+  <h3 class="subtitulo-seccion">Características del conocimiento científico</h3>
+  <div class="tabla-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Característica</th>
+          <th>Qué significa</th>
+          <th>Ejemplo en nuestro ciclo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Sistemático</td>
+          <td>Sigue pasos ordenados y lógicos</td>
+          <td>Seguimos las 7 clases como etapas del proceso investigativo</td>
+        </tr>
+        <tr>
+          <td>Empírico</td>
+          <td>Se basa en evidencia observable y medible</td>
+          <td>Encuestaremos empresas reales con datos primarios en AXON</td>
+        </tr>
+        <tr>
+          <td>Replicable</td>
+          <td>Otro investigador puede repetir el estudio y obtener resultados comparables</td>
+          <td>Tres cursos aplican el mismo instrumento núcleo de 5 preguntas</td>
+        </tr>
+        <tr>
+          <td>Crítico</td>
+          <td>Se somete a evaluación y puede ser refutado</td>
+          <td>Nuestra hipótesis puede ser confirmada o rechazada por los datos</td>
+        </tr>
+        <tr>
+          <td>Acumulativo</td>
+          <td>Construye sobre el conocimiento anterior</td>
+          <td>Usamos artículos de bases de datos para fundamentar nuestro marco teórico</td>
+        </tr>
+        <tr>
+          <td>Comunicable</td>
+          <td>Se publica y puede ser cuestionado por la comunidad académica</td>
+          <td>El ciclo concluye con un artículo científico co-autorado</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="highlight-box hb-amarillo">
+    <div class="hb-icon">💡</div>
+    <div class="hb-content">
+      <strong>Para pensar en clase</strong>
+      <p>¿Cuántas veces has tomado una decisión de negocio o personal basándote en una "sensación" o en lo que alguien te contó? ¿Qué habría cambiado si hubieras tenido datos verificados? Eso es exactamente lo que pretendemos construir este ciclo: la capacidad de tomar decisiones respaldadas por evidencia.</p>
+    </div>
+  </div>
+
+</section>
+
+<!-- ============================================================
+     SECCIÓN 2: EMPIRISMO Y RACIONALISMO
+============================================================ -->
+<section id="seccion-corrientes" class="seccion seccion-empirismo">
+  <div class="seccion-label lbl-violeta">Sección 2</div>
+  <h2>Las Raíces del Pensamiento Científico: Empirismo y Racionalismo</h2>
+  <p class="intro-parrafo">Para entender cómo funciona la investigación moderna, necesitamos remontarnos a una discusión filosófica de siglos de antigüedad: ¿de dónde viene el conocimiento verdadero? ¿De los sentidos o de la razón?</p>
+
+  <h3 class="subtitulo-seccion">El debate fundacional</h3>
+  <p>Esta no es solo una discusión abstracta. Cuando un investigador decide si va a recolectar datos en campo (encuesta, observación) o si va a construir modelos teóricos primero, está tomando partido, aunque no lo sepa, en una conversación filosófica que lleva más de 400 años.</p>
+
+  <div class="tabla-wrap" style="margin-top: 24px;">
+    <table>
+      <thead>
+        <tr>
+          <th>Dimensión</th>
+          <th>Empirismo</th>
+          <th>Racionalismo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Fuente del conocimiento</td>
+          <td>La experiencia sensorial, la observación, el experimento</td>
+          <td>La razón, la lógica deductiva, las ideas innatas</td>
+        </tr>
+        <tr>
+          <td>Representantes clásicos</td>
+          <td>John Locke, David Hume, Francis Bacon</td>
+          <td>René Descartes, Gottfried Leibniz, Baruch Spinoza</td>
+        </tr>
+        <tr>
+          <td>Postura central</td>
+          <td>"Nada hay en el entendimiento que no haya estado antes en los sentidos"</td>
+          <td>"Pienso, luego existo" — la razón es la única fuente segura de verdad</td>
+        </tr>
+        <tr>
+          <td>Método preferido</td>
+          <td>Inducción: de casos particulares a leyes generales</td>
+          <td>Deducción: de principios generales a conclusiones particulares</td>
+        </tr>
+        <tr>
+          <td>Debilidad clave</td>
+          <td>No puede generalizar con certeza absoluta a partir de observaciones limitadas</td>
+          <td>Un razonamiento puede ser lógicamente válido pero empíricamente falso</td>
+        </tr>
+        <tr>
+          <td>Aplicación en investigación</td>
+          <td>Estudios cuantitativos, encuestas, experimentos, recolección de datos primarios</td>
+          <td>Revisión de literatura, construcción de marcos teóricos, modelos conceptuales</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="subtitulo-seccion">Los personajes clave</h3>
+  <div class="concepto-grid">
+    <div class="concepto-card cc-violeta">
+      <div class="cc-titulo" style="color: var(--violeta);">René Descartes (1596–1650)</div>
+      <p><em>"Cogito, ergo sum"</em> — el padre del racionalismo moderno. Descartes propuso dudar de todo hasta encontrar algo de lo que no pudiera dudar: el hecho de que estaba pensando. Su método se basa en descomponer los problemas en partes, ir de lo simple a lo complejo y verificar constantemente.</p>
+    </div>
+    <div class="concepto-card cc-azul">
+      <div class="cc-titulo" style="color: var(--azul-vivo);">Francis Bacon (1561–1626)</div>
+      <p>Padre del empirismo científico y del método inductivo. Propuso que el conocimiento debe construirse desde la observación sistemática de hechos, no desde especulaciones abstractas. Su lema: "El conocimiento es poder" — pero solo si viene de la experiencia real.</p>
+    </div>
+    <div class="concepto-card cc-verde">
+      <div class="cc-titulo" style="color: var(--verde);">David Hume (1711–1776)</div>
+      <p>Radicalizó el empirismo: incluso la causalidad (A causa B) es solo un hábito mental, no una verdad lógica. Nunca podemos probar con absoluta certeza que el sol saldrá mañana solo porque lo ha hecho hasta hoy. Esto generó una crisis en la filosofía que obligó a buscar nuevas soluciones.</p>
+    </div>
+    <div class="concepto-card cc-amarillo">
+      <div class="cc-titulo" style="color: var(--amarillo-oscuro);">Immanuel Kant (1724–1804)</div>
+      <p>La síntesis: respondió a Hume integrando ambas corrientes. Propuso que el conocimiento requiere tanto la experiencia (empirismo) como las estructuras previas de la mente (racionalismo). Sin experiencia no hay conocimiento; sin razón, la experiencia es ciega.</p>
+    </div>
+  </div>
+
+  <div class="cita-bloque">
+    "Los pensamientos sin contenido son vacíos; las intuiciones sin conceptos son ciegas."
+    <cite>— Immanuel Kant, Crítica de la razón pura (1781)</cite>
+  </div>
+
+  <h3 class="subtitulo-seccion">¿Y qué tiene que ver todo esto con nuestra investigación de Mipymes?</h3>
+
+  <div class="concepto-grid">
+    <div class="concepto-card cc-verde">
+      <div class="cc-titulo" style="color: var(--verde);">Nuestra dimensión empírica</div>
+      <p>Cuando salimos a encuestar a gerentes, proveedores y contadores de Mipymes sobre la volatilidad de insumos, estamos siendo empiristas. Los datos que recogemos en AXON son nuestra "experiencia sensorial" del problema.</p>
+    </div>
+    <div class="concepto-card cc-violeta">
+      <div class="cc-titulo" style="color: var(--violeta);">Nuestra dimensión racionalista</div>
+      <p>Cuando construimos el marco teórico consultando artículos científicos indexados sobre inflación, cadenas de suministro y toma de decisiones gerenciales, estamos siendo racionalistas. Usamos la teoría preexistente como estructura conceptual.</p>
+    </div>
+  </div>
+
+  <div class="highlight-box hb-azul" style="margin-top: 8px;">
+    <div class="hb-icon">🔬</div>
+    <div class="hb-content">
+      <strong>La investigación moderna integra las dos tradiciones</strong>
+      <p>No somos solo empiristas ni solo racionalistas. El ciclo que vamos a recorrer juntos sigue el camino que Kant insinuó: primero construimos el marco conceptual (razón → teoría → hipótesis), luego contrastamos con datos reales (experiencia → encuesta → resultados). Eso es ciencia aplicada.</p>
+    </div>
+  </div>
+
+  <div class="reflexion-box">
+    <h3>Espacio de reflexión grupal</h3>
+    <ol>
+      <li>Un gerente de una empresa textil dice: <strong>"Yo sé que el algodón importado subió de precio porque lo vivo todos los meses."</strong> ¿Esto es conocimiento empírico o vulgar? ¿Qué le faltaría para convertirse en conocimiento científico?</li>
+      <li>Un economista construye un modelo matemático que predice que si la TRM sube un 10%, los costos de insumos médicos importados subirán un 8.2%. Nunca ha visitado una Mipyme. ¿Esto es conocimiento científico? ¿Qué le falta?</li>
+      <li>¿Qué tipo de conocimiento estamos construyendo <em>nosotros</em> en este ciclo? ¿Cómo combinaríamos la observación real con la teoría preexistente?</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============================================================
+     SECCIÓN 3: MÉTODO CIENTÍFICO
+============================================================ -->
+<section id="seccion-metodo" class="seccion seccion-metodo">
+  <div class="seccion-label lbl-verde">Sección 3</div>
+  <h2>El Método Científico: El Puente entre Teoría y Realidad</h2>
+  <p class="intro-parrafo">El método científico no es una receta rígida. Es un conjunto de principios que garantizan que el proceso de producir conocimiento sea honesto, transparente y autocorrectivo. Es la forma en que la ciencia se protege de sus propios errores.</p>
+
+  <h3 class="subtitulo-seccion">Las etapas del proceso investigativo</h3>
+  <ul class="proceso-lista">
+    <li>
+      <div class="paso-num">1</div>
+      <div class="paso-texto">
+        <strong>Observación del fenómeno</strong>
+        <span>Identificamos algo que nos llama la atención en la realidad. En nuestro caso: los gerentes de Mipymes colombianas reportan dificultades crecientes con el costo de sus insumos críticos.</span>
+      </div>
+    </li>
+    <li>
+      <div class="paso-num">2</div>
+      <div class="paso-texto">
+        <strong>Formulación de la pregunta de investigación</strong>
+        <span>Convertimos esa observación en una pregunta precisa, delimitada y respondible mediante datos. La vaguedad es el enemigo del investigador.</span>
+      </div>
+    </li>
+    <li>
+      <div class="paso-num">3</div>
+      <div class="paso-texto">
+        <strong>Revisión de la literatura (marco teórico)</strong>
+        <span>¿Qué ya se sabe sobre este tema? Consultamos fuentes académicas indexadas para no "reinventar la rueda" y para identificar el vacío de conocimiento que nuestro estudio llenará.</span>
+      </div>
+    </li>
+    <li>
+      <div class="paso-num">4</div>
+      <div class="paso-texto">
+        <strong>Formulación de la hipótesis</strong>
+        <span>Una respuesta tentativa y verificable a la pregunta. Debe ser falseable: si ningún dato puede refutarla, no es una hipótesis científica, es una creencia.</span>
+      </div>
+    </li>
+    <li>
+      <div class="paso-num">5</div>
+      <div class="paso-texto">
+        <strong>Diseño metodológico</strong>
+        <span>¿Cómo vamos a recolectar los datos? Definimos el tipo de estudio, la población objetivo, la muestra y el instrumento (en nuestro caso, la encuesta de 7 preguntas digitalizada en AXON).</span>
+      </div>
+    </li>
+    <li>
+      <div class="paso-num">6</div>
+      <div class="paso-texto">
+        <strong>Recolección de datos</strong>
+        <span>Aplicamos el instrumento. En este ciclo, cada estudiante encuestará a un mínimo de 5 informantes clave del sector asignado. Los datos quedan registrados automáticamente en la plataforma.</span>
+      </div>
+    </li>
+    <li>
+      <div class="paso-num">7</div>
+      <div class="paso-texto">
+        <strong>Análisis e interpretación de resultados</strong>
+        <span>Procesamos los datos. ¿Confirman la hipótesis? ¿La refutan? ¿Qué patrones emergen por sector? ¿Qué dicen los números sobre la realidad de las Mipymes colombianas?</span>
+      </div>
+    </li>
+    <li>
+      <div class="paso-num">8</div>
+      <div class="paso-texto">
+        <strong>Conclusiones y comunicación</strong>
+        <span>Redactamos lo que aprendimos, las limitaciones del estudio y las preguntas que quedan abiertas. Lo comunicamos en el artículo científico co-autorado del ciclo.</span>
+      </div>
+    </li>
+  </ul>
+
+  <h3 class="subtitulo-seccion">Inducción vs. Deducción: dos rutas hacia el conocimiento</h3>
+
+  <div class="concepto-grid">
+    <div class="concepto-card cc-verde">
+      <div class="cc-titulo" style="color: var(--verde);">Razonamiento Inductivo</div>
+      <p>Va de lo particular a lo general. Observamos muchos casos específicos y generalizamos. <br><br><em>Ejemplo:</em> Encuestamos a 50 empresas textiles y el 78% reporta impacto crítico por la suba del algodón importado. <strong>Conclusión:</strong> es probable que el sector textil colombiano en su conjunto enfrente este problema.</p>
+    </div>
+    <div class="concepto-card cc-violeta">
+      <div class="cc-titulo" style="color: var(--violeta);">Razonamiento Deductivo</div>
+      <p>Va de lo general a lo particular. Partimos de una teoría o ley general y derivamos conclusiones específicas. <br><br><em>Ejemplo:</em> La teoría económica establece que cuando el precio de los insumos sube, el margen de utilidad cae. <strong>Conclusión:</strong> las Mipymes del sector agroalimentario colombiano deben tener márgenes comprimidos este ciclo.</p>
+    </div>
+  </div>
+
+  <div class="highlight-box hb-verde">
+    <div class="hb-icon">⚙️</div>
+    <div class="hb-content">
+      <strong>Nuestro estudio usa ambos caminos</strong>
+      <p>Partimos de teoría económica (deducción → hipótesis) y luego la contrastamos con encuestas reales (inducción → análisis). Esta articulación es característica de los estudios <strong>descriptivo-correlacionales</strong>, que es exactamente el tipo de diseño que aplicaremos en la Actividad A5.</p>
+    </div>
+  </div>
+
+  <h3 class="subtitulo-seccion">¿Qué hace que una hipótesis sea científica? El criterio de Popper</h3>
+
+  <div class="cita-bloque">
+    "El criterio de cientificidad de una teoría es su falsabilidad, refutabilidad o verificabilidad."
+    <cite>— Karl Popper, La lógica de la investigación científica (1934)</cite>
+  </div>
+
+  <p>Karl Popper propuso que una afirmación solo es científica si existe, al menos en principio, alguna evidencia que podría demostrar que está equivocada. Si no existe ninguna posibilidad de refutación, no es ciencia, es dogma.</p>
+
+  <div class="tabla-wrap" style="margin-top: 20px;">
+    <table>
+      <thead>
+        <tr><th>Afirmación</th><th>¿Es falseable?</th><th>Veredicto</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>"La volatilidad de precios de insumos importados afecta negativamente el margen de utilidad de las Mipymes colombianas del sector textil"</td>
+          <td>Sí — si la encuesta muestra que no hay correlación, la hipótesis se refuta</td>
+          <td style="color: var(--verde); font-weight: 700;">✓ Hipótesis científica válida</td>
+        </tr>
+        <tr>
+          <td>"Todo lo que Dios quiera, las empresas sobrevivirán"</td>
+          <td>No — ningún dato puede probar ni refutar esta afirmación</td>
+          <td style="color: #dc2626; font-weight: 700;">✗ No es una hipótesis científica</td>
+        </tr>
+        <tr>
+          <td>"El mercado siempre se regula solo"</td>
+          <td>Parcialmente — es una ideología económica que puede tener casos que la apoyan y casos que la contradicen; usualmente formulada de forma demasiado vaga para ser testeable</td>
+          <td style="color: #d97706; font-weight: 700;">⚠ Requiere operacionalización</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ============================================================
+     SECCIÓN 4: FUENTES CONFIABLES
+============================================================ -->
+<section id="seccion-fuentes" class="seccion seccion-fuentes">
+  <div class="seccion-label lbl-amarillo">Sección 4</div>
+  <h2>Fuentes de Información: Cómo Distinguir lo Confiable de lo que No lo Es</h2>
+  <p class="intro-parrafo">En la era de la sobreinformación, saber evaluar la calidad de una fuente es una competencia crítica. No todas las páginas, no todos los libros, no todos los artículos tienen el mismo peso científico.</p>
+
+  <h3 class="subtitulo-seccion">La jerarquía de las fuentes de información</h3>
+
+  <div class="jerarquia">
+    <div class="jerarquia-nivel jn-1">
+      <div>
+        <div class="jn-tipo">Nivel 5 — Máxima confiabilidad</div>
+        <div class="jn-nombre">Artículos de investigación en revistas indexadas con revisión por pares</div>
+        <div class="jn-desc">Publicados en Scopus, Web of Science, SciELO. Revisados por expertos independientes antes de publicarse.</div>
+      </div>
+    </div>
+    <div class="jerarquia-nivel jn-2">
+      <div>
+        <div class="jn-tipo">Nivel 4 — Alta confiabilidad</div>
+        <div class="jn-nombre">Libros académicos de editoriales reconocidas · Tesis doctorales</div>
+        <div class="jn-desc">Producidos por investigadores con respaldo institucional. Cuentan con proceso editorial riguroso.</div>
+      </div>
+    </div>
+    <div class="jerarquia-nivel jn-3">
+      <div>
+        <div class="jn-tipo">Nivel 3 — Confiabilidad media</div>
+        <div class="jn-nombre">Informes de organismos internacionales · Estadísticas gubernamentales</div>
+        <div class="jn-desc">DANE, Banco de la República, OCDE, FMI, CEPAL. Son fuentes primarias de datos, pero no siempre revisadas por pares académicos.</div>
+      </div>
+    </div>
+    <div class="jerarquia-nivel jn-4">
+      <div>
+        <div class="jn-tipo">Nivel 2 — Confiabilidad limitada — usar con precaución</div>
+        <div class="jn-nombre">Artículos de prensa especializada · Reportes de consultoras</div>
+        <div class="jn-desc">Portafolio, El Colombiano, McKinsey Reports. Útiles para contextualizar pero no suficientes como respaldo teórico.</div>
+      </div>
+    </div>
+    <div class="jerarquia-nivel jn-5">
+      <div>
+        <div class="jn-tipo">Nivel 1 — No válido como fuente académica</div>
+        <div class="jn-nombre">Wikipedia · Blogs · Redes sociales · Páginas sin autoría identificada</div>
+        <div class="jn-desc">Pueden ser punto de partida para exploración, nunca fuente citable en un trabajo académico.</div>
+      </div>
+    </div>
+  </div>
+
+  <h3 class="subtitulo-seccion">¿Qué es una revista indexada y por qué importa?</h3>
+
+  <p>Una revista científica indexada ha sido evaluada y aceptada en catálogos internacionales de calidad. Esto garantiza que sus artículos han pasado por un proceso de <strong>revisión por pares (peer review)</strong>: antes de publicarse, dos o más expertos en el tema los leen, critican y aprueban de forma anónima.</p>
+
+  <div class="concepto-grid">
+    <div class="concepto-card cc-azul">
+      <div class="cc-titulo" style="color: var(--azul-vivo);">Scopus</div>
+      <p>La mayor base de datos de literatura científica revisada por pares del mundo (Elsevier). Cubre más de 25.000 revistas de todas las disciplinas. Es el estándar de referencia en Colombia para la categorización de investigadores (MinCiencias).</p>
+    </div>
+    <div class="concepto-card cc-verde">
+      <div class="cc-titulo" style="color: var(--verde);">EBSCOhost</div>
+      <p>Plataforma que agrega múltiples bases de datos. Incluye Business Source Complete, relevante para investigaciones en economía, administración y finanzas. Disponible en la Biblioteca Virtual UniGermana.</p>
+    </div>
+    <div class="concepto-card cc-violeta">
+      <div class="cc-titulo" style="color: var(--violeta);">ProQuest</div>
+      <p>Especializada en tesis, disertaciones y publicaciones académicas. Muy útil para encontrar estudios similares al nuestro a nivel iberoamericano. También disponible en la Biblioteca Virtual.</p>
+    </div>
+    <div class="concepto-card cc-amarillo">
+      <div class="cc-titulo" style="color: var(--amarillo-oscuro);">Google Scholar</div>
+      <p>Buscador académico gratuito. Útil para exploración inicial y para acceder a versiones libres de artículos. <strong>No reemplaza las bases de datos institucionales</strong>: muchos resultados no son arbitrados ni indexados en Scopus.</p>
+    </div>
+  </div>
+
+  <h3 class="subtitulo-seccion">Cómo evaluar una fuente: el criterio CRAAP</h3>
+
+  <div class="tabla-wrap">
+    <table>
+      <thead>
+        <tr><th>Criterio</th><th>Qué evaluar</th><th>Pregunta clave</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Currency (Actualidad)</td>
+          <td>¿Cuándo fue publicado? ¿Ha sido actualizado?</td>
+          <td>Para ciencias sociales, preferir fuentes de los últimos 10 años. En metodología, los clásicos siguen vigentes.</td>
+        </tr>
+        <tr>
+          <td>Relevance (Relevancia)</td>
+          <td>¿Responde a tu pregunta de investigación?</td>
+          <td>¿El tema del artículo se alinea con las variables que estoy estudiando?</td>
+        </tr>
+        <tr>
+          <td>Authority (Autoridad)</td>
+          <td>¿Quién lo escribió? ¿Tiene respaldo institucional?</td>
+          <td>¿El autor tiene afiliación académica? ¿La revista tiene ISSN? ¿Está indexada?</td>
+        </tr>
+        <tr>
+          <td>Accuracy (Exactitud)</td>
+          <td>¿Los datos tienen fuente? ¿Puede verificarse?</td>
+          <td>¿El artículo cita sus datos? ¿Puedo rastrear la evidencia original?</td>
+        </tr>
+        <tr>
+          <td>Purpose (Propósito)</td>
+          <td>¿Para qué fue escrito? ¿Tiene sesgo?</td>
+          <td>¿Informa, persuade, vende o entretiene? Un artículo de una empresa sobre sus propios productos no es neutral.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="subtitulo-seccion">Normas APA 7ª edición: la clave para citar correctamente</h3>
+
+  <p>Las Normas APA (American Psychological Association) son el estándar de citación más usado en ciencias sociales, administración y educación en Colombia. Garantizan que la comunidad académica pueda rastrear cualquier afirmación hasta su fuente original.</p>
+
+  <div class="concepto-grid">
+    <div class="concepto-card cc-azul">
+      <div class="cc-titulo" style="color: var(--azul-vivo);">Cita directa (textual)</div>
+      <p>Se transcribe el texto exacto entre comillas. Se incluye autor, año y número de página.<br><br>
+      <em>Ejemplo:</em> "La inflación de costos es el principal determinante de decisiones de precio en Mipymes manufactureras colombianas" (García, 2022, p. 45).</p>
+    </div>
+    <div class="concepto-card cc-verde">
+      <div class="cc-titulo" style="color: var(--verde);">Cita parafraseada</div>
+      <p>Se expresa la idea del autor con palabras propias. No lleva comillas pero sí la referencia.<br><br>
+      <em>Ejemplo:</em> García (2022) señala que el incremento en los costos de insumos es el factor más determinante en la estrategia de precios de las pequeñas empresas industriales del país.</p>
+    </div>
+    <div class="concepto-card cc-violeta">
+      <div class="cc-titulo" style="color: var(--violeta);">Referencia en lista</div>
+      <p>Al final del documento, toda fuente citada debe aparecer en la lista de referencias en formato APA completo.<br><br>
+      <em>Ejemplo:</em><br>García, L. (2022). Costos de insumos y estrategia de precios en Mipymes colombianas. <em>Revista Innovar</em>, <em>32</em>(84), 40–56. https://doi.org/xxxxxx</p>
+    </div>
+    <div class="concepto-card cc-rojo">
+      <div class="cc-titulo" style="color: #dc2626;">Errores que invalidan el trabajo</div>
+      <p>
+        • Copiar texto sin comillas ni cita (plagio).<br>
+        • Poner en la lista referencias que no se citaron en el texto.<br>
+        • Citar en el texto fuentes que no aparecen en la lista.<br>
+        • Usar Wikipedia o páginas sin autoría como fuente.<br>
+        • Omitir el DOI o URL en artículos digitales.
+      </p>
+    </div>
+  </div>
+
+  <div class="highlight-box hb-rojo">
+    <div class="hb-icon">⚠️</div>
+    <div class="hb-content">
+      <strong>El plagio académico tiene consecuencias graves</strong>
+      <p>UniGermana utiliza herramientas de detección de plagio. Un trabajo con similitud superior al umbral institucional puede ser anulado. Más allá de la sanción: el plagio impide el aprendizaje real y destruye la credibilidad académica y profesional. Citar bien es una habilidad transferible que usarás toda tu vida profesional.</p>
+    </div>
+  </div>
+
+</section>
+
+<!-- ============================================================
+     SECCIÓN 5: LA PREGUNTA TRANSVERSAL
+============================================================ -->
+<section id="seccion-pregunta" class="seccion seccion-pregunta">
+  <div class="seccion-label lbl-rojo">Sección 5</div>
+  <h2>La Pregunta que Guiará Nuestro Ciclo</h2>
+  <p class="intro-parrafo">Todo lo que hemos aprendido hoy — el rigor científico, el empirismo, el racionalismo, las fuentes confiables — tiene un destino concreto. Hay una pregunta real, anclada en la economía colombiana de hoy, que vamos a intentar responder.</p>
+
+  <div class="pregunta-hero">
+    <div class="ph-label">Pregunta Transversal Eje del Macro-Proyecto · Ciclo 2026-13</div>
+    <blockquote>
+      ¿Cómo afecta la fluctuación de precios de insumos (importados o locales) en la viabilidad financiera y la toma de decisiones de las Mipymes colombianas?
+    </blockquote>
+    <p class="ph-explicacion">
+      Esta pregunta no es teórica. Colombia tiene más de 2,5 millones de Mipymes que representan el 80% del empleo formal del país. En un contexto de alta volatilidad cambiaria, inflación acumulada y disrupciones en cadenas de suministro globales, el costo de los insumos se ha convertido en una variable crítica de supervivencia empresarial. Tu trabajo este ciclo contribuirá a entender este fenómeno desde un sector específico.
+    </p>
+  </div>
+
+  <h3 class="subtitulo-seccion">¿Por qué este problema importa? Contexto Colombia 2024–2026</h3>
+
+  <div class="tabla-wrap">
+    <table>
+      <thead>
+        <tr><th>Indicador</th><th>Situación reciente</th><th>Impacto en Mipymes</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>TRM (Tasa Representativa del Mercado)</td>
+          <td>Alta volatilidad: oscilaciones superiores al 20% en períodos cortos</td>
+          <td>Los insumos importados se encarecen directamente; el costo operativo se vuelve impredecible</td>
+        </tr>
+        <tr>
+          <td>Inflación acumulada (IPC)</td>
+          <td>Ciclos de inflación elevada post-pandemia y por conflictos internacionales</td>
+          <td>Los precios de insumos locales también suben; los contratos a largo plazo quedan desactualizados</td>
+        </tr>
+        <tr>
+          <td>Cadenas de suministro globales</td>
+          <td>Disrupciones por conflictos geopolíticos, pandemias y nearshoring</td>
+          <td>Escasez de materias primas específicas; mayores tiempos de entrega; proveedores alternativos más costosos</td>
+        </tr>
+        <tr>
+          <td>Acceso a crédito para Mipymes</td>
+          <td>Tasas de interés elevadas; restricciones bancarias para pequeñas empresas</td>
+          <td>Menor capacidad de amortiguar el golpe del alza de insumos con financiamiento; mayor presión sobre flujo de caja</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="subtitulo-seccion">Los sectores que investigaremos</h3>
+  <p>Cada estudiante investigará desde la perspectiva del sector que le sea asignado. Los datos de todos los sectores se consolidarán en el artículo científico co-autorado al final del ciclo.</p>
+
+  <div class="sector-grid">
+    <div class="sector-card">
+      <div class="sc-icon">🏥</div>
+      <div class="sc-nombre">Salud</div>
+      <div class="sc-insumo">Insumos médicos, EPP, medicamentos</div>
+    </div>
+    <div class="sector-card">
+      <div class="sc-icon">🌾</div>
+      <div class="sc-nombre">Agroalimentario</div>
+      <div class="sc-insumo">Café, cacao, fertilizantes</div>
+    </div>
+    <div class="sector-card">
+      <div class="sc-icon">👔</div>
+      <div class="sc-nombre">Textil y Confección</div>
+      <div class="sc-insumo">Algodón, telas, colorantes</div>
+    </div>
+    <div class="sector-card">
+      <div class="sc-icon">💻</div>
+      <div class="sc-nombre">Tecnología</div>
+      <div class="sc-insumo">Componentes electrónicos, licencias</div>
+    </div>
+    <div class="sector-card">
+      <div class="sc-icon">🏗️</div>
+      <div class="sc-nombre">Construcción</div>
+      <div class="sc-insumo">Cemento, acero, materiales</div>
+    </div>
+    <div class="sector-card">
+      <div class="sc-icon">🚚</div>
+      <div class="sc-nombre">Logística</div>
+      <div class="sc-insumo">Combustible, repuestos</div>
+    </div>
+  </div>
+
+  <div class="highlight-box hb-oscuro">
+    <div class="hb-icon">🎯</div>
+    <div class="hb-content">
+      <strong>Tu misión como co-investigador</strong>
+      <p>Durante las próximas 7 clases, serás el especialista sectorial de tu área. Tu pregunta de investigación derivará de la pregunta transversal pero será específica para tu sector. Tus datos de campo son una contribución real al conocimiento colectivo del ciclo — no es un ejercicio simulado, es investigación aplicada real.</p>
+    </div>
+  </div>
+
+</section>
+
+<!-- ============================================================
+     SECCIÓN 6: EL PROYECTO DEL CICLO
+============================================================ -->
+<section id="seccion-proyecto" class="seccion seccion-proyecto">
+  <div class="seccion-label lbl-oscuro">Sección 6</div>
+  <h2>El Proyecto del Ciclo: Mapa Completo de lo que Construiremos</h2>
+  <p class="intro-parrafo">Para entender dónde estamos hoy, es fundamental ver el mapa completo del viaje. Las 7 clases no son temas aislados: son etapas de un proyecto de investigación que crecerá semana a semana.</p>
+
+  <h3 class="subtitulo-seccion">Las 7 clases y su lógica acumulativa</h3>
+
+  <ul class="proceso-lista">
+    <li>
+      <div class="paso-num" style="background: var(--amarillo); color: #1a1a2e;">1</div>
+      <div class="paso-texto">
+        <strong>Hoy — Fundamentos del conocimiento científico</strong>
+        <span>Entendemos qué es investigar, de dónde viene el conocimiento (empirismo/racionalismo), cómo usar fuentes y cuál es la pregunta que guía el ciclo. Es el piso conceptual sobre el que se construye todo.</span>
+      </div>
+    </li>
+    <li>
+      <div class="paso-num">2</div>
+      <div class="paso-texto">
+        <strong>El problema de investigación — Clase 2</strong>
+        <span>Aprenderemos a formular una pregunta precisa, construir el árbol del problema y redactar una hipótesis de investigación. Cada estudiante delimitará su pregunta sectorial.</span>
+      </div>
+    </li>
+    <li>
+      <div class="paso-num">3</div>
+      <div class="paso-texto">
+        <strong>Marco teórico y fuentes académicas — Clase 3</strong>
+        <span>Búsqueda avanzada en la Biblioteca Virtual UniGermana. Cómo leer y reseñar artículos científicos. Construcción de la matriz bibliográfica.</span>
+      </div>
+    </li>
+    <li>
+      <div class="paso-num">4</div>
+      <div class="paso-texto">
+        <strong>Repaso e integración — Evaluación Corte 1 — Clase 4</strong>
+        <span>Consolidamos los aprendizajes de las primeras clases. Revisión de borradores del planteamiento del problema. Evaluación escrita (A3).</span>
+      </div>
+    </li>
+    <li>
+      <div class="paso-num">5</div>
+      <div class="paso-texto">
+        <strong>Diseño metodológico — Clase 5</strong>
+        <span>Tipos de estudio, población objetivo, operacionalización de variables, diseño del instrumento de 7 preguntas para la encuesta AXON.</span>
+      </div>
+    </li>
+    <li>
+      <div class="paso-num">6</div>
+      <div class="paso-texto">
+        <strong>Trabajo de campo: Encuesta AXON — Clase 6</strong>
+        <span>Aplicación real de la encuesta a mínimo 5 informantes clave de Mipymes del sector asignado. Análisis inicial de los datos recolectados.</span>
+      </div>
+    </li>
+    <li>
+      <div class="paso-num">7</div>
+      <div class="paso-texto">
+        <strong>Resultados, conclusiones y co-autoría — Clase 7</strong>
+        <span>Análisis descriptivo, discusión de hallazgos, arquitectura del artículo científico multisectorial y evaluación final (A7).</span>
+      </div>
+    </li>
+  </ul>
+
+  <h3 class="subtitulo-seccion">Las actividades evaluativas del ciclo</h3>
+  <p style="margin-bottom: 20px;">Cada actividad está alineada con los pilares CAA (Conocer, Aprender, Aplicar) que rigen el modelo pedagógico de UniGermana y con el proceso acumulativo de la investigación.</p>
+
+  <div class="eval-grid">
+    <div class="eval-card">
+      <div class="eval-header bg-c1a">
+        <div class="eval-id">A1</div>
+        <div class="eval-titulo">Prueba Diagnóstica Institucional</div>
+      </div>
+      <div class="eval-body">
+        Cuestionario automatizado de mínimo 8 preguntas sobre conceptos básicos de investigación, mercados e inflación. Retroalimentación programada automáticamente.
+        <div class="eval-peso">10% del Corte 1</div>
+      </div>
+    </div>
+    <div class="eval-card">
+      <div class="eval-header bg-c1b">
+        <div class="eval-id">A1-F</div>
+        <div class="eval-titulo">Foro Reflexivo Transversal</div>
+      </div>
+      <div class="eval-body">
+        Debate abierto sobre fluctuación de precios de insumos locales vs. importados. Cada estudiante identifica el insumo más crítico de su sector asignado.
+        <div class="eval-peso">20% del Corte 1</div>
+      </div>
+    </div>
+    <div class="eval-card">
+      <div class="eval-header bg-c1c">
+        <div class="eval-id">A2</div>
+        <div class="eval-titulo">Planteamiento del Problema</div>
+      </div>
+      <div class="eval-body">
+        Documento individual: contexto del problema en el sector asignado, pregunta derivada de la transversal, justificación teórico-práctica e hipótesis. PDF, máx. 3 páginas, APA 7.
+        <div class="eval-peso">40% del Corte 1</div>
+      </div>
+    </div>
+    <div class="eval-card">
+      <div class="eval-header bg-c1d">
+        <div class="eval-id">A3</div>
+        <div class="eval-titulo">Evaluación Escrita Corte 1</div>
+      </div>
+      <div class="eval-body">
+        Examen de control metodológico y conceptual en plataforma. Retroalimentación inmediata reactivo por reactivo. No puede pesar menos del 30% institucional.
+        <div class="eval-peso">30% del Corte 1</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="highlight-box hb-azul" style="margin-top: 8px;">
+    <div class="hb-icon">📋</div>
+    <div class="hb-content">
+      <strong>El enfoque CAA en cada clase</strong>
+      <ul>
+        <li><strong>Conocer:</strong> El andamiaje teórico que necesitas para entender el problema — lo que construimos hoy.</li>
+        <li><strong>Aprender:</strong> La aplicación guiada de los conceptos a tu contexto sectorial específico — lo que harás en las clases 2 a 4.</li>
+        <li><strong>Aplicar:</strong> El trabajo de campo real y la producción del artículo científico — lo que harás en las clases 5 a 7.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="reflexion-box">
+    <h3>Cierre de la Clase 1 — Compromisos y próximos pasos</h3>
+    <ol>
+      <li>Identifica el <strong>sector económico asignado</strong> y empieza a pensar en cuál es el insumo más crítico para las empresas de ese sector en Colombia hoy.</li>
+      <li>Ingresa a la <strong>Biblioteca Virtual UniGermana</strong> y localiza las bases de datos EBSCOhost y ProQuest. Haz una búsqueda exploratoria con los términos "volatilidad de precios" + tu sector.</li>
+      <li>Responde la <strong>Actividad A1 (Diagnóstico)</strong> en la plataforma Q10. Son preguntas sobre los conceptos que vimos hoy.</li>
+      <li>Trae a la <strong>Clase 2</strong> al menos una idea de problema real que hayas observado en tu sector — algo que te genere la pregunta: <em>"¿por qué pasa esto?"</em></li>
+    </ol>
+  </div>
+
+</section>
+
+</div><!-- /page-wrap -->
+
+<footer class="site-footer">
+  <strong>UniGermana · Metodología Investigativa · Ciclo 2026-13</strong><br>
+  Prof. Sergio Andrés Rojas Trujillo · Dirección de Investigaciones · Facultad de Ciencias Económicas y Administrativas<br>
+  Plataformas: Q10 · AXON (Supabase/Render) · Biblioteca Virtual UniGermana
+</footer>
+
+<script>
+// Navegación activa al hacer scroll
+const secciones = document.querySelectorAll('.seccion');
+const navLinks = document.querySelectorAll('.nav-secciones a');
+window.addEventListener('scroll', () => {
+  let actual = '';
+  secciones.forEach(s => {
+    const top = s.offsetTop - 120;
+    if (window.scrollY >= top) actual = s.id;
+  });
+  navLinks.forEach(a => {
+    a.classList.remove('active');
+    if (a.getAttribute('href') === '#' + actual) a.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>
