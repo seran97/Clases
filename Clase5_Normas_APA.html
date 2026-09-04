@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 5 · Fundamentos Investigativos · Normas APA</title>
+<style>
+  :root{
+    color-scheme: light;
+    --surface-0:#f9f9f7;
+    --surface-1:#fcfcfb;
+    --surface-2:#ffffff;
+    --text-primary:#0b0b0b;
+    --text-secondary:#52514e;
+    --text-muted:#898781;
+    --grid:#e1e0d9;
+    --axis:#c3c2b7;
+    --border:rgba(11,11,11,0.10);
+    --brand:#2a78d6;
+    --brand-dark:#184f95;
+    --accent:#eb6834;
+    --good:#0ca30c;
+    --warning:#fab219;
+    --serious:#ec835a;
+    --critical:#d03b3b;
+    --card-shadow: 0 1px 2px rgba(11,11,11,.06), 0 4px 14px rgba(11,11,11,.05);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      color-scheme: dark;
+      --surface-0:#0d0d0d;
+      --surface-1:#1a1a19;
+      --surface-2:#222221;
+      --text-primary:#ffffff;
+      --text-secondary:#c3c2b7;
+      --text-muted:#898781;
+      --grid:#2c2c2a;
+      --axis:#383835;
+      --border:rgba(255,255,255,0.10);
+      --brand:#3987e5;
+      --brand-dark:#86b6ef;
+      --accent:#d95926;
+      --good:#0ca30c;
+      --warning:#fab219;
+      --serious:#ec835a;
+      --critical:#e66767;
+      --card-shadow: 0 1px 2px rgba(0,0,0,.4), 0 4px 14px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"]{
+    color-scheme: dark;
+    --surface-0:#0d0d0d;
+    --surface-1:#1a1a19;
+    --surface-2:#222221;
+    --text-primary:#ffffff;
+    --text-secondary:#c3c2b7;
+    --text-muted:#898781;
+    --grid:#2c2c2a;
+    --axis:#383835;
+    --border:rgba(255,255,255,0.10);
+    --brand:#3987e5;
+    --brand-dark:#86b6ef;
+    --accent:#d95926;
+    --good:#0ca30c;
+    --warning:#fab219;
+    --serious:#ec835a;
+    --critical:#e66767;
+    --card-shadow: 0 1px 2px rgba(0,0,0,.4), 0 4px 14px rgba(0,0,0,.35);
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--surface-0); color:var(--text-primary);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    line-height:1.55;
+  }
+  .wrap{max-width:980px; margin:0 auto; padding:0 20px 80px;}
+
+  /* HERO */
+  .hero{
+    background: linear-gradient(135deg, var(--brand-dark), var(--brand));
+    color:#fff; padding:46px 20px 60px; text-align:center;
+    border-bottom:5px solid var(--accent);
+  }
+  .hero .eyebrow{
+    text-transform:uppercase; letter-spacing:.14em; font-size:.72rem; font-weight:700;
+    opacity:.85; margin-bottom:10px;
+  }
+  .hero h1{font-size:clamp(1.6rem,4vw,2.4rem); margin:0 0 8px; font-weight:800;}
+  .hero p.sub{font-size:1.05rem; opacity:.92; margin:0 0 4px;}
+  .hero .prof{
+    display:inline-flex; align-items:center; gap:10px; margin-top:18px;
+    background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.25);
+    padding:10px 18px; border-radius:999px; font-size:.92rem;
+  }
+  .hero .prof b{font-weight:700;}
+
+  /* NAV */
+  nav.tabs{
+    position:sticky; top:0; z-index:50; background:var(--surface-1);
+    border-bottom:1px solid var(--border); box-shadow: var(--card-shadow);
+    display:flex; gap:2px; overflow-x:auto; padding:0 8px;
+  }
+  nav.tabs button{
+    flex:0 0 auto; background:none; border:none; color:var(--text-secondary);
+    font-size:.86rem; font-weight:600; padding:14px 16px; cursor:pointer;
+    border-bottom:3px solid transparent; white-space:nowrap; font-family:inherit;
+  }
+  nav.tabs button:hover{color:var(--text-primary);}
+  nav.tabs button.active{color:var(--brand); border-bottom-color:var(--brand);}
+
+  section.panel{display:none; padding-top:32px; animation:fade .25s ease;}
+  section.panel.active{display:block;}
+  @keyframes fade{from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:none;}}
+
+  h2.section-title{
+    font-size:1.5rem; margin:0 0 6px; font-weight:800; display:flex; align-items:center; gap:10px;
+  }
+  h2.section-title .num{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:32px; height:32px; border-radius:8px; background:var(--brand); color:#fff;
+    font-size:.95rem;
+  }
+  p.section-lead{color:var(--text-secondary); margin:0 0 26px; font-size:1rem;}
+
+  .card{
+    background:var(--surface-1); border:1px solid var(--border); border-radius:14px;
+    padding:22px 24px; margin-bottom:18px; box-shadow:var(--card-shadow);
+  }
+  .card h3{margin:0 0 10px; font-size:1.08rem; font-weight:700;}
+  .card h3 .tag{
+    font-size:.68rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em;
+    background:var(--brand); color:#fff; padding:3px 9px; border-radius:999px; margin-left:8px;
+    vertical-align:middle;
+  }
+  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:18px;}
+  @media (max-width:720px){.grid2{grid-template-columns:1fr;}}
+
+  code, .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:.92em;}
+  .cite-box{
+    background:var(--surface-2); border:1px solid var(--border); border-left:4px solid var(--brand);
+    padding:12px 16px; border-radius:8px; margin:10px 0; font-size:.94rem;
+  }
+  .cite-box.bad{border-left-color:var(--critical);}
+  .cite-box.good{border-left-color:var(--good);}
+  .cite-box .label{
+    font-size:.7rem; font-weight:800; text-transform:uppercase; letter-spacing:.05em; margin-bottom:5px;
+    display:block;
+  }
+  .cite-box.bad .label{color:var(--critical);}
+  .cite-box.good .label{color:var(--good);}
+  .cite-box.neutral .label{color:var(--brand);}
+
+  table.ref-table{width:100%; border-collapse:collapse; font-size:.88rem; margin-top:10px;}
+  table.ref-table th, table.ref-table td{
+    text-align:left; padding:8px 10px; border-bottom:1px solid var(--grid); vertical-align:top;
+  }
+  table.ref-table th{color:var(--text-muted); font-weight:700; font-size:.72rem; text-transform:uppercase; letter-spacing:.04em;}
+
+  .diagram{
+    display:flex; align-items:stretch; gap:0; flex-wrap:wrap; margin:18px 0;
+  }
+  .diagram .step{
+    flex:1 1 140px; background:var(--surface-2); border:1px solid var(--border); border-radius:10px;
+    padding:14px; text-align:center; position:relative; margin:6px;
+  }
+  .diagram .step .n{
+    width:26px; height:26px; border-radius:50%; background:var(--brand); color:#fff;
+    display:flex; align-items:center; justify-content:center; font-weight:700; font-size:.82rem;
+    margin:0 auto 8px;
+  }
+  .diagram .step .t{font-weight:700; font-size:.85rem; margin-bottom:4px;}
+  .diagram .step .d{font-size:.78rem; color:var(--text-secondary);}
+  .diagram .arrow{align-self:center; color:var(--text-muted); font-size:1.3rem; padding:0 2px;}
+  @media (max-width:720px){.diagram .arrow{display:none;}}
+
+  /* Exercise inputs */
+  .exercise{
+    background:var(--surface-2); border:1px dashed var(--axis); border-radius:12px;
+    padding:18px 20px; margin-top:12px;
+  }
+  .exercise .q{font-weight:700; margin-bottom:8px; font-size:.96rem;}
+  .exercise textarea, .exercise input[type=text]{
+    width:100%; background:var(--surface-1); color:var(--text-primary);
+    border:1px solid var(--border); border-radius:8px; padding:10px 12px;
+    font-family:inherit; font-size:.92rem; resize:vertical;
+  }
+  .exercise textarea:focus, .exercise input:focus{outline:2px solid var(--brand); outline-offset:1px;}
+  .save-status{font-size:.74rem; color:var(--good); margin-top:6px; min-height:1em; font-weight:600;}
+
+  .toolbar{
+    display:flex; gap:10px; flex-wrap:wrap; align-items:center;
+    background:var(--surface-1); border:1px solid var(--border); border-radius:12px;
+    padding:14px 18px; margin:20px 0; position:sticky; bottom:12px; box-shadow:var(--card-shadow);
+  }
+  .toolbar input[type=text]{
+    flex:1 1 200px; padding:8px 12px; border-radius:8px; border:1px solid var(--border);
+    background:var(--surface-2); color:var(--text-primary); font-family:inherit;
+  }
+  .btn{
+    background:var(--brand); color:#fff; border:none; border-radius:8px; padding:9px 16px;
+    font-weight:700; font-size:.85rem; cursor:pointer; font-family:inherit;
+  }
+  .btn:hover{filter:brightness(1.08);}
+  .btn.secondary{background:var(--surface-2); color:var(--text-primary); border:1px solid var(--border);}
+  .btn.accent{background:var(--accent);}
+
+  /* Feedback dashboard */
+  .stat-row{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:14px; margin-bottom:20px;}
+  .stat-tile{
+    background:var(--surface-1); border:1px solid var(--border); border-radius:12px;
+    padding:16px 18px; box-shadow:var(--card-shadow);
+  }
+  .stat-tile .v{font-size:1.9rem; font-weight:800; font-variant-numeric:tabular-nums;}
+  .stat-tile .l{font-size:.76rem; color:var(--text-muted); font-weight:600; text-transform:uppercase; letter-spacing:.03em;}
+
+  .bar-chart{margin:8px 0 4px;}
+  .bar-row{display:grid; grid-template-columns:190px 1fr 46px; align-items:center; gap:10px; margin-bottom:12px;}
+  .bar-row .name{font-size:.85rem; color:var(--text-secondary); font-weight:600;}
+  .bar-track{background:var(--grid); border-radius:6px; height:14px; overflow:hidden;}
+  .bar-fill{height:100%; border-radius:6px; background:var(--brand);}
+  .bar-row .val{font-size:.82rem; font-weight:700; text-align:right; font-variant-numeric:tabular-nums;}
+  .bar-chart .axis-note{font-size:.72rem; color:var(--text-muted); margin-top:2px;}
+
+  .badge{
+    display:inline-block; font-size:.72rem; font-weight:700; padding:3px 10px; border-radius:999px;
+    margin-right:6px; margin-bottom:6px;
+  }
+  .badge.crit{background:color-mix(in srgb, var(--critical) 18%, transparent); color:var(--critical);}
+  .badge.warn{background:color-mix(in srgb, var(--warning) 25%, transparent); color:#8a5a00;}
+  :root[data-theme="dark"] .badge.warn, @media (prefers-color-scheme:dark){.badge.warn{color:var(--warning);}}
+  .badge.good{background:color-mix(in srgb, var(--good) 18%, transparent); color:var(--good);}
+
+  ul.tight{margin:6px 0; padding-left:20px;}
+  ul.tight li{margin-bottom:6px; font-size:.92rem;}
+
+  footer{
+    text-align:center; padding:34px 20px; color:var(--text-muted); font-size:.8rem;
+    border-top:1px solid var(--border); margin-top:40px;
+  }
+
+  .quote{
+    font-style:italic; color:var(--text-secondary); font-size:.88rem; border-left:3px solid var(--axis);
+    padding-left:12px; margin:10px 0;
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="eyebrow">Fundación Universitaria Colombo Germana · Fundamentos Investigativos</div>
+  <h1>Clase 5 — Redacción en Normas APA (7.ª edición)</h1>
+  <p class="sub">Desde cero: citar, referenciar y evitar los errores más comunes en trabajos de investigación</p>
+  <div class="prof">👨‍🏫 Docente: <b>Sergio Rojas</b> · Magíster en Finanzas Cuantitativas</div>
+</div>
+
+<nav class="tabs" id="tabs">
+  <button data-panel="p0" class="active">🏠 Bienvenida</button>
+  <button data-panel="p1">📘 APA desde cero</button>
+  <button data-panel="p2">✅ Ejemplos correctos / incorrectos</button>
+  <button data-panel="p3">✍️ Ejercicios en clase</button>
+  <button data-panel="p4">📊 Retroalimentación Actividad A4</button>
+  <button data-panel="p5">🎯 Cierre y tarea</button>
+</nav>
+
+<div class="wrap">
+
+  <!-- PANEL 0 : BIENVENIDA -->
+  <section class="panel active" id="p0">
+    <h2 class="section-title"><span class="num">0</span> Bienvenida y objetivos</h2>
+    <p class="section-lead">Hoy construimos, desde cero, la habilidad de citar y referenciar correctamente en formato APA — la base de todo trabajo investigativo serio.</p>
+
+    <div class="grid2">
+      <div class="card">
+        <h3>🎯 Objetivos de la clase</h3>
+        <ul class="tight">
+          <li>Comprender <b>qué es</b> y <b>para qué sirve</b> el estilo APA.</li>
+          <li>Diferenciar cita textual, parafraseo y cita de cita.</li>
+          <li>Construir correctamente citas en texto y su lista de referencias.</li>
+          <li>Identificar y corregir los errores más frecuentes vistos en la Actividad A4.</li>
+          <li>Practicar con ejercicios que ustedes mismos van a resolver aquí en la página.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>🗂️ Cómo está organizada esta clase</h3>
+        <ul class="tight">
+          <li><b>APA desde cero</b>: teoría, componentes y estructura.</li>
+          <li><b>Ejemplos</b>: casos correctos vs. incorrectos, diagramas.</li>
+          <li><b>Ejercicios</b>: ustedes escriben aquí mismo, se guarda en su navegador.</li>
+          <li><b>Retroalimentación A4</b>: análisis real de sus entregas anteriores.</li>
+          <li><b>Cierre</b>: tarea y recomendaciones para la próxima entrega.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>💡 Cómo participar en esta página</h3>
+      <p style="margin:0 0 8px;">Esta clase es interactiva. En la pestaña <b>"Ejercicios en clase"</b> hay cuadros de texto donde pueden responder preguntas y desarrollar ejercicios. Sus respuestas se guardan automáticamente <b>en su propio navegador</b> mientras escriben. Al final de la clase, usen el botón <b>"Descargar mis respuestas"</b> (al final de la pestaña de ejercicios) para generar un archivo con todo lo que escribieron y enviarlo al profesor por el medio que él indique (correo, Moodle, WhatsApp, etc.).</p>
+      <p style="margin:0; color:var(--text-secondary); font-size:.85rem;">Nota: como esta página se comparte como archivo estático, lo escrito no se envía solo — por eso deben descargarlo y enviarlo. Así garantizamos que su trabajo no se pierda.</p>
+    </div>
+  </section>
+
+  <!-- PANEL 1: APA DESDE CERO -->
+  <section class="panel" id="p1">
+    <h2 class="section-title"><span class="num">1</span> Normas APA desde cero</h2>
+    <p class="section-lead">APA (American Psychological Association), 7.ª edición: el estilo de citación más usado en ciencias sociales, salud y administración.</p>
+
+    <div class="card">
+      <h3>¿Qué es y para qué sirve?</h3>
+      <p>APA es un <b>sistema de reglas</b> para dar crédito a las ideas de otros autores dentro de un texto propio. Sirve para:</p>
+      <ul class="tight">
+        <li>Evitar el <b>plagio</b>, reconociendo la autoría de cada idea que no es nuestra.</li>
+        <li>Permitir que el lector <b>rastree la fuente original</b> de cualquier afirmación.</li>
+        <li>Dar <b>solidez académica</b> al trabajo: mostrar que la investigación se apoya en literatura previa.</li>
+        <li>Mantener un formato <b>uniforme</b> entre todos los trabajos de una disciplina.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>Los dos componentes de toda cita APA</h3>
+      <div class="diagram">
+        <div class="step">
+          <div class="n">1</div>
+          <div class="t">Cita en texto</div>
+          <div class="d">Aparece dentro del párrafo, junto a la idea citada. Formato corto: (Autor, Año).</div>
+        </div>
+        <div class="arrow">↔</div>
+        <div class="step">
+          <div class="n">2</div>
+          <div class="t">Lista de referencias</div>
+          <div class="d">Al final del documento. Cada cita en texto debe tener su referencia completa aquí, y viceversa.</div>
+        </div>
+      </div>
+      <p style="color:var(--text-secondary); font-size:.88rem;">Regla de oro: <b>toda cita en texto tiene su referencia, y toda referencia fue citada en el texto</b>. Si no se cumple esto, es un error de forma que baja la nota del criterio de citación.</p>
+    </div>
+
+    <div class="card">
+      <h3>Tipos de citas en texto</h3>
+      <table class="ref-table">
+        <tr><th>Tipo</th><th>Cuándo usarla</th><th>Ejemplo</th></tr>
+        <tr><td>Parafraseo (la más usada)</td><td>Explicar la idea de un autor con tus propias palabras</td><td class="mono">El estrés laboral se asocia con bajo control sobre las tareas (Karasek, 1979).</td></tr>
+        <tr><td>Textual corta (&lt;40 palabras)</td><td>Reproducir una frase exacta, va entre comillas</td><td class="mono">Karasek (1979) definió el modelo como "la interacción entre demanda y control" (p. 291).</td></tr>
+        <tr><td>Textual larga (≥40 palabras)</td><td>Cita en bloque, sin comillas, con sangría</td><td class="mono">(párrafo aparte, sangrado 1.27 cm, sin comillas, con (Autor, año, p. X) al final)</td></tr>
+        <tr><td>Un autor</td><td>&nbsp;</td><td class="mono">(Bakker, 2020)</td></tr>
+        <tr><td>Dos autores</td><td>Se citan siempre ambos, unidos con "y" (texto) o "&" (paréntesis)</td><td class="mono">Bakker y Demerouti (2017) / (Bakker &amp; Demerouti, 2017)</td></tr>
+        <tr><td>Tres o más autores</td><td>Desde la primera cita se usa "et al."</td><td class="mono">(Fernández et al., 2021)</td></tr>
+        <tr><td>Sin autor identificable</td><td>Se usa el título de la fuente entre comillas</td><td class="mono">("Resolución 2646," 2008)</td></tr>
+        <tr><td>Sin fecha</td><td>Se usa "s.f." (sin fecha)</td><td class="mono">(OMS, s.f.)</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3>Estructura de la lista de referencias (los formatos más usados)</h3>
+      <div class="cite-box neutral">
+        <span class="label">Artículo de revista científica</span>
+        Apellido, A. A. (Año). Título del artículo en minúsculas excepto la primera letra. <i>Nombre de la Revista, volumen</i>(número), páginas. https://doi.org/xxxx
+      </div>
+      <div class="cite-box neutral">
+        <span class="label">Libro</span>
+        Apellido, A. A. (Año). <i>Título del libro en cursiva</i>. Editorial.
+      </div>
+      <div class="cite-box neutral">
+        <span class="label">Norma / decreto / resolución (muy usado en SST)</span>
+        Ministerio del Trabajo. (Año). <i>Resolución 2646 de 2008</i>. https://www.mintrabajo.gov.co/...
+      </div>
+      <div class="cite-box neutral">
+        <span class="label">Página web / informe institucional</span>
+        Organización. (Año). <i>Título del informe</i>. Nombre del sitio. URL completa
+      </div>
+      <p style="font-size:.85rem; color:var(--text-secondary); margin-top:10px;">Reglas de formato: interlineado doble, sangría francesa (la segunda línea en adelante se sangra), orden <b>alfabético</b> por apellido del primer autor, título del libro/informe en <b>cursiva</b>, solo la primera letra del título en mayúscula.</p>
+    </div>
+  </section>
+
+  <!-- PANEL 2: EJEMPLOS -->
+  <section class="panel" id="p2">
+    <h2 class="section-title"><span class="num">2</span> Ejemplos correctos vs. incorrectos</h2>
+    <p class="section-lead">Estos son patrones de error reales, detectados en la retroalimentación de la Actividad A4 (anonimizados).</p>
+
+    <div class="grid2">
+      <div class="card">
+        <h3>Caso 1 — Falta la lista de referencias</h3>
+        <div class="cite-box bad"><span class="label">❌ Incorrecto</span>El texto cita a varios autores en párrafos, pero el documento termina directamente en las conclusiones. No hay sección de referencias.</div>
+        <div class="cite-box good"><span class="label">✅ Correcto</span>Cada autor mencionado en el cuerpo aparece también en una sección final titulada "Referencias", en orden alfabético y con formato completo.</div>
+      </div>
+      <div class="card">
+        <h3>Caso 2 — Fuentes no académicas</h3>
+        <div class="cite-box bad"><span class="label">❌ Incorrecto</span>Se citan blogs comerciales de venta de productos, canales de YouTube o resultados de búsqueda de Google como si fueran literatura científica.</div>
+        <div class="cite-box good"><span class="label">✅ Correcto</span>Se usan artículos de revistas indexadas (Scopus, Redalyc, Scielo), libros académicos, y normativa oficial (decretos, resoluciones).</div>
+      </div>
+      <div class="card">
+        <h3>Caso 3 — Cita en texto sin formato</h3>
+        <div class="cite-box bad"><span class="label">❌ Incorrecto</span>Según Pérez el estrés laboral aumenta... <i>(sin año, sin paréntesis)</i></div>
+        <div class="cite-box good"><span class="label">✅ Correcto</span>Según Pérez (2021), el estrés laboral aumenta...</div>
+      </div>
+      <div class="card">
+        <h3>Caso 4 — Referencias incompletas</h3>
+        <div class="cite-box bad"><span class="label">❌ Incorrecto</span>"No title", enlace a un archivo local, o solo una URL de búsqueda de Google como referencia.</div>
+        <div class="cite-box good"><span class="label">✅ Correcto</span>Autor, A. (Año). <i>Título completo del documento</i>. Editorial o institución. URL directa y funcional del documento.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Diagrama: ¿debo citar o no?</h3>
+      <div class="diagram">
+        <div class="step"><div class="n">1</div><div class="t">¿La idea es tuya?</div><div class="d">Si es 100% tu razonamiento propio, no necesita cita.</div></div>
+        <div class="arrow">→</div>
+        <div class="step"><div class="n">2</div><div class="t">¿Viene de otro texto?</div><div class="d">Dato, teoría, definición o cifra tomada de otro autor.</div></div>
+        <div class="arrow">→</div>
+        <div class="step"><div class="n">3</div><div class="t">Cita siempre</div><div class="d">Parafraseo o cita textual + referencia completa al final.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PANEL 3: EJERCICIOS -->
+  <section class="panel" id="p3">
+    <h2 class="section-title"><span class="num">3</span> Ejercicios en clase</h2>
+    <p class="section-lead">Escriban sus respuestas en los cuadros. Se guardan automáticamente en este navegador mientras completan la clase.</p>
+
+    <div class="card">
+      <h3>Ejercicio 1 <span class="tag">Identificar</span></h3>
+      <p style="font-size:.9rem; color:var(--text-secondary);">Lean la frase: <i>"Los estudios de Bakker, Demerouti y Sanz-Vergel (2021) muestran que el engagement laboral actúa como amortiguador del burnout."</i> ¿Cuántos autores tiene la fuente? ¿Cómo se citaría esta misma fuente la <b>segunda</b> vez que aparece en el documento?</p>
+      <div class="exercise">
+        <div class="q">Su respuesta:</div>
+        <textarea rows="3" data-ex="ex1" placeholder="Escriba aquí su respuesta..."></textarea>
+        <div class="save-status" data-status="ex1"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Ejercicio 2 <span class="tag">Corregir</span></h3>
+      <p style="font-size:.9rem; color:var(--text-secondary);">Esta cita tiene errores de formato APA: <span class="mono">"segun garcia 2019 el riesgo psicosocial es importante"</span>. Reescríbanla correctamente.</p>
+      <div class="exercise">
+        <div class="q">Versión corregida:</div>
+        <textarea rows="3" data-ex="ex2" placeholder="Escriba aquí su respuesta..."></textarea>
+        <div class="save-status" data-status="ex2"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Ejercicio 3 <span class="tag">Construir referencia</span></h3>
+      <p style="font-size:.9rem; color:var(--text-secondary);">Tienen un artículo de la revista "Salud y Trabajo", volumen 12, número 3, páginas 45-58, publicado en 2022 por María Torres, sobre riesgo biomecánico. Escriban la referencia completa en formato APA.</p>
+      <div class="exercise">
+        <div class="q">Referencia APA:</div>
+        <textarea rows="3" data-ex="ex3" placeholder="Escriba aquí su respuesta..."></textarea>
+        <div class="save-status" data-status="ex3"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Ejercicio 4 <span class="tag">Aplicar a su propio trabajo</span></h3>
+      <p style="font-size:.9rem; color:var(--text-secondary);">Revisen su propio trabajo de la Actividad A4 (o el que estén desarrollando). Mencionen <b>una fuente</b> que usaron y verifiquen si está correctamente citada tanto en el texto como en la lista de referencias. Si encuentran un error, corríjanlo aquí.</p>
+      <div class="exercise">
+        <div class="q">Fuente revisada y corrección (si aplica):</div>
+        <textarea rows="4" data-ex="ex4" placeholder="Escriba aquí su respuesta..."></textarea>
+        <div class="save-status" data-status="ex4"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Pregunta abierta de cierre</h3>
+      <p style="font-size:.9rem; color:var(--text-secondary);">Después de ver la retroalimentación de la Actividad A4 (siguiente pestaña), ¿cuál es el error que más se comprometen a corregir en su próxima entrega?</p>
+      <div class="exercise">
+        <div class="q">Compromiso personal:</div>
+        <textarea rows="3" data-ex="ex5" placeholder="Escriba aquí su respuesta..."></textarea>
+        <div class="save-status" data-status="ex5"></div>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <input type="text" id="studentName" placeholder="Escriba su nombre completo aquí antes de descargar">
+      <button class="btn" id="downloadBtn">⬇️ Descargar mis respuestas</button>
+      <button class="btn secondary" id="clearBtn">🗑️ Borrar mis respuestas</button>
+    </div>
+  </section>
+
+  <!-- PANEL 4: RETROALIMENTACION -->
+  <section class="panel" id="p4">
+    <h2 class="section-title"><span class="num">4</span> Retroalimentación general — Actividad A4</h2>
+    <p class="section-lead">Análisis agregado de las 63 entregas únicas calificadas contra la rúbrica (Marco Teórico y Estado del Arte / Operacionalización de Variables). Sin nombres — es una lectura de curso completo.</p>
+
+    <div class="stat-row">
+      <div class="stat-tile"><div class="v">63</div><div class="l">Entregas únicas evaluadas</div></div>
+      <div class="stat-tile"><div class="v">3.94 / 5</div><div class="l">Promedio general del curso</div></div>
+      <div class="stat-tile"><div class="v">0</div><div class="l">Casos de plagio confirmado</div></div>
+      <div class="stat-tile"><div class="v">3</div><div class="l">Entregas sin nombre identificable</div></div>
+    </div>
+
+    <div class="card">
+      <h3>Promedio por criterio de la rúbrica</h3>
+      <div class="bar-chart">
+        <div class="bar-row"><div class="name">Apropiación conceptual</div><div class="bar-track"><div class="bar-fill" style="width:86%"></div></div><div class="val">4.30</div></div>
+        <div class="bar-row"><div class="name">Redacción</div><div class="bar-track"><div class="bar-fill" style="width:92%"></div></div><div class="val">4.59</div></div>
+        <div class="bar-row"><div class="name">Modalidad de trabajo</div><div class="bar-track"><div class="bar-fill" style="width:95%"></div></div><div class="val">4.76</div></div>
+        <div class="bar-row"><div class="name">Citación APA</div><div class="bar-track"><div class="bar-fill" style="width:78%"></div></div><div class="val">3.92</div></div>
+        <div class="bar-row"><div class="name">Análisis creativo</div><div class="bar-track"><div class="bar-fill" style="width:76%"></div></div><div class="val">3.78</div></div>
+        <div class="bar-row"><div class="name">Análisis de contexto</div><div class="bar-track"><div class="bar-fill" style="width:71%"></div></div><div class="val">3.54</div></div>
+        <div class="bar-row"><div class="name">Conclusiones</div><div class="bar-track" style="background:var(--grid);"><div class="bar-fill" style="width:59%; background:var(--critical);"></div></div><div class="val">2.97</div></div>
+      </div>
+      <p class="axis-note">Escala de nivel 1 (bajo) a 5 (sobresaliente). Barra roja = criterio más débil del curso.</p>
+    </div>
+
+    <div class="card">
+      <h3>🔴 Falencia #1: Conclusiones ausentes <span class="badge crit">Criterio más bajo del curso</span></h3>
+      <p><b>16 de 63 entregas (25%)</b> obtuvieron el nivel más bajo en este criterio, y en total <b>29 entregas (46%)</b> quedaron en nivel 1 o 2. Es, por lejos, la falencia más generalizada del curso.</p>
+      <p style="color:var(--text-secondary); font-size:.9rem;">Patrón detectado: muchos trabajos terminan directamente en la lista de referencias, o diluyen el cierre dentro del "vacío de conocimiento" del estado del arte, sin una sección <b>explícitamente titulada "Conclusiones"</b> que sintetice el aporte del documento.</p>
+      <div class="quote">"El documento no incluye una sección de conclusiones ni un cierre síntesis del ejercicio." — comentario recurrente en la retroalimentación individual.</div>
+      <p><b>Cómo corregirlo:</b> cierren siempre con un apartado propio, de mínimo un párrafo, titulado "Conclusiones", que responda: ¿qué aprendí del estado del arte?, ¿cuál es el vacío de conocimiento que mi proyecto va a llenar?, ¿cómo se conecta la teoría revisada con mi problema de investigación?</p>
+    </div>
+
+    <div class="card">
+      <h3>🟠 Falencia #2: Poca conexión con el contexto colombiano <span class="badge warn">Frecuente</span></h3>
+      <p>Promedio 3.54/5. Varios trabajos se apoyan casi exclusivamente en literatura y normativa <b>internacional</b> (OMS, OIT, estudios de México, España o Estados Unidos) sin conectar el análisis con la normativa de SST colombiana (Decreto 1072, Resoluciones 2646/2404/2764) ni con un contexto organizacional local concreto.</p>
+      <p><b>Cómo corregirlo:</b> por cada antecedente internacional que usen, agreguen una frase que lo relacione con la realidad o normativa colombiana de su sector.</p>
+    </div>
+
+    <div class="card">
+      <h3>🟠 Falencia #3: Calidad de las fuentes citadas (APA) <span class="badge warn">Frecuente</span></h3>
+      <p>Promedio 3.92/5, pero con una cola importante de trabajos débiles: <b>14 entregas</b> en nivel 1 o 2. Los problemas más comunes:</p>
+      <ul class="tight">
+        <li>Fuentes no académicas: blogs comerciales, canales de YouTube, resultados de búsqueda de Google.</li>
+        <li>Ausencia total de lista de referencias al final del documento.</li>
+        <li>Referencias incompletas: falta año, editorial, DOI, o solo un enlace roto/local.</li>
+        <li>Citas en texto sin formato correcto (sin paréntesis, sin año).</li>
+        <li>Uso de muy pocas fuentes repetidas en todo el documento (poca diversidad bibliográfica).</li>
+      </ul>
+      <p><b>Cómo corregirlo:</b> usar buscadores académicos (Google Académico, Redalyc, Scielo, Scopus) y revisar la sección de "APA desde cero" de esta clase antes de entregar.</p>
+    </div>
+
+    <div class="card">
+      <h3>🟡 Falencia #4: Análisis descriptivo en vez de crítico <span class="badge warn">Moderada</span></h3>
+      <p>Promedio 3.78/5. Varios trabajos resumen cada artículo de forma aislada ("el autor X dice... el autor Y dice...") sin comparar, contrastar o construir una postura propia frente a los hallazgos.</p>
+      <p><b>Cómo corregirlo:</b> después de resumir cada fuente, agreguen explícitamente en qué coinciden o difieren los autores entre sí, y qué opinan ustedes al respecto.</p>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <h3>✅ Fortalezas generales del curso</h3>
+        <ul class="tight">
+          <li><b>Redacción</b>: el criterio mejor calificado (4.59/5). Buena ortografía y coherencia general.</li>
+          <li><b>Modalidad de trabajo</b>: casi todos identifican correctamente autores e integrantes (4.76/5).</li>
+          <li><b>Apropiación conceptual</b>: buen dominio de teorías y modelos propios de cada tema (4.30/5).</li>
+          <li>0 casos de plagio confirmado entre estudiantes distintos.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>⚠️ Casos administrativos a revisar</h3>
+        <ul class="tight">
+          <li>3 entregas sin nombre de estudiante identificable en portada ni cuerpo del documento.</li>
+          <li>1 entrega identificada solo por metadatos del archivo (autor del .docx), a confirmar.</li>
+          <li>El profesor verificará estos casos contra el registro de entrega de la plataforma.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- PANEL 5: CIERRE -->
+  <section class="panel" id="p5">
+    <h2 class="section-title"><span class="num">5</span> Cierre y tarea</h2>
+    <p class="section-lead">Resumen de lo trabajado hoy y compromiso para la próxima entrega.</p>
+
+    <div class="card">
+      <h3>📌 Resumen de la clase</h3>
+      <ul class="tight">
+        <li>APA existe para dar crédito a las ideas de otros y permitir rastrear las fuentes.</li>
+        <li>Toda cita en texto debe tener su referencia completa, y viceversa.</li>
+        <li>Usen fuentes académicas: artículos indexados, libros, normativa oficial — nunca blogs comerciales o videos como única fuente.</li>
+        <li>Cierren siempre sus trabajos con una sección de <b>Conclusiones</b> explícita — fue la falencia más grande del curso en la Actividad A4.</li>
+        <li>Conecten la teoría internacional con el contexto y la normativa colombiana.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>📝 Tarea para la próxima sesión</h3>
+      <ol class="tight">
+        <li>Revisen su trabajo de la Actividad A4 (o el que estén elaborando) y agreguen una sección de <b>Conclusiones</b> si no la tienen.</li>
+        <li>Verifiquen que cada cita en texto tenga su referencia y viceversa.</li>
+        <li>Reemplacen cualquier fuente no académica por un artículo indexado o normativa oficial.</li>
+        <li>Traigan a la próxima clase al menos una referencia en formato APA que hayan construido ustedes mismos.</li>
+      </ol>
+    </div>
+
+    <div class="card" style="text-align:center;">
+      <h3>¡Gracias por su participación!</h3>
+      <p style="color:var(--text-secondary);">No olviden descargar sus respuestas en la pestaña "Ejercicios en clase" antes de cerrar esta página.</p>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  Clase 5 · Fundamentos Investigativos · Fundación Universitaria Colombo Germana · Prof. Sergio Rojas, Mg. en Finanzas Cuantitativas
+</footer>
+
+<script>
+(function(){
+  const tabs = document.querySelectorAll('nav.tabs button');
+  const panels = document.querySelectorAll('section.panel');
+  tabs.forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      tabs.forEach(b=>b.classList.remove('active'));
+      panels.forEach(p=>p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(btn.dataset.panel).classList.add('active');
+      window.scrollTo({top:0, behavior:'smooth'});
+    });
+  });
+
+  const STORAGE_KEY = 'clase5_apa_respuestas';
+
+  function loadAnswers(){
+    try{
+      return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+    }catch(e){ return {}; }
+  }
+  function saveAnswers(data){
+    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }catch(e){}
+  }
+
+  const answers = loadAnswers();
+  document.querySelectorAll('[data-ex]').forEach(el=>{
+    const key = el.dataset.ex;
+    if(answers[key]) el.value = answers[key];
+    let timer;
+    el.addEventListener('input', ()=>{
+      const current = loadAnswers();
+      current[key] = el.value;
+      saveAnswers(current);
+      const status = document.querySelector('[data-status="'+key+'"]');
+      if(status){
+        status.textContent = '✓ Guardado en este navegador';
+        clearTimeout(timer);
+        timer = setTimeout(()=>{ status.textContent=''; }, 1800);
+      }
+    });
+  });
+
+  const nameKey = 'clase5_apa_nombre';
+  const nameInput = document.getElementById('studentName');
+  nameInput.value = localStorage.getItem(nameKey) || '';
+  nameInput.addEventListener('input', ()=>{
+    try{ localStorage.setItem(nameKey, nameInput.value); }catch(e){}
+  });
+
+  document.getElementById('downloadBtn').addEventListener('click', ()=>{
+    const data = loadAnswers();
+    const name = nameInput.value.trim() || 'Estudiante sin nombre';
+    const labels = {
+      ex1: 'Ejercicio 1 — Identificar autores y segunda cita',
+      ex2: 'Ejercicio 2 — Corregir cita mal formateada',
+      ex3: 'Ejercicio 3 — Construir referencia APA completa',
+      ex4: 'Ejercicio 4 — Aplicar a su propio trabajo',
+      ex5: 'Pregunta abierta de cierre — compromiso personal'
+    };
+    let text = 'CLASE 5 - NORMAS APA - FUNDACIÓN COLOMBO GERMANA\n';
+    text += 'Estudiante: ' + name + '\n';
+    text += 'Fecha de descarga: ' + new Date().toLocaleString('es-CO') + '\n';
+    text += '========================================\n\n';
+    Object.keys(labels).forEach(k=>{
+      text += labels[k] + '\n';
+      text += (data[k] && data[k].trim() ? data[k].trim() : '(sin respuesta)') + '\n\n';
+    });
+    const blob = new Blob([text], {type:'text/plain;charset=utf-8'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'Clase5_APA_' + name.replace(/\s+/g,'_') + '.txt';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
+
+  document.getElementById('clearBtn').addEventListener('click', ()=>{
+    if(confirm('¿Borrar todas sus respuestas guardadas en este navegador?')){
+      localStorage.removeItem(STORAGE_KEY);
+      document.querySelectorAll('[data-ex]').forEach(el=> el.value = '');
+    }
+  });
+})();
+</script>
+
+</body>
+</html>
