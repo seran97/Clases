@@ -243,6 +243,27 @@
     font-style:italic; color:var(--text-secondary); font-size:.88rem; border-left:3px solid var(--axis);
     padding-left:12px; margin:10px 0;
   }
+
+  .timer-card{
+    background: linear-gradient(135deg, var(--brand-dark), var(--brand));
+    border:none; color:#fff;
+  }
+  .timer-top{display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;}
+  .timer-card h3{color:#fff;}
+  .timer-display{
+    font-size:2.6rem; font-weight:800; font-variant-numeric:tabular-nums;
+    background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.3);
+    border-radius:12px; padding:6px 22px; letter-spacing:.02em;
+  }
+  .timer-display.done{background:rgba(255,255,255,.28); animation:pulse 1s ease infinite;}
+  @keyframes pulse{0%,100%{transform:scale(1);} 50%{transform:scale(1.04);}}
+  .timer-controls{display:flex; gap:10px; margin:16px 0 12px; flex-wrap:wrap;}
+  .timer-card .btn.secondary{background:rgba(255,255,255,.14); color:#fff; border:1px solid rgba(255,255,255,.35);}
+  .timer-msg{
+    background:rgba(255,255,255,.14); border:1px dashed rgba(255,255,255,.4); border-radius:10px;
+    padding:12px 16px; font-size:.92rem; font-weight:600; text-align:center; min-height:1.4em;
+    transition:opacity .35s ease;
+  }
 </style>
 </head>
 <body>
@@ -269,6 +290,22 @@
   <section class="panel active" id="p0">
     <h2 class="section-title"><span class="num">0</span> Bienvenida y objetivos</h2>
     <p class="section-lead">Hoy construimos, desde cero, la habilidad de citar y referenciar correctamente en formato APA — la base de todo trabajo investigativo serio.</p>
+
+    <div class="card timer-card">
+      <div class="timer-top">
+        <div>
+          <h3 style="margin-bottom:2px;">⏳ Iniciamos en...</h3>
+          <p style="margin:0; color:var(--text-secondary); font-size:.88rem;">Mientras esperamos que se conecten todos, revisen el mensaje de abajo 👇</p>
+        </div>
+        <div class="timer-display" id="timerDisplay">05:00</div>
+      </div>
+      <div class="timer-controls">
+        <button class="btn" id="timerStart">▶️ Iniciar</button>
+        <button class="btn secondary" id="timerPause">⏸️ Pausar</button>
+        <button class="btn secondary" id="timerReset">🔄 Reiniciar (5 min)</button>
+      </div>
+      <div class="timer-msg" id="timerMsg">Bienvenidos a la Clase 5. En un momento iniciamos 🙂</div>
+    </div>
 
     <div class="grid2">
       <div class="card">
@@ -815,6 +852,72 @@ Karasek, R. A. (1979). Job demands, job decision latitude, and mental<br>
       document.querySelectorAll('[data-ex]').forEach(el=> el.value = '');
     }
   });
+
+  // ---- Cronómetro de inicio (5 min) + mensajes rotativos ----
+  const TOTAL_SECONDS = 5 * 60;
+  let secondsLeft = TOTAL_SECONDS;
+  let tickHandle = null;
+  const display = document.getElementById('timerDisplay');
+  const msgBox = document.getElementById('timerMsg');
+
+  const mensajes = [
+    'Ingresen a esta página y ubiquen la pestaña "Retroalimentación Actividad A4" para ir revisando sus calificaciones 📊',
+    'Mientras esperamos: revisen su nota y la justificación de cada criterio en su entrega anterior.',
+    'Preparen al menos una pregunta sobre su calificación para hacerla apenas iniciemos.',
+    'Recuerden: la falencia más común del curso fue no incluir "Conclusiones" — revisen si su trabajo la tiene.',
+    'Naveguen por la pestaña "APA desde cero" y familiarícense con la estructura de la clase de hoy.',
+    'Tengan a la mano su documento de Planteamiento del Problema y Marco Teórico, los usaremos hoy.',
+    'Si ya revisaron su nota, anoten en un papel la duda principal que quieren resolver en clase.',
+    '¡Ya casi iniciamos! Sigan explorando la página mientras se conectan sus compañeros.'
+  ];
+  let msgIndex = 0;
+  let msgInterval = null;
+
+  function formatTime(s){
+    const m = Math.floor(s/60).toString().padStart(2,'0');
+    const sec = (s%60).toString().padStart(2,'0');
+    return m+':'+sec;
+  }
+  function renderTime(){
+    display.textContent = formatTime(secondsLeft);
+    display.classList.toggle('done', secondsLeft<=0);
+  }
+  function rotateMessage(){
+    msgBox.style.opacity = 0;
+    setTimeout(()=>{
+      msgBox.textContent = mensajes[msgIndex % mensajes.length];
+      msgIndex++;
+      msgBox.style.opacity = 1;
+    }, 350);
+  }
+  function startTimer(){
+    if(tickHandle) return;
+    if(secondsLeft<=0) return;
+    tickHandle = setInterval(()=>{
+      secondsLeft = Math.max(0, secondsLeft-1);
+      renderTime();
+      if(secondsLeft<=0){
+        clearInterval(tickHandle); tickHandle=null;
+        msgBox.textContent = '⏰ ¡Iniciamos! Bienvenidos a la Clase 5 de Fundamentos Investigativos.';
+      }
+    }, 1000);
+  }
+  function pauseTimer(){
+    if(tickHandle){ clearInterval(tickHandle); tickHandle=null; }
+  }
+  function resetTimer(){
+    pauseTimer();
+    secondsLeft = TOTAL_SECONDS;
+    renderTime();
+  }
+
+  document.getElementById('timerStart').addEventListener('click', startTimer);
+  document.getElementById('timerPause').addEventListener('click', pauseTimer);
+  document.getElementById('timerReset').addEventListener('click', resetTimer);
+
+  renderTime();
+  rotateMessage();
+  msgInterval = setInterval(rotateMessage, 6000);
 })();
 </script>
 
