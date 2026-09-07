@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cronograma y Presupuesto — Clase de Metodología</title>
+<style>
+  :root{
+    --bg:#f7f5ef; --bg-alt:#ffffff; --ink:#1f2933; --ink-soft:#5b6470;
+    --accent:#2d6a4f; --accent-soft:#e8f2ec; --warn:#b5541a; --warn-soft:#fbe9df;
+    --border:#e1dbc9; --shadow:0 2px 10px rgba(31,41,51,0.06);
+    --radius:14px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#181c1a; --bg-alt:#22271f; --ink:#ecebe4; --ink-soft:#a9b0a4;
+      --accent:#6fbf94; --accent-soft:#243b30; --warn:#e08a5a; --warn-soft:#3a2a20;
+      --border:#333a30; --shadow:0 2px 10px rgba(0,0,0,0.35);
+    }
+  }
+  *{box-sizing:border-box;}
+  body{background:var(--bg); color:var(--ink); font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif; line-height:1.55; margin:0;}
+  header.hero{background:var(--accent); color:#fff; padding:30px 20px 24px; text-align:center;}
+  header.hero h1{margin:0 0 8px; font-size:1.6rem;}
+  header.hero p{margin:0; opacity:0.9; font-size:0.95rem;}
+  .badge{display:inline-block; background:rgba(255,255,255,0.18); border-radius:999px; padding:4px 14px; font-size:0.8rem; margin-top:10px;}
+
+  .intro-timer{display:flex; align-items:center; justify-content:center; gap:10px; flex-wrap:wrap; background:rgba(255,255,255,0.16); border-radius:999px; padding:8px 16px; margin-top:14px; font-size:0.92rem;}
+  .intro-timer .valor{font-variant-numeric:tabular-nums; font-weight:700; font-size:1.05rem;}
+  .intro-timer input{width:46px; border:none; border-radius:6px; padding:3px 6px; font-size:0.85rem; text-align:center;}
+  .intro-timer button{background:#fff; color:var(--accent); padding:6px 14px; font-size:0.8rem;}
+  .intro-timer.oculto{display:none;}
+
+  .app-shell{display:grid; grid-template-columns:2fr 3fr; gap:24px; max-width:1200px; margin:0 auto; padding:24px 20px 80px; align-items:start;}
+  @media (max-width:860px){
+    .app-shell{grid-template-columns:1fr;}
+    .stage{position:static !important;}
+  }
+
+  /* ---------- Panel izquierdo: escenario (video + cronómetro) ---------- */
+  .stage{position:sticky; top:20px; background:var(--bg-alt); border:1px solid var(--border); border-radius:var(--radius); padding:18px; box-shadow:var(--shadow);}
+  .stage-header{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:12px;}
+  .stage-kicker{font-size:0.78rem; font-weight:700; color:var(--accent); text-transform:uppercase; letter-spacing:0.03em;}
+  .stage-timer{font-variant-numeric:tabular-nums; font-size:1.05rem; font-weight:700; background:var(--accent-soft); color:var(--accent); border-radius:999px; padding:4px 12px;}
+  .stage-timer.playing{background:var(--warn-soft); color:var(--warn);}
+  .video-frame{background:#000; border-radius:10px; overflow:hidden; aspect-ratio:16/9; display:flex; align-items:center; justify-content:center; margin-bottom:14px; position:relative;}
+  .video-frame video{width:100%; height:100%; object-fit:contain; display:block;}
+  .stage-placeholder{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; text-align:center; color:#cfd6cf; font-size:0.9rem; padding:20px; background:#0b0f0d;}
+  .stage-title{margin:0 0 10px; font-size:1.05rem; color:var(--ink);}
+  .stage-controls{display:flex; gap:8px; flex-wrap:wrap;}
+  .stage-progress{font-size:0.78rem; color:var(--ink-soft); margin:10px 0 0;}
+  .stage-progress-bar{height:6px; border-radius:999px; background:var(--border); margin-top:6px; overflow:hidden;}
+  .stage-progress-bar > span{display:block; height:100%; background:var(--accent); width:0%; transition:width 1s linear;}
+
+  main.content{min-width:0;}
+  section{margin:0 0 24px; background:var(--bg-alt); border:1px solid var(--border); border-radius:var(--radius); padding:24px 24px 20px; box-shadow:var(--shadow); scroll-margin-top:20px; transition:box-shadow .25s, border-color .25s;}
+  section.video-block{background:var(--accent-soft); border-color:var(--accent);}
+  section.active-section{border-color:var(--warn); box-shadow:0 0 0 3px var(--warn-soft), var(--shadow);}
+  .kicker{display:flex; align-items:center; gap:10px; margin-bottom:6px;}
+  .kicker .tag{font-size:0.72rem; text-transform:uppercase; letter-spacing:0.04em; font-weight:700; color:var(--accent);}
+  .kicker .mins{font-size:0.78rem; color:var(--ink-soft); background:var(--bg); border:1px solid var(--border); border-radius:999px; padding:2px 10px;}
+  h2{margin:0 0 14px; font-size:1.2rem;}
+  h3{font-size:1.0rem; margin:18px 0 8px;}
+  p{margin:0 0 12px;}
+  ul,ol{margin:0 0 12px; padding-left:22px;}
+  li{margin-bottom:6px;}
+  .video-note{display:flex; align-items:center; gap:10px; background:var(--bg); border:1px dashed var(--accent); border-radius:10px; padding:10px 14px; font-size:0.85rem; color:var(--ink-soft); margin-bottom:14px;}
+  .video-note button{flex-shrink:0;}
+  details.guion{margin-top:8px; font-size:0.9rem; color:var(--ink-soft);}
+  details.guion summary{cursor:pointer; color:var(--accent); font-weight:600;}
+  details.guion pre{white-space:pre-wrap; font-family:inherit; background:var(--bg); border-radius:8px; padding:12px; margin-top:8px;}
+
+  .callout{background:var(--warn-soft); border:1px solid var(--warn); color:var(--ink); border-radius:10px; padding:14px 16px; font-size:0.92rem; margin:14px 0;}
+  .callout b{color:var(--warn);}
+
+  table{width:100%; border-collapse:collapse; margin:14px 0; font-size:0.9rem;}
+  table.static th, table.static td{border:1px solid var(--border); padding:8px 10px; text-align:left;}
+  table.static th{background:var(--accent-soft); color:var(--accent);}
+
+  .practica{border:2px dashed var(--accent); border-radius:12px; padding:18px; margin-top:14px; background:var(--bg);}
+  .practica table{font-size:0.85rem;}
+  .practica th{background:var(--accent); color:#fff; padding:8px; text-align:left; font-size:0.78rem;}
+  .practica td{border-bottom:1px solid var(--border); padding:6px 4px;}
+  .practica input, .practica select{width:100%; border:1px solid var(--border); border-radius:6px; padding:6px 8px; background:var(--bg-alt); color:var(--ink); font-size:0.85rem;}
+  .practica input[readonly]{background:var(--accent-soft); font-weight:600;}
+  .row-actions{display:flex; gap:10px; margin-top:12px; flex-wrap:wrap;}
+  button{background:var(--accent); color:#fff; border:none; border-radius:8px; padding:9px 16px; font-size:0.85rem; cursor:pointer;}
+  button.secondary{background:transparent; color:var(--accent); border:1px solid var(--accent);}
+  button.danger{background:transparent; color:var(--warn); border:1px solid var(--warn); padding:4px 8px; font-size:0.75rem;}
+  button:disabled{opacity:0.5; cursor:default;}
+  .totales{margin-top:10px; font-weight:700; text-align:right;}
+
+  .quiz-q{border:1px solid var(--border); border-radius:10px; padding:14px; margin-bottom:12px;}
+  .quiz-q p.enunciado{font-weight:600; margin-bottom:8px;}
+  .quiz-q label{display:block; padding:6px 10px; border-radius:8px; cursor:pointer; margin-bottom:4px;}
+  .quiz-q label:hover{background:var(--bg);}
+  .quiz-q .feedback{display:none; margin-top:8px; font-size:0.85rem; border-radius:8px; padding:8px 10px;}
+  .quiz-q .feedback.ok{background:var(--accent-soft); color:var(--accent);}
+  .quiz-q .feedback.bad{background:var(--warn-soft); color:var(--warn);}
+
+  .checklist label{display:flex; gap:10px; align-items:flex-start; margin-bottom:8px; font-size:0.92rem;}
+  .checklist input{margin-top:3px;}
+
+  footer{text-align:center; color:var(--ink-soft); font-size:0.82rem; padding:30px 20px;}
+  .save-note{font-size:0.75rem; color:var(--ink-soft); margin-top:6px;}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <h1>Cronograma y Presupuesto</h1>
+  <p>Clase de Metodología de Investigación — cómo planear el CUÁNDO y el CON QUÉ de tu proyecto</p>
+  <div class="intro-timer" id="introTimer">
+    <span>⏱ Iniciamos en</span>
+    <span class="valor" id="introTimerValor">05:00</span>
+    <label>min: <input type="number" id="introTimerMinutos" value="5" min="1" max="30"></label>
+    <button type="button" id="btnEmpezarArriba">▶ Comenzar ahora</button>
+  </div>
+</header>
+
+<div class="app-shell">
+
+  <aside class="stage" id="stage">
+    <div class="stage-header">
+      <span class="stage-kicker" id="stageKicker">Antes de empezar</span>
+      <span class="stage-timer" id="stageTimer">⏱ 90:00</span>
+    </div>
+    <div class="video-frame" id="stageVideoFrame">
+      <video id="stageVideo" controls playsinline></video>
+      <div class="stage-placeholder" id="stagePlaceholder">👋 Dale a "Comenzar clase" cuando estés list@. El video, la teoría y las prácticas se van a ir turnando solas.</div>
+    </div>
+    <h3 class="stage-title" id="stageTitle">Bienvenid@</h3>
+    <div class="stage-controls" id="stageControls">
+      <button type="button" id="btnEmpezar">▶ Comenzar clase</button>
+    </div>
+    <p class="stage-progress" id="stageProgress"></p>
+    <div class="stage-progress-bar"><span id="stageProgressBar"></span></div>
+  </aside>
+
+  <main class="content">
+
+    <section id="s1" class="video-block" data-kind="video">
+      <div class="kicker"><span class="tag">🎬 Video · Avatar</span><span class="mins">5 min</span></div>
+      <h2>1. Por qué necesitas cronograma y presupuesto</h2>
+      <div class="video-note"><span>▶️</span><span>El video se reproduce en el panel de la izquierda.</span><button type="button" class="secondary" onclick="irAPaso(0)">Ver / repetir</button></div>
+      <p>Ya tienes tu planteamiento del problema, tus objetivos y tu diseño metodológico. Falta responder <b>cuándo</b> harás cada cosa y <b>con qué recursos</b>. El cronograma es tu itinerario de viaje; el presupuesto, tu bolsillo calculado antes de salir.</p>
+      <div class="callout">📌 Según el <b>Manual de Opciones de Grado — UniGermana</b>, cronograma y presupuesto van en el <b>anteproyecto</b>, dentro de "aspectos metodológicos" — pero <b>NO se incluyen en el informe final</b> del trabajo de grado. Son herramientas de planeación y seguimiento con tu asesor.</div>
+      <details class="guion"><summary>Ver guion narrado (para quien prefiera leer)</summary>
+        <pre>Ya tienes tu planteamiento del problema, tus objetivos, tu enfoque, tu diseño, tu población y tu muestra. Falta una pregunta clave: ¿cuándo vas a hacer cada cosa, y con qué recursos?
+
+Piénsalo como planear un viaje: ya decidiste el destino (tu problema) y la ruta (tu diseño). Pero si no defines el día de salida, cuántos días en cada lugar, y cuánta plata necesitas... el viaje se queda solo en la idea.
+
+El cronograma es tu itinerario. El presupuesto es tu bolsillo calculado antes de salir.
+
+Hoy construimos los dos, paso a paso, con tu propio proyecto.</pre>
+      </details>
+    </section>
+
+    <section id="s2" data-kind="reading" data-minutes="5">
+      <div class="kicker"><span class="tag">📖 Micro-lectura</span><span class="mins">5 min</span></div>
+      <h2>2. Qué es un cronograma</h2>
+      <p>El Manual lo define así: <i>"Relación de actividades a realizar en función del tiempo (semanas, meses), en el período de ejecución del proyecto."</i></p>
+      <h3>Idea clave</h3>
+      <p>Un cronograma responde, actividad por actividad, una sola pregunta: <b>¿cuándo hago esto?</b> Se construye desglosando tu investigación en fases con nombre propio — no "hacer la investigación" como bloque único.</p>
+      <h3>Fases típicas de un proyecto de grado</h3>
+      <ol>
+        <li>Revisión de antecedentes y marco teórico</li>
+        <li>Diseño y validación del instrumento (encuesta / entrevista)</li>
+        <li>Trabajo de campo (recolección de datos con tu población/muestra)</li>
+        <li>Procesamiento y análisis de datos</li>
+        <li>Redacción de resultados y discusión</li>
+        <li>Conclusiones y ajustes finales</li>
+      </ol>
+      <h3>Dependencias</h3>
+      <p>Una actividad no puede empezar hasta que otra termine: no puedes analizar datos que aún no recolectaste, ni redactar resultados de un instrumento sin validar. Dibuja el orden real, no el orden ideal.</p>
+    </section>
+
+    <section id="s3" class="video-block" data-kind="video">
+      <div class="kicker"><span class="tag">🎬 Video · Avatar</span><span class="mins">8 min</span></div>
+      <h2>3. Cómo construir tu cronograma (3 pasos)</h2>
+      <div class="video-note"><span>▶️</span><span>El video se reproduce en el panel de la izquierda.</span><button type="button" class="secondary" onclick="irAPaso(2)">Ver / repetir</button></div>
+      <ol>
+        <li><b>Desglosa</b> tu investigación en actividades concretas.</li>
+        <li><b>Estima el tiempo</b> de cada una — y súmale 20-30% de margen (la "ilusión de planificación" es el error más común: casi siempre subestimamos el trabajo de campo).</li>
+        <li><b>Ordénalas en el tiempo</b> y verifica las dependencias entre fases.</li>
+      </ol>
+      <h3>Ejemplo (10 semanas)</h3>
+      <table class="static">
+        <tr><th>Semana</th><th>Actividad</th></tr>
+        <tr><td>1–2</td><td>Antecedentes y marco teórico</td></tr>
+        <tr><td>3</td><td>Diseño del instrumento</td></tr>
+        <tr><td>4–6</td><td>Trabajo de campo</td></tr>
+        <tr><td>7</td><td>Procesamiento de datos</td></tr>
+        <tr><td>8–9</td><td>Redacción de resultados</td></tr>
+        <tr><td>10</td><td>Ajustes finales y entrega</td></tr>
+      </table>
+      <p>Esto es un <b>diagrama de Gantt</b> simplificado: filas = actividades, columnas = tiempo, barras = duración. No necesitas software especial; una tabla bien organizada cumple.</p>
+    </section>
+
+    <section id="s4" data-kind="practice" data-minutes="8">
+      <div class="kicker"><span class="tag">✍️ Práctica guiada</span><span class="mins">8 min</span></div>
+      <h2>4. Construye tu propio cronograma</h2>
+      <p>Completa la tabla con las actividades reales de <b>tu</b> proyecto. No copies el ejemplo — solo sirve si refleja tu investigación.</p>
+      <div class="practica">
+        <table id="tabla-cronograma">
+          <thead><tr><th style="width:30%">Actividad</th><th style="width:20%">Semana inicio</th><th style="width:20%">Semana fin</th><th style="width:20%">Responsable</th><th style="width:10%"></th></tr></thead>
+          <tbody></tbody>
+        </table>
+        <div class="row-actions">
+          <button type="button" onclick="agregarFilaCronograma()">+ Agregar actividad</button>
+          <button type="button" class="secondary" onclick="imprimirSeccion('s4')">Imprimir / PDF</button>
+        </div>
+        <p class="save-note">Tu progreso se guarda automáticamente en este navegador.</p>
+      </div>
+    </section>
+
+    <section id="s5" data-kind="reading" data-minutes="5">
+      <div class="kicker"><span class="tag">📖 Micro-lectura</span><span class="mins">5 min</span></div>
+      <h2>5. Qué es un presupuesto</h2>
+      <p>El Manual lo define así: <i>"Estimación del costo de la investigación a nivel de agregados: costos de personal, materiales, transporte y desplazamientos. Se debe discriminar las fuentes de financiación."</i></p>
+      <h3>Las 4 categorías de costo</h3>
+      <ul>
+        <li><b>Personal</b> — tu tiempo, apoyo de encuestadores, estadístico, tutor externo.</li>
+        <li><b>Materiales y suministros</b> — papelería, impresión, licencias de software.</li>
+        <li><b>Transporte y desplazamientos</b> — viajes para trabajo de campo.</li>
+        <li><b>Imprevistos</b> — margen de 10–15% sobre el subtotal. Todo proyecto tiene imprevistos.</li>
+      </ul>
+      <h3>Fuentes de financiación</h3>
+      <p>No basta con decir cuánto cuesta: hay que decir <b>de dónde sale la plata</b>. Tres fuentes típicas: <b>recursos propios</b>, <b>apoyo institucional</b>, <b>financiación externa</b> (patrocinador, empresa aliada, beca).</p>
+    </section>
+
+    <section id="s6" class="video-block" data-kind="video">
+      <div class="kicker"><span class="tag">🎬 Video · Avatar</span><span class="mins">8 min</span></div>
+      <h2>6. Cómo estimar tu presupuesto</h2>
+      <div class="video-note"><span>▶️</span><span>El video se reproduce en el panel de la izquierda.</span><button type="button" class="secondary" onclick="irAPaso(5)">Ver / repetir</button></div>
+      <h3>Ejemplo</h3>
+      <table class="static">
+        <tr><th>Rubro</th><th>Categoría</th><th>Valor</th><th>Fuente</th></tr>
+        <tr><td>Personal de apoyo</td><td>Personal</td><td>$200.000</td><td>Recursos propios</td></tr>
+        <tr><td>Impresión y papelería</td><td>Materiales</td><td>$50.000</td><td>Recursos propios</td></tr>
+        <tr><td>Transporte trabajo de campo</td><td>Transporte</td><td>$150.000</td><td>Recursos propios</td></tr>
+        <tr><td>Licencia de software</td><td>Materiales</td><td>$0 (versión institucional)</td><td>Apoyo institucional</td></tr>
+        <tr><td>Imprevistos (15%)</td><td>Imprevistos</td><td>$60.000</td><td>Recursos propios</td></tr>
+      </table>
+      <p>No tiene que ser un proyecto de millones. Lo que evalúa tu asesor es que hayas pensado cada categoría con seriedad y sepas de dónde sale cada peso.</p>
+    </section>
+
+    <section id="s7" data-kind="practice" data-minutes="8">
+      <div class="kicker"><span class="tag">✍️ Práctica guiada</span><span class="mins">8 min</span></div>
+      <h2>7. Construye tu propio presupuesto</h2>
+      <p>Completa con los rubros reales de tu proyecto. El total se calcula solo.</p>
+      <div class="practica">
+        <table id="tabla-presupuesto">
+          <thead><tr>
+            <th style="width:26%">Rubro</th>
+            <th style="width:18%">Categoría</th>
+            <th style="width:12%">Cantidad</th>
+            <th style="width:15%">Valor unitario</th>
+            <th style="width:13%">Total</th>
+            <th style="width:16%">Fuente</th>
+            <th style="width:6%"></th>
+          </tr></thead>
+          <tbody></tbody>
+        </table>
+        <div class="row-actions">
+          <button type="button" onclick="agregarFilaPresupuesto()">+ Agregar rubro</button>
+          <button type="button" class="secondary" onclick="imprimirSeccion('s7')">Imprimir / PDF</button>
+        </div>
+        <p class="totales">Total estimado: <span id="total-presupuesto">$0</span></p>
+        <p class="save-note">Tu progreso se guarda automáticamente en este navegador.</p>
+      </div>
+    </section>
+
+    <section id="s8" class="video-block" data-kind="video">
+      <div class="kicker"><span class="tag">🎬 Video · Avatar</span><span class="mins">6 min</span></div>
+      <h2>8. Cierre: cronograma + presupuesto, las dos caras del plan</h2>
+      <div class="video-note"><span>▶️</span><span>El video se reproduce en el panel de la izquierda.</span><button type="button" class="secondary" onclick="irAPaso(7)">Ver / repetir</button></div>
+      <table class="static">
+        <tr><th>Cronograma</th><th>Presupuesto</th></tr>
+        <tr><td>Organiza el <b>TIEMPO</b></td><td>Organiza el <b>DINERO</b></td></tr>
+        <tr><td>Actividades y semanas</td><td>Categorías de costo</td></tr>
+        <tr><td>Dependencias entre fases</td><td>Fuentes de financiación</td></tr>
+      </table>
+      <p>Un cronograma sin presupuesto es un itinerario sin plata para el viaje. Un presupuesto sin cronograma es plata sin saber cuándo se necesita. Con los dos listos, la conversación con tu asesor cambia de "¿qué voy a hacer?" a "aquí está mi plan, revisémoslo juntos".</p>
+    </section>
+
+    <section id="s9" data-kind="quiz">
+      <div class="kicker"><span class="tag">✅ Autoevaluación</span><span class="mins">9 min</span></div>
+      <h2>9. Verifica lo que aprendiste</h2>
+
+      <div class="quiz-q" data-correct="b">
+        <p class="enunciado">1. Según el Manual UniGermana, ¿dónde van el cronograma y el presupuesto?</p>
+        <label><input type="radio" name="q1" value="a"> En el informe final del trabajo de grado</label>
+        <label><input type="radio" name="q1" value="b"> En el anteproyecto, dentro de aspectos metodológicos</label>
+        <label><input type="radio" name="q1" value="c"> En los anexos finales</label>
+        <div class="feedback ok">✔ Correcto — van en el anteproyecto y NO se incluyen en el informe final.</div>
+        <div class="feedback bad">✘ Revisa la sección 1: el Manual indica que esta sección NO debe incluirse en el informe final.</div>
+      </div>
+
+      <div class="quiz-q" data-correct="c">
+        <p class="enunciado">2. ¿Qué margen de tiempo extra se recomienda al estimar cada actividad del cronograma?</p>
+        <label><input type="radio" name="q2" value="a"> 0%, la estimación inicial siempre es correcta</label>
+        <label><input type="radio" name="q2" value="b"> 50-60%</label>
+        <label><input type="radio" name="q2" value="c"> 20-30%</label>
+        <div class="feedback ok">✔ Correcto — para compensar la "ilusión de planificación".</div>
+        <div class="feedback bad">✘ La sección 3 recomienda un margen de 20-30% adicional.</div>
+      </div>
+
+      <div class="quiz-q" data-correct="a">
+        <p class="enunciado">3. ¿Cuáles son las 4 categorías de costo del presupuesto?</p>
+        <label><input type="radio" name="q3" value="a"> Personal, materiales, transporte, imprevistos</label>
+        <label><input type="radio" name="q3" value="b"> Personal, marketing, arriendo, viáticos</label>
+        <label><input type="radio" name="q3" value="c"> Solo materiales y transporte</label>
+        <div class="feedback ok">✔ Correcto.</div>
+        <div class="feedback bad">✘ Revisa la sección 5: son personal, materiales, transporte e imprevistos.</div>
+      </div>
+
+      <h3>Checklist final antes de mostrarle esto a tu asesor</h3>
+      <div class="checklist" id="checklist"></div>
+    </section>
+
+  </main>
+</div>
+
+<footer>
+  Nichirin Docente — Clases de Metodología · UniGermana<br>
+  Contenido basado en el Manual de Opciones de Grado UniGermana 2023.
+</footer>
+
+<script>
+// ============================================================
+// Secuenciador de la clase: video (panel izquierdo) + teoría/
+// práctica (cronómetro) se turnan solos, sección por sección.
+// ============================================================
+const PASOS = [...document.querySelectorAll('main.content > section')].map(sec => ({
+  id: sec.id,
+  kind: sec.dataset.kind,
+  minutes: parseInt(sec.dataset.minutes || '0', 10),
+  el: sec,
+  title: sec.querySelector('h2') ? sec.querySelector('h2').textContent : sec.id,
+}));
+
+const VIDEO_SRC = {
+  s1: 'videos/bloque_01_intro.mp4',
+  s3: 'videos/bloque_02_cronograma.mp4',
+  s6: 'videos/bloque_03_presupuesto.mp4',
+  s8: 'videos/bloque_04_cierre.mp4',
+};
+
+const stageVideo = document.getElementById('stageVideo');
+const stagePlaceholder = document.getElementById('stagePlaceholder');
+const stageKicker = document.getElementById('stageKicker');
+const stageTimer = document.getElementById('stageTimer');
+const stageTitle = document.getElementById('stageTitle');
+const stageControls = document.getElementById('stageControls');
+const stageProgress = document.getElementById('stageProgress');
+const stageProgressBar = document.getElementById('stageProgressBar');
+
+let pasoActual = -1;
+let cuentaRegresivaId = null;
+let segundosRestantes = 0;
+let segundosTotales = 0;
+let iniciado = false;
+
+function formatoTiempo(s) {
+  s = Math.max(0, Math.round(s));
+  const m = Math.floor(s / 60).toString().padStart(2, '0');
+  const ss = (s % 60).toString().padStart(2, '0');
+  return `${m}:${ss}`;
+}
+
+function limpiarActivo() {
+  PASOS.forEach(p => p.el.classList.remove('active-section'));
+}
+
+function detenerCuentaRegresiva() {
+  if (cuentaRegresivaId) { clearInterval(cuentaRegresivaId); cuentaRegresivaId = null; }
+}
+
+function actualizarProgresoGeneral() {
+  const pct = Math.round(((pasoActual + 1) / PASOS.length) * 100);
+  stageProgress.textContent = `Paso ${pasoActual + 1} de ${PASOS.length}`;
+  stageProgressBar.style.width = pct + '%';
+}
+
+function irAPaso(indice) {
+  if (indice < 0 || indice >= PASOS.length) return;
+  detenerCuentaRegresiva();
+  pasoActual = indice;
+  const paso = PASOS[indice];
+
+  limpiarActivo();
+  paso.el.classList.add('active-section');
+  paso.el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  stageTitle.textContent = paso.title;
+  actualizarProgresoGeneral();
+
+  if (paso.kind === 'video') {
+    stagePlaceholder.style.display = 'none';
+    stageVideo.style.display = 'block';
+    stageKicker.textContent = '🎬 Reproduciendo video';
+    stageTimer.textContent = '▶ Video';
+    stageTimer.classList.add('playing');
+    stageControls.innerHTML = '';
+    const src = VIDEO_SRC[paso.id];
+    if (stageVideo.getAttribute('src') !== src) stageVideo.setAttribute('src', src);
+    stageVideo.currentTime = 0;
+    stageVideo.play().catch(() => {
+      // autoplay bloqueado por el navegador -- se necesita un clic
+      stageControls.innerHTML = '<button type="button" id="btnPlayManual">▶ Reproducir video</button>';
+      document.getElementById('btnPlayManual').addEventListener('click', () => stageVideo.play());
+    });
+  } else if (paso.kind === 'reading' || paso.kind === 'practice') {
+    stageVideo.pause();
+    stageVideo.style.display = 'none';
+    stagePlaceholder.style.display = 'flex';
+    stagePlaceholder.textContent = paso.kind === 'reading'
+      ? '📖 Lee esta sección a tu ritmo. Cuando el cronómetro llegue a cero, seguimos solos.'
+      : '✍️ Completa la práctica en el panel derecho. Cuando el cronómetro llegue a cero, seguimos solos.';
+    stageKicker.textContent = paso.kind === 'reading' ? 'Lectura' : 'Práctica';
+    stageTimer.classList.remove('playing');
+    segundosTotales = paso.minutes * 60;
+    segundosRestantes = segundosTotales;
+    stageTimer.textContent = '⏱ ' + formatoTiempo(segundosRestantes);
+    stageControls.innerHTML = `
+      <button type="button" id="btnContinuar">Continuar ahora →</button>
+      <button type="button" class="secondary" id="btnMasTiempo">+5 min</button>
+    `;
+    document.getElementById('btnContinuar').addEventListener('click', () => irAPaso(pasoActual + 1));
+    document.getElementById('btnMasTiempo').addEventListener('click', () => { segundosRestantes += 300; });
+    cuentaRegresivaId = setInterval(() => {
+      segundosRestantes -= 1;
+      stageTimer.textContent = '⏱ ' + formatoTiempo(segundosRestantes);
+      if (segundosRestantes <= 0) irAPaso(pasoActual + 1);
+    }, 1000);
+  } else if (paso.kind === 'quiz') {
+    stageVideo.pause();
+    stageVideo.style.display = 'none';
+    stagePlaceholder.style.display = 'flex';
+    stagePlaceholder.textContent = '🎉 ¡Llegaste al final! Responde el quiz y el checklist en el panel derecho a tu propio ritmo.';
+    stageKicker.textContent = 'Autoevaluación';
+    stageTimer.classList.remove('playing');
+    stageTimer.textContent = '✅ Fin';
+    stageControls.innerHTML = '';
+  }
+}
+
+stageVideo.addEventListener('ended', () => {
+  if (pasoActual >= 0 && PASOS[pasoActual].kind === 'video') irAPaso(pasoActual + 1);
+});
+
+function iniciarClase() {
+  if (iniciado) return;
+  iniciado = true;
+  detenerCuentaAtras();
+  document.getElementById('introTimer').classList.add('oculto');
+  irAPaso(0);
+}
+
+document.getElementById('btnEmpezar').addEventListener('click', iniciarClase);
+document.getElementById('btnEmpezarArriba').addEventListener('click', iniciarClase);
+
+// ---------- Cuenta atrás de arriba: "Iniciamos en X min" ----------
+const introTimerValor = document.getElementById('introTimerValor');
+const introTimerMinutos = document.getElementById('introTimerMinutos');
+let segundosIntro = parseInt(introTimerMinutos.value, 10) * 60;
+let introIntervalId = null;
+
+function detenerCuentaAtras() {
+  if (introIntervalId) { clearInterval(introIntervalId); introIntervalId = null; }
+}
+
+function actualizarIntro() {
+  introTimerValor.textContent = formatoTiempo(segundosIntro);
+}
+
+function iniciarCuentaAtras() {
+  detenerCuentaAtras();
+  actualizarIntro();
+  introIntervalId = setInterval(() => {
+    segundosIntro -= 1;
+    actualizarIntro();
+    if (segundosIntro <= 0) iniciarClase();
+  }, 1000);
+}
+
+introTimerMinutos.addEventListener('change', () => {
+  const min = Math.max(1, parseInt(introTimerMinutos.value, 10) || 5);
+  introTimerMinutos.value = min;
+  segundosIntro = min * 60;
+  actualizarIntro();
+  if (!iniciado) iniciarCuentaAtras();
+});
+
+iniciarCuentaAtras();
+
+// ---------- Persistencia simple (localStorage) ----------
+function guardar(clave, valor){
+  try { localStorage.setItem(clave, JSON.stringify(valor)); } catch(e) {}
+}
+function cargar(clave, porDefecto){
+  try {
+    const v = localStorage.getItem(clave);
+    return v ? JSON.parse(v) : porDefecto;
+  } catch(e) { return porDefecto; }
+}
+
+// ---------- Tabla de cronograma ----------
+function filaCronogramaHTML(datos = {}) {
+  return `<tr>
+    <td><input type="text" class="c-actividad" value="${datos.actividad||''}" placeholder="Ej: Trabajo de campo"></td>
+    <td><input type="number" class="c-inicio" value="${datos.inicio||''}" placeholder="1"></td>
+    <td><input type="number" class="c-fin" value="${datos.fin||''}" placeholder="2"></td>
+    <td><input type="text" class="c-responsable" value="${datos.responsable||''}" placeholder="Tú / asesor"></td>
+    <td><button type="button" class="danger" onclick="this.closest('tr').remove(); guardarCronograma();">✕</button></td>
+  </tr>`;
+}
+function agregarFilaCronograma(datos) {
+  document.querySelector('#tabla-cronograma tbody').insertAdjacentHTML('beforeend', filaCronogramaHTML(datos));
+}
+function guardarCronograma() {
+  const filas = [...document.querySelectorAll('#tabla-cronograma tbody tr')].map(tr => ({
+    actividad: tr.querySelector('.c-actividad').value,
+    inicio: tr.querySelector('.c-inicio').value,
+    fin: tr.querySelector('.c-fin').value,
+    responsable: tr.querySelector('.c-responsable').value,
+  }));
+  guardar('cronograma', filas);
+}
+document.addEventListener('input', (e) => {
+  if (e.target.closest('#tabla-cronograma')) guardarCronograma();
+});
+
+const cronogramaGuardado = cargar('cronograma', []);
+if (cronogramaGuardado.length) {
+  cronogramaGuardado.forEach(agregarFilaCronograma);
+} else {
+  agregarFilaCronograma(); agregarFilaCronograma(); agregarFilaCronograma();
+}
+
+// ---------- Tabla de presupuesto ----------
+const CATEGORIAS = ['Personal', 'Materiales', 'Transporte', 'Imprevistos'];
+function filaPresupuestoHTML(datos = {}) {
+  const opciones = CATEGORIAS.map(c => `<option ${datos.categoria===c?'selected':''}>${c}</option>`).join('');
+  return `<tr>
+    <td><input type="text" class="p-rubro" value="${datos.rubro||''}" placeholder="Ej: Impresión"></td>
+    <td><select class="p-categoria">${opciones}</select></td>
+    <td><input type="number" class="p-cantidad" value="${datos.cantidad||1}" min="0"></td>
+    <td><input type="number" class="p-valor" value="${datos.valor||0}" min="0"></td>
+    <td><input type="text" class="p-total" readonly value="$0"></td>
+    <td><input type="text" class="p-fuente" value="${datos.fuente||''}" placeholder="Recursos propios"></td>
+    <td><button type="button" class="danger" onclick="this.closest('tr').remove(); recalcularPresupuesto();">✕</button></td>
+  </tr>`;
+}
+function agregarFilaPresupuesto(datos) {
+  document.querySelector('#tabla-presupuesto tbody').insertAdjacentHTML('beforeend', filaPresupuestoHTML(datos));
+  recalcularPresupuesto();
+}
+function formatoMoneda(n) {
+  return '$' + Math.round(n).toLocaleString('es-CO');
+}
+function recalcularPresupuesto() {
+  let total = 0;
+  document.querySelectorAll('#tabla-presupuesto tbody tr').forEach(tr => {
+    const cant = parseFloat(tr.querySelector('.p-cantidad').value) || 0;
+    const valor = parseFloat(tr.querySelector('.p-valor').value) || 0;
+    const t = cant * valor;
+    tr.querySelector('.p-total').value = formatoMoneda(t);
+    total += t;
+  });
+  document.getElementById('total-presupuesto').textContent = formatoMoneda(total);
+  guardarPresupuesto();
+}
+function guardarPresupuesto() {
+  const filas = [...document.querySelectorAll('#tabla-presupuesto tbody tr')].map(tr => ({
+    rubro: tr.querySelector('.p-rubro').value,
+    categoria: tr.querySelector('.p-categoria').value,
+    cantidad: tr.querySelector('.p-cantidad').value,
+    valor: tr.querySelector('.p-valor').value,
+    fuente: tr.querySelector('.p-fuente').value,
+  }));
+  guardar('presupuesto', filas);
+}
+document.addEventListener('input', (e) => {
+  if (e.target.closest('#tabla-presupuesto')) recalcularPresupuesto();
+});
+
+const presupuestoGuardado = cargar('presupuesto', []);
+if (presupuestoGuardado.length) {
+  presupuestoGuardado.forEach(agregarFilaPresupuesto);
+} else {
+  agregarFilaPresupuesto(); agregarFilaPresupuesto(); agregarFilaPresupuesto();
+}
+
+// ---------- Quiz ----------
+document.querySelectorAll('.quiz-q').forEach(q => {
+  const correcta = q.dataset.correct;
+  q.querySelectorAll('input[type=radio]').forEach(r => {
+    r.addEventListener('change', () => {
+      q.querySelector('.feedback.ok').style.display = 'none';
+      q.querySelector('.feedback.bad').style.display = 'none';
+      q.querySelector(r.value === correcta ? '.feedback.ok' : '.feedback.bad').style.display = 'block';
+    });
+  });
+});
+
+// ---------- Checklist final ----------
+const ITEMS_CHECKLIST = [
+  'Mi cronograma tiene todas las fases de mi diseño metodológico (no solo "hacer la investigación")',
+  'Cada actividad de mi cronograma tiene un tiempo estimado + margen de 20-30%',
+  'Verifiqué las dependencias entre actividades (nada empieza antes de tener lo que necesita)',
+  'Mi presupuesto cubre las 4 categorías: personal, materiales, transporte, imprevistos',
+  'Discriminé la fuente de financiación de cada rubro de mi presupuesto',
+  'Sé que este cronograma y presupuesto van en mi anteproyecto, NO en el informe final',
+];
+const checklistDiv = document.getElementById('checklist');
+const checklistGuardado = cargar('checklist', {});
+ITEMS_CHECKLIST.forEach((texto, i) => {
+  const id = 'chk' + i;
+  const marcado = checklistGuardado[id] ? 'checked' : '';
+  checklistDiv.insertAdjacentHTML('beforeend',
+    `<label><input type="checkbox" id="${id}" ${marcado}> ${texto}</label>`);
+});
+checklistDiv.addEventListener('change', () => {
+  const estado = {};
+  ITEMS_CHECKLIST.forEach((_, i) => {
+    estado['chk'+i] = document.getElementById('chk'+i).checked;
+  });
+  guardar('checklist', estado);
+});
+
+// ---------- Imprimir sección ----------
+function imprimirSeccion(id) {
+  window.print();
+}
+</script>
+
+</body>
+</html>
